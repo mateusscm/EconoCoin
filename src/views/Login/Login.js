@@ -100,6 +100,8 @@ class Login extends Component {
     };
   }
 
+  static navigationOptions = ({ navigation }) => {};
+
   showPass = () => {
     if (this.state.press === false) {
       this.setState({ showPass: false, press: true });
@@ -163,15 +165,22 @@ class Login extends Component {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.btnLogin}>
+          <TouchableOpacity
+            style={styles.btnLogin}
+            onPress={() => this.props.navigation.navigate("Home")}
+          >
             <Text style={styles.text}>Login</Text>
           </TouchableOpacity>
 
           <View style={styles.containerActions}>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate("Forget")}
+            >
               <Text style={styles.text}>Esqueceu a senha?</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate("SignUp")}
+            >
               <Text style={styles.text}>Cadastre-se!</Text>
             </TouchableOpacity>
           </View>
