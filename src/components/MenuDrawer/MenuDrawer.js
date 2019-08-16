@@ -38,7 +38,7 @@ export default class MenuDrawer extends React.Component {
                 />
               </View>
               <View style={styles.profileText}>
-                <Text style={styles.name}>Hays Stanford</Text>
+                <Text style={styles.name}>Usuário 1</Text>
               </View>
             </View>
           </View>
@@ -48,7 +48,7 @@ export default class MenuDrawer extends React.Component {
           </View>
         </ScrollView>
         <View style={styles.footer}>
-          <Text style={styles.description}>Menu Tutorial</Text>
+          <Text style={styles.description}>EconoCoin</Text>
           <Text style={styles.version}>v1.0</Text>
         </View>
       </View>

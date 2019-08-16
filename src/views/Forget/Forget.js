@@ -18,8 +18,11 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "rgba(0,0,0,0.7)",
     justifyContent: "center",
-
     alignItems: "center"
+  },
+  text: {
+    color: "#fff",
+    fontSize: 30
   }
 });
 
@@ -36,7 +39,7 @@ class Forget extends Component {
         imageStyle={{ opacity: 0.7 }}
       >
         <View style={styles.allCont}>
-          <Text>Forget</Text>
+          <Text style={styles.text}>Forget</Text>
         </View>
       </ImageBackground>
     );

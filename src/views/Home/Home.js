@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center"
+  },
+  text: {
+    fontSize: 30
   }
 });
 
@@ -22,7 +25,7 @@ class Home extends Component {
     return (
       <View style={styles.allCont}>
         <MenuButton navigation={this.props.navigation} />
-        <Text>Home</Text>
+        <Text style={styles.text}>Home</Text>
       </View>
     );
   }

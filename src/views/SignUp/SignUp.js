@@ -18,8 +18,11 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "rgba(0,0,0,0.7)",
     justifyContent: "center",
-
     alignItems: "center"
+  },
+  text: {
+    color: "#fff",
+    fontSize: 30
   }
 });
 
@@ -36,7 +39,7 @@ class SignUp extends Component {
         imageStyle={{ opacity: 0.7 }}
       >
         <View style={styles.allCont}>
-          <Text>SignUp</Text>
+          <Text style={styles.text}>SignUp</Text>
         </View>
       </ImageBackground>
     );
