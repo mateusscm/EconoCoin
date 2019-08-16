@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   }
 });
 
-class Home extends Component {
+class Settings extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -22,10 +22,10 @@ class Home extends Component {
     return (
       <View style={styles.allCont}>
         <MenuButton navigation={this.props.navigation} />
-        <Text>Home</Text>
+        <Text>Settings</Text>
       </View>
     );
   }
 }
 
-export default Home;
+export default Settings;

@@ -14,7 +14,7 @@ import bgImage from "./../../assets/img/background.jpg";
 import logo from "./../../assets/img/logo.png";
 
 import Icon from "react-native-vector-icons/Ionicons";
-import { classes } from "istanbul-lib-coverage";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -100,7 +100,10 @@ class Login extends Component {
     };
   }
 
-  static navigationOptions = ({ navigation }) => {};
+  login = async () => {
+    await AsyncStorage.setItem("userToken", "mateus");
+    this.props.navigation.navigate("Home");
+  };
 
   showPass = () => {
     if (this.state.press === false) {
@@ -165,10 +168,7 @@ class Login extends Component {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity
-            style={styles.btnLogin}
-            onPress={() => this.props.navigation.navigate("Home")}
-          >
+          <TouchableOpacity style={styles.btnLogin} onPress={this.login}>
             <Text style={styles.text}>Login</Text>
           </TouchableOpacity>
 

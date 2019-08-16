@@ -1,64 +1,21 @@
-import React from "react";
-import {} from "react-native";
-import {
-  createSwitchNavigator,
-  createAppContainer,
-  createStackNavigator,
-  createDrawerNavigator
-} from "react-navigation";
-import Icon from "react-native-vector-icons/Ionicons";
+import React, { Component } from "react";
+import { View, StyleSheet } from "react-native";
 
-// Importing Views
-import Login from "../views/Login/Login";
-import SignUp from "../views/SignUp/SignUp";
-import Forget from "../views/Forget/Forget";
-// import AuthLoading from "../views/AuthLoading/AuthLoading";
-import Home from "../views/Home/Home";
+import DrawerNavigator from "./../navigation/DrawerNavigator";
 
-const HomeStackNavigator = createStackNavigator(
-  {
-    Home: {
-      screen: Home,
-      navigationOptions: ({ navigation }) => ({
-        title: "Home"
-      })
-    }
-  },
-  {
-    defaultNavigationOptions: ({ navigation }) => {
-      return {
-        headerLeft: (
-          <Icon
-            style={{ paddingLeft: 10 }}
-            onPress={() => navigation.openDrawer()}
-            name="md-menu"
-            size={30}
-          />
-        )
-      };
-    }
+export default class App extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <DrawerNavigator />
+      </View>
+    );
   }
-);
+}
 
-const AppDrawerNavigator = createDrawerNavigator({
-  Home: {
-    screen: HomeStackNavigator
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff"
   }
 });
-
-const Navigator = createSwitchNavigator({
-  // AuthLoading: AuthLoading,
-  Login: {
-    screen: Login,
-    navigationOptions: {
-      headerTransparent: true
-    }
-  },
-  SignUp: SignUp,
-  Forget: Forget,
-  Home: {
-    screen: AppDrawerNavigator
-  }
-});
-
-export default createAppContainer(Navigator);

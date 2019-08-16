@@ -21,7 +21,7 @@ class AuthLoading extends Component {
   loadApp = async () => {
     const userToken = await AsyncStorage.getItem("userToken");
 
-    this.props.navigation.navigate(userToken ? "App" : "Login");
+    this.props.navigation.navigate("Auth");
   };
 
   render() {
