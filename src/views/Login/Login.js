@@ -74,11 +74,16 @@ const styles = StyleSheet.create({
     width: WIDTH - 55,
     height: 45,
     borderRadius: 25,
-    backgroundColor: "#432577",
+    backgroundColor: "#59BF3F",
     justifyContent: "center",
     marginTop: 20
   },
   text: {
+    color: "rgba(255, 255, 255, 0.7)",
+    fontSize: 20,
+    textAlign: "center"
+  },
+  text2: {
     color: "rgba(255, 255, 255, 0.7)",
     fontSize: 16,
     textAlign: "center"
@@ -176,12 +181,12 @@ class Login extends Component {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate("Forget")}
             >
-              <Text style={styles.text}>Esqueceu a senha?</Text>
+              <Text style={styles.text2}>Esqueceu a senha?</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate("SignUp")}
             >
-              <Text style={styles.text}>Cadastre-se!</Text>
+              <Text style={styles.text2}>Cadastre-se!</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
+import AsyncStorage from "@react-native-community/async-storage";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -21,11 +22,11 @@ class Settings extends Component {
     super(props);
     this.state = {};
   }
+
   render() {
     return (
       <View style={styles.allCont}>
         <MenuButton navigation={this.props.navigation} />
-        <Text style={styles.text}>Settings</Text>
       </View>
     );
   }

@@ -7,13 +7,20 @@ import {
   Platform,
   Dimensions,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Button
 } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 
 const WIDTH = Dimensions.get("window").width;
 const HEIGHT = Dimensions.get("window").height;
 
 export default class MenuDrawer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   navLink(nav, text) {
     return (
       <TouchableOpacity
@@ -24,6 +31,11 @@ export default class MenuDrawer extends React.Component {
       </TouchableOpacity>
     );
   }
+
+  logout = async () => {
+    AsyncStorage.clear();
+    this.props.navigation.navigate("AuthLoading");
+  };
 
   render() {
     return (
@@ -47,6 +59,9 @@ export default class MenuDrawer extends React.Component {
             {this.navLink("Settings", "Settings")}
           </View>
         </ScrollView>
+        <TouchableOpacity onPress={this.logout} style={styles.btnLogout}>
+          <Text style={{ color: "#fff" }}>Sair</Text>
+        </TouchableOpacity>
         <View style={styles.footer}>
           <Text style={styles.description}>EconoCoin</Text>
           <Text style={styles.version}>v1.0</Text>
@@ -59,7 +74,7 @@ export default class MenuDrawer extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "lightgray"
+    backgroundColor: "black"
   },
   scroller: {
     flex: 1
@@ -115,9 +130,9 @@ const styles = StyleSheet.create({
     height: 50,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
-    borderTopWidth: 1,
-    borderTopColor: "lightgray"
+    backgroundColor: "white"
+    // borderTopWidth: 1,
+    // borderTopColor: "lightgray"
   },
   version: {
     flex: 1,
@@ -129,5 +144,11 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 20,
     fontSize: 16
+  },
+  btnLogout: {
+    backgroundColor: "black",
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center"
   }
 });

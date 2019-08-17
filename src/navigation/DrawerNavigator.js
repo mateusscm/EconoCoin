@@ -44,8 +44,20 @@ const LoginNavigator = createStackNavigator({
       headerTransparent: true
     }
   },
-  SignUp: SignUp,
-  Forget: Forget
+  SignUp: {
+    screen: SignUp,
+    navigationOptions: {
+      headerTransparent: true,
+      headerTintColor: "#fff"
+    }
+  },
+  Forget: {
+    screen: Forget,
+    navigationOptions: {
+      headerTransparent: true,
+      headerTintColor: "#fff"
+    }
+  }
 });
 
 const Navigator = createSwitchNavigator({
