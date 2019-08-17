@@ -4,11 +4,14 @@ import {
   View,
   Text,
   StyleSheet,
-  TextInput
+  TextInput,
+  TouchableOpacity,
+  Picker
 } from "react-native";
 
 import bgImage from "./../../assets/img/background.jpg";
 import Icon from "react-native-vector-icons/Ionicons";
+import DatePicker from "react-native-datepicker";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -52,8 +55,32 @@ const styles = StyleSheet.create({
     top: 8,
     left: 15
   },
+  inputIconDate: {
+    position: "absolute",
+    top: 4,
+    left: 15
+  },
   inputContainer: {
     marginTop: 20
+  },
+  btnSignup: {
+    width: "100%",
+    height: 45,
+    borderRadius: 25,
+    backgroundColor: "#59BF3F",
+    justifyContent: "center",
+    marginTop: 80
+  },
+  signup: {
+    color: "rgba(255, 255, 255, 0.7)",
+    fontSize: 20,
+    textAlign: "center"
+  },
+  sexo: {
+    width: 150,
+    color: "#fff",
+    borderBottomColor: "#fff",
+    borderBottomWidth: 1
   }
 });
 
@@ -142,6 +169,62 @@ class SignUp extends Component {
                 underlineColorAndroid="transparent"
               />
             </View>
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 20,
+                justifyContent: "space-between"
+              }}
+            >
+              <Icon
+                name={"md-time"}
+                size={28}
+                color="#ffffff"
+                style={styles.inputIconDate}
+              />
+              <DatePicker
+                style={{ width: 150 }}
+                mode="date"
+                showIcon={false}
+                format="DD-MM-YYYY"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                androidMode="spinner"
+                customStyles={{
+                  dateInput: {
+                    color: "#fff",
+                    paddingLeft: 15,
+                    borderWidth: 0,
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#fff"
+                  },
+                  dateText: {
+                    color: "#fff"
+                  },
+                  dateIcon: {
+                    position: "absolute",
+                    left: 0,
+                    top: 4,
+                    marginLeft: 0
+                  }
+                }}
+              />
+              <Picker
+                style={styles.sexo}
+                // selectedValue={this.props.operacao}
+                // onValueChange={op => {
+                //   this.props.attOperacao(op);
+                // }}
+              >
+                <Picker.Item label="Masculino" value="masc" />
+                <Picker.Item label="Feminino" value="fem" />
+              </Picker>
+            </View>
+          </View>
+          <View style={{ marginHorizontal: 20 }}>
+            <TouchableOpacity style={styles.btnSignup} onPress={this.login}>
+              <Text style={styles.signup}>Cadastrar</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ImageBackground>

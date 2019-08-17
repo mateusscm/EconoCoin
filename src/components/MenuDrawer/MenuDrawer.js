@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   topLinks: {
     height: 160,
-    backgroundColor: "black"
+    backgroundColor: "#59BF3F"
   },
   bottomLinks: {
     flex: 1,
