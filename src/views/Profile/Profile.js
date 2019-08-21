@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 30,
     paddingBottom: 5,
-    color: "black",
+    color: "white",
     textAlign: "left"
   },
   subname: {

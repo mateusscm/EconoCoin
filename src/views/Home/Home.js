@@ -24,10 +24,12 @@ class Home extends Component {
   }
   render() {
     return (
-      <View style={styles.allCont}>
+      <React.Fragment>
         <MenuButton navigation={this.props.navigation} />
-        <Text style={styles.text}>Home</Text>
-      </View>
+        <View style={styles.allCont}>
+          <Text style={styles.text}>Home</Text>
+        </View>
+      </React.Fragment>
     );
   }
 }
