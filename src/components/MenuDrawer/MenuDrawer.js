@@ -7,13 +7,9 @@ import {
   Platform,
   Dimensions,
   StyleSheet,
-  TouchableOpacity,
-  Button
+  TouchableOpacity
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
-
-const WIDTH = Dimensions.get("window").width;
-const HEIGHT = Dimensions.get("window").height;
 
 export default class MenuDrawer extends React.Component {
   constructor(props) {
@@ -41,7 +37,12 @@ export default class MenuDrawer extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.scroller}>
-          <View style={styles.topLinks}>
+          <TouchableOpacity
+            style={styles.topLinks}
+            onPress={() => {
+              this.props.navigation.navigate("Profile");
+            }}
+          >
             <View style={styles.profile}>
               <View style={styles.imgView}>
                 <Image
@@ -51,9 +52,10 @@ export default class MenuDrawer extends React.Component {
               </View>
               <View style={styles.profileText}>
                 <Text style={styles.name}>Usuário 1</Text>
+                <Text style={styles.subname}>Ver Perfil</Text>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
           <View style={styles.bottomLinks}>
             {this.navLink("Home", "Home")}
             {this.navLink("Settings", "Settings")}
@@ -94,6 +96,12 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 20,
+    paddingBottom: 5,
+    color: "white",
+    textAlign: "left"
+  },
+  subname: {
+    fontSize: 16,
     paddingBottom: 5,
     color: "white",
     textAlign: "left"

@@ -13,6 +13,7 @@ import SignUp from "../views/SignUp/SignUp";
 import Forget from "../views/Forget/Forget";
 import Settings from "../views/Settings/Settings";
 import AuthLoading from "../views/AuthLoading/AuthLoading";
+import Profile from "../views/Profile/Profile";
 
 import MenuDrawer from "../components/MenuDrawer/MenuDrawer";
 
@@ -32,6 +33,9 @@ const DrawerNavigator = createDrawerNavigator(
     },
     Settings: {
       screen: Settings
+    },
+    Profile: {
+      screen: Profile
     }
   },
   DrawerConfig

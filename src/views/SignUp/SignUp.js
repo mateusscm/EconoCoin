@@ -11,7 +11,7 @@ import {
 
 import bgImage from "./../../assets/img/background.jpg";
 import Icon from "react-native-vector-icons/Ionicons";
-import DatePicker from "react-native-datepicker";
+// import DatePicker from "react-native-datepicker";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -182,7 +182,17 @@ class SignUp extends Component {
                 color="#ffffff"
                 style={styles.inputIconDate}
               />
-              <DatePicker
+              <Text
+                style={{
+                  color: "#fff",
+                  paddingLeft: 45,
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#fff"
+                }}
+              >
+                22/08/2019
+              </Text>
+              {/* <DatePicker
                 style={{ width: 150 }}
                 mode="date"
                 showIcon={false}
@@ -208,7 +218,7 @@ class SignUp extends Component {
                     marginLeft: 0
                   }
                 }}
-              />
+              /> */}
               <Picker
                 style={styles.sexo}
                 // selectedValue={this.props.operacao}
