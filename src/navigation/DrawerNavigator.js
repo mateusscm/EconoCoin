@@ -8,6 +8,9 @@ import {
 } from "react-navigation";
 
 import Home from "../views/Home/Home";
+import HomeNewExpense from "../views/Home/HomeNewExpense";
+import HomeNewIncome from "../views/Home/HomeNewIncome";
+import HomeNewTransf from "../views/Home/HomeNewTransf";
 import Login from "../views/Login/Login";
 import SignUp from "../views/SignUp/SignUp";
 import Forget from "../views/Forget/Forget";
@@ -26,11 +29,16 @@ const DrawerConfig = {
   }
 };
 
+const HomeStack = createSwitchNavigator({
+  Home: Home,
+  HomeNewExpense: HomeNewExpense,
+  HomeNewIncome: HomeNewIncome,
+  HomeNewTransf: HomeNewTransf
+});
+
 const DrawerNavigator = createDrawerNavigator(
   {
-    Home: {
-      screen: Home
-    },
+    Home: HomeStack,
     Settings: {
       screen: Settings
     },

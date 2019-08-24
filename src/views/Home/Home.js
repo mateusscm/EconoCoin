@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text } from "react-native";
-import { Container, View, Fab, Button, Icon } from "native-base";
+import { Container, View } from "native-base";
+import FloatingButtonHome from "./../../components/FloatingButtonHome/FloatingButtonHome";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
 
@@ -27,9 +28,7 @@ const styles = StyleSheet.create({
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      active: false
-    };
+    this.state = {};
   }
   render() {
     return (
@@ -39,59 +38,7 @@ class Home extends Component {
           style={this.state.active ? styles.allContOpacity : styles.allCont}
         >
           <Text style={styles.text}>Home</Text>
-          <Fab
-            active={this.state.active}
-            direction="up"
-            containerStyle={{}}
-            style={{ backgroundColor: "#3c7d2c" }}
-            position="bottomRight"
-            onPress={() => this.setState({ active: !this.state.active })}
-          >
-            <Icon
-              name={this.state.active ? "ios-close" : "ios-add"}
-              style={{ fontSize: 30 }}
-            />
-            <Button style={{ backgroundColor: "#56f" }}>
-              <Text
-                style={
-                  this.state.active
-                    ? {
-                        display: "flex",
-                        position: "absolute",
-                        left: -94,
-                        backgroundColor: "rgba(0,0,0,0.5)",
-                        color: "#fff",
-                        padding: 5,
-                        borderRadius: 5
-                      }
-                    : { display: "none" }
-                }
-              >
-                Editar Conta
-              </Text>
-              <Icon type="AntDesign" name="edit" />
-            </Button>
-            <Button style={{ backgroundColor: "#516" }}>
-              <Text
-                style={
-                  this.state.active
-                    ? {
-                        display: "flex",
-                        position: "absolute",
-                        left: -90,
-                        backgroundColor: "rgba(0,0,0,0.5)",
-                        color: "#fff",
-                        padding: 5,
-                        borderRadius: 5
-                      }
-                    : { display: "none" }
-                }
-              >
-                Nova Conta
-              </Text>
-              <Icon type="AntDesign" name="addfile" />
-            </Button>
-          </Fab>
+          <FloatingButtonHome navigation={this.props.navigation} />
         </View>
       </Container>
     );
