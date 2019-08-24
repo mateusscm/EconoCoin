@@ -10,6 +10,7 @@ import {
   TouchableOpacity
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
+import { Icon } from "native-base";
 
 export default class MenuDrawer extends React.Component {
   constructor(props) {
@@ -17,13 +18,19 @@ export default class MenuDrawer extends React.Component {
     this.state = {};
   }
 
-  navLink(nav, text) {
+  navLink(nav, text, typeIcon, icon) {
     return (
       <TouchableOpacity
-        style={{ height: 50 }}
+        style={{
+          height: 50,
+          flexDirection: "row",
+          alignItems: "center",
+          paddingHorizontal: 10
+        }}
         onPress={() => this.props.navigation.navigate(nav)}
       >
-        <Text style={styles.link}>{text}</Text>
+        <Icon style={styles.linkColor} type={typeIcon} name={icon} />
+        <Text style={[styles.link, styles.linkColor]}>{text}</Text>
       </TouchableOpacity>
     );
   }
@@ -57,8 +64,13 @@ export default class MenuDrawer extends React.Component {
             </View>
           </TouchableOpacity>
           <View style={styles.bottomLinks}>
-            {this.navLink("Home", "Home")}
-            {this.navLink("Settings", "Settings")}
+            {this.navLink("Home", "Visão Geral", "MaterialIcons", "dashboard")}
+            {this.navLink(
+              "Settings",
+              "Preferências",
+              "MaterialIcons",
+              "settings"
+            )}
           </View>
         </ScrollView>
         <TouchableOpacity onPress={this.logout} style={styles.btnLogout}>
@@ -133,6 +145,9 @@ const styles = StyleSheet.create({
     paddingLeft: 14,
     margin: 5,
     textAlign: "left"
+  },
+  linkColor: {
+    color: "#757575"
   },
   footer: {
     height: 50,

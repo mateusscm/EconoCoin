@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text } from "react-native";
+import { Container, View, Fab, Button, Icon } from "native-base";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
-
-import Icon from "react-native-vector-icons";
-import { FloatingAction } from "react-native-floating-action";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -15,6 +13,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#ededed"
   },
+  allContOpacity: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)"
+  },
   text: {
     fontSize: 30
   }
@@ -23,43 +27,73 @@ const styles = StyleSheet.create({
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      active: false
+    };
   }
   render() {
-    const actions = [
-      {
-        text: "Bob",
-        icon: require("./../../assets/img/android.png"),
-        name: "bt_language",
-        position: 1
-      },
-      {
-        text: "Esponja",
-        icon: require("./../../assets/img/ic_accessibility_white.png"),
-        name: "bt_accessibility",
-        position: 2
-      },
-      {
-        text: "Calça Quadrada",
-        icon: require("./../../assets/img/feedback.png"),
-        name: "bt_room",
-        position: 3
-      }
-    ];
     return (
-      <React.Fragment>
+      <Container>
         <MenuButton navigation={this.props.navigation} />
-        <View style={styles.allCont}>
+        <View
+          style={this.state.active ? styles.allContOpacity : styles.allCont}
+        >
           <Text style={styles.text}>Home</Text>
-          <FloatingAction
-            color="#3c7d2c"
-            actions={actions}
-            onPressItem={name => {
-              console.log(`selected button: ${name}`);
-            }}
-          />
+          <Fab
+            active={this.state.active}
+            direction="up"
+            containerStyle={{}}
+            style={{ backgroundColor: "#3c7d2c" }}
+            position="bottomRight"
+            onPress={() => this.setState({ active: !this.state.active })}
+          >
+            <Icon
+              name={this.state.active ? "ios-close" : "ios-add"}
+              style={{ fontSize: 30 }}
+            />
+            <Button style={{ backgroundColor: "#56f" }}>
+              <Text
+                style={
+                  this.state.active
+                    ? {
+                        display: "flex",
+                        position: "absolute",
+                        left: -94,
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        color: "#fff",
+                        padding: 5,
+                        borderRadius: 5
+                      }
+                    : { display: "none" }
+                }
+              >
+                Editar Conta
+              </Text>
+              <Icon type="AntDesign" name="edit" />
+            </Button>
+            <Button style={{ backgroundColor: "#516" }}>
+              <Text
+                style={
+                  this.state.active
+                    ? {
+                        display: "flex",
+                        position: "absolute",
+                        left: -90,
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        color: "#fff",
+                        padding: 5,
+                        borderRadius: 5
+                      }
+                    : { display: "none" }
+                }
+              >
+                Nova Conta
+              </Text>
+              <Icon type="AntDesign" name="addfile" />
+            </Button>
+          </Fab>
         </View>
-      </React.Fragment>
+      </Container>
     );
   }
 }

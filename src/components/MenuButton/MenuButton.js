@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
+import { Container, Header, Left, Body, Right, Button } from "native-base";
 import Icon from "react-native-vector-icons/Ionicons";
 
 // const { width: WIDTH } = Dimensions.get("window");
@@ -25,15 +26,29 @@ class MenuButton extends Component {
   }
   render() {
     return (
-      <View style={styles.menu}>
-        <Icon
-          name="md-menu"
-          color="#fff"
-          size={32}
-          style={styles.menuIcon}
-          onPress={() => this.props.navigation.toggleDrawer()}
-        />
-      </View>
+      <React.Fragment>
+        <Header style={styles.menu}>
+          <Left>
+            <Button
+              transparent
+              onPress={() => this.props.navigation.toggleDrawer()}
+            >
+              <Icon name="md-menu" color="#fff" size={32} />
+            </Button>
+          </Left>
+          <Body />
+          <Right />
+        </Header>
+      </React.Fragment>
+      // <View style={styles.menu}>
+      //   <Icon
+      //     name="md-menu"
+      //     color="#fff"
+      //     size={32}
+      //     style={styles.menuIcon}
+      //     onPress={() => this.props.navigation.toggleDrawer()}
+      //   />
+      // </View>
     );
   }
 }

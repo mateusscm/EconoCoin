@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
+import { Container } from "native-base";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -25,12 +26,12 @@ class Settings extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Container>
         <MenuButton navigation={this.props.navigation} />
         <View style={styles.allCont}>
           <Text style={styles.text}>Settings</Text>
         </View>
-      </React.Fragment>
+      </Container>
     );
   }
 }
