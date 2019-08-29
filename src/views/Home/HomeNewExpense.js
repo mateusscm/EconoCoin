@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 
 import MenuButtonBack from "./../../components/MenuButtonBack/MenuButtonBack";
 import { Container } from "native-base";
+import { theme } from "../../config/_theme";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -11,7 +12,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#ededed"
+    backgroundColor: theme.palette.backgroundMain
   },
   text: {
     fontSize: 30

@@ -2,18 +2,19 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
+import { theme } from "../../config/_theme";
 
 const styles = StyleSheet.create({
   allCont: {
     flex: 1,
-    backgroundColor: "#ededed"
+    backgroundColor: theme.palette.backgroundMain
   },
   text: {
     fontSize: 30
   },
   header: {
     height: 250,
-    backgroundColor: "#59BF3F",
+    backgroundColor: theme.palette.secondary,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 0

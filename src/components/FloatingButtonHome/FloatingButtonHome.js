@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Text } from "react-native";
 
 import { Fab, Icon, Button } from "native-base";
+import { theme } from "../../config/_theme";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -19,7 +20,7 @@ class FloatingButtonHome extends Component {
         active={this.state.active}
         direction="up"
         containerStyle={{}}
-        style={{ backgroundColor: "#3c7d2c" }}
+        style={{ backgroundColor: theme.palette.primary }}
         position="bottomRight"
         onPress={() => this.setState({ active: !this.state.active })}
       >
@@ -39,7 +40,7 @@ class FloatingButtonHome extends Component {
                     position: "absolute",
                     left: -115,
                     backgroundColor: "rgba(0,0,0,0.5)",
-                    color: "#fff",
+                    color: theme.palette.fontColorIcon,
                     padding: 5,
                     borderRadius: 5
                   }
@@ -62,7 +63,7 @@ class FloatingButtonHome extends Component {
                     position: "absolute",
                     left: -110,
                     backgroundColor: "rgba(0,0,0,0.5)",
-                    color: "#fff",
+                    color: theme.palette.fontColorIcon,
                     padding: 5,
                     borderRadius: 5
                   }
@@ -85,7 +86,7 @@ class FloatingButtonHome extends Component {
                     position: "absolute",
                     left: -140,
                     backgroundColor: "rgba(0,0,0,0.5)",
-                    color: "#fff",
+                    color: theme.palette.fontColorIcon,
                     padding: 5,
                     borderRadius: 5
                   }

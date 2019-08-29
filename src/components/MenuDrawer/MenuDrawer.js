@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import { Icon } from "native-base";
+import { theme } from "../../config/_theme";
 
 export default class MenuDrawer extends React.Component {
   constructor(props) {
@@ -88,7 +89,7 @@ export default class MenuDrawer extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black"
+    backgroundColor: theme.palette.bgTxtSideMenu
   },
   scroller: {
     flex: 1
@@ -97,9 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    paddingTop: 25,
-    borderBottomWidth: 1,
-    borderBottomColor: "#777777"
+    paddingTop: 25
   },
   profileText: {
     flex: 3,
@@ -130,11 +129,11 @@ const styles = StyleSheet.create({
   },
   topLinks: {
     height: 160,
-    backgroundColor: "#59BF3F"
+    backgroundColor: theme.palette.secondary
   },
   bottomLinks: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: theme.palette.bgTxtSideMenu,
     paddingTop: 10,
     paddingBottom: 450
   },
@@ -147,21 +146,19 @@ const styles = StyleSheet.create({
     textAlign: "left"
   },
   linkColor: {
-    color: "#757575"
+    color: theme.palette.textSideMenu
   },
   footer: {
     height: 50,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white"
-    // borderTopWidth: 1,
-    // borderTopColor: "lightgray"
+    backgroundColor: theme.palette.bgTxtSideMenu
   },
   version: {
     flex: 1,
     textAlign: "right",
     marginRight: 20,
-    color: "gray"
+    color: theme.palette.textSideMenu
   },
   description: {
     flex: 1,

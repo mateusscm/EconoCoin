@@ -11,6 +11,7 @@ import {
 
 import bgImage from "./../../assets/img/background.jpg";
 import Icon from "react-native-vector-icons/Ionicons";
+import { theme } from "../../config/_theme";
 // import DatePicker from "react-native-datepicker";
 
 // const { width: WIDTH } = Dimensions.get("window");
@@ -34,11 +35,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   subtext: {
-    color: "#fff",
+    color: theme.palette.txtWithBg,
     fontSize: 20
   },
   frase: {
-    color: "#fff",
+    color: theme.palette.txtWithBg,
     fontSize: 16
   },
   input: {
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
     paddingLeft: 45,
     color: "rgba(255, 255, 255, 0.7)",
     borderBottomWidth: 1,
-    borderBottomColor: "white"
+    borderBottomColor: theme.palette.txtWithBg
   },
   inputIcon: {
     position: "absolute",
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 45,
     borderRadius: 25,
-    backgroundColor: "#59BF3F",
+    backgroundColor: theme.palette.secondary,
     justifyContent: "center",
     marginTop: 80
   },
@@ -78,9 +79,15 @@ const styles = StyleSheet.create({
   },
   sexo: {
     width: 150,
-    color: "#fff",
-    borderBottomColor: "#fff",
+    color: theme.palette.txtWithBg,
+    borderBottomColor: theme.palette.txtWithBg,
     borderBottomWidth: 1
+  },
+  line: {
+    borderWidth: 1,
+    borderColor: theme.palette.secondary,
+    marginRight: 200,
+    marginLeft: 20
   }
 });
 
@@ -101,14 +108,7 @@ class SignUp extends Component {
             <Text style={styles.text}>Faça seu cadastro</Text>
             <Text style={styles.subtext}>e acompanhe seus gastos!</Text>
           </View>
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: "#59BF3F",
-              marginRight: 200,
-              marginLeft: 20
-            }}
-          />
+          <View style={styles.line} />
           <View style={{ padding: 20 }}>
             <Text style={styles.frase}>Insira alguns dados abaixo:</Text>
             <View style={styles.inputContainer}>
@@ -192,33 +192,6 @@ class SignUp extends Component {
               >
                 22/08/2019
               </Text>
-              {/* <DatePicker
-                style={{ width: 150 }}
-                mode="date"
-                showIcon={false}
-                format="DD-MM-YYYY"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                androidMode="spinner"
-                customStyles={{
-                  dateInput: {
-                    color: "#fff",
-                    paddingLeft: 15,
-                    borderWidth: 0,
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#fff"
-                  },
-                  dateText: {
-                    color: "#fff"
-                  },
-                  dateIcon: {
-                    position: "absolute",
-                    left: 0,
-                    top: 4,
-                    marginLeft: 0
-                  }
-                }}
-              /> */}
               <Picker
                 style={styles.sexo}
                 // selectedValue={this.props.operacao}

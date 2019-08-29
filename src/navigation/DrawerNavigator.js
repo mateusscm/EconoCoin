@@ -29,12 +29,20 @@ const DrawerConfig = {
   }
 };
 
-const HomeStack = createSwitchNavigator({
-  Home: Home,
-  HomeNewExpense: HomeNewExpense,
-  HomeNewIncome: HomeNewIncome,
-  HomeNewTransf: HomeNewTransf
-});
+const HomeStack = createStackNavigator(
+  {
+    Home: Home,
+    HomeNewExpense: HomeNewExpense,
+    HomeNewIncome: HomeNewIncome,
+    HomeNewTransf: HomeNewTransf
+  },
+  {
+    headerMode: "none",
+    navigationOptions: {
+      headerVisible: false
+    }
+  }
+);
 
 const DrawerNavigator = createDrawerNavigator(
   {

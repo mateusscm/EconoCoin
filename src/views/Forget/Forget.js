@@ -11,6 +11,7 @@ import {
 
 import bgImage from "./../../assets/img/background.jpg";
 import Icon from "react-native-vector-icons/Ionicons";
+import { theme } from "../../config/_theme";
 
 const styles = StyleSheet.create({
   backgroundContainer: {
@@ -28,12 +29,12 @@ const styles = StyleSheet.create({
     // alignItems: "center"
   },
   text: {
-    color: "#59BF3F",
+    color: theme.palette.secondary,
     fontSize: 25,
     fontWeight: "bold"
   },
   subtext: {
-    color: "#fff",
+    color: theme.palette.txtWithBg,
     fontSize: 20
   },
   input: {
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
     paddingLeft: 45,
     color: "rgba(255, 255, 255, 0.7)",
     borderBottomWidth: 1,
-    borderBottomColor: "white"
+    borderBottomColor: theme.palette.txtWithBg
   },
   inputIcon: {
     position: "absolute",
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 45,
     borderRadius: 25,
-    backgroundColor: "#59BF3F",
+    backgroundColor: theme.palette.secondary,
     justifyContent: "center",
     marginTop: 80
   },
@@ -90,7 +91,7 @@ class Forget extends Component {
           <View
             style={{
               borderWidth: 1,
-              borderColor: "#59BF3F",
+              borderColor: theme.palette.secondary,
               marginRight: 200,
               marginLeft: 20
             }}
@@ -117,7 +118,7 @@ class Forget extends Component {
           <View
             style={{
               borderWidth: 1,
-              borderColor: "#59BF3F",
+              borderColor: theme.palette.secondary,
               marginLeft: 20,
               marginRight: 200,
               marginTop: 20

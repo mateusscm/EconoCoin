@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
-import { Container, Header, Left, Body, Right, Button } from "native-base";
-import Icon from "react-native-vector-icons/Ionicons";
+import { StyleSheet, StatusBar } from "react-native";
+import { Icon, Header, Left, Body, Right, Button } from "native-base";
+import { theme } from "../../config/_theme";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   menu: {
     height: 50,
-    backgroundColor: "#3c7d2c",
+    backgroundColor: theme.palette.primary,
     elevation: 4
   },
   menuIcon: {
@@ -16,6 +16,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 10,
     left: 20
+  },
+  icon: {
+    color: theme.palette.fontColorIcon,
+    fontSize: 32
   }
 });
 
@@ -28,27 +32,19 @@ class MenuButton extends Component {
     return (
       <React.Fragment>
         <Header style={styles.menu}>
+          <StatusBar backgroundColor="black" barStyle="light-content" />
           <Left>
             <Button
               transparent
               onPress={() => this.props.navigation.toggleDrawer()}
             >
-              <Icon name="md-menu" color="#fff" size={32} />
+              <Icon type="Ionicons" name="md-menu" style={styles.icon} />
             </Button>
           </Left>
           <Body />
           <Right />
         </Header>
       </React.Fragment>
-      // <View style={styles.menu}>
-      //   <Icon
-      //     name="md-menu"
-      //     color="#fff"
-      //     size={32}
-      //     style={styles.menuIcon}
-      //     onPress={() => this.props.navigation.toggleDrawer()}
-      //   />
-      // </View>
     );
   }
 }

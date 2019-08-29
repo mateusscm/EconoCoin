@@ -15,6 +15,7 @@ import logo from "./../../assets/img/logo.png";
 
 import Icon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-community/async-storage";
+import { theme } from "../../config/_theme";
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
     width: WIDTH - 55,
     height: 45,
     borderRadius: 25,
-    backgroundColor: "#59BF3F",
+    backgroundColor: theme.palette.secondary,
     justifyContent: "center",
     marginTop: 20
   },

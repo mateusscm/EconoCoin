@@ -1,13 +1,14 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar } from "react-native";
 import { Header, Left, Body, Right, Button, Icon, Title } from "native-base";
+import { theme } from "../../config/_theme";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   menu: {
     height: 50,
-    backgroundColor: "#3c7d2c",
+    backgroundColor: theme.palette.primary,
     elevation: 4
   },
   menuIcon: {
@@ -27,6 +28,7 @@ class MenuButtonBack extends Component {
     return (
       <React.Fragment>
         <Header style={styles.menu}>
+          <StatusBar backgroundColor="black" barStyle="light-content" />
           <Left>
             <Button
               transparent
@@ -35,7 +37,7 @@ class MenuButtonBack extends Component {
               <Icon
                 type="MaterialIcons"
                 name="keyboard-arrow-left"
-                style={{ color: "#fff", fontSize: 30 }}
+                style={{ color: theme.palette.fontColorIcon, fontSize: 30 }}
               />
             </Button>
           </Left>
