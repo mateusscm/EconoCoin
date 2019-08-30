@@ -66,6 +66,10 @@ const styles = StyleSheet.create({
     color: "rgba(255, 255, 255, 0.7)",
     fontSize: 20,
     textAlign: "center"
+  },
+  frase: {
+    color: theme.palette.txtWithBg,
+    fontSize: 16
   }
 });
 
@@ -97,9 +101,7 @@ class Forget extends Component {
             }}
           />
           <View style={{ padding: 20 }}>
-            <Text style={styles.subtext}>
-              Digite seu E-mail no campo abaixo:
-            </Text>
+            <Text style={styles.frase}>Digite seu E-mail no campo abaixo:</Text>
             <View style={styles.inputContainer}>
               <Icon
                 name={"ios-person"}
@@ -115,7 +117,7 @@ class Forget extends Component {
               />
             </View>
           </View>
-          <View
+          {/* <View
             style={{
               borderWidth: 1,
               borderColor: theme.palette.secondary,
@@ -123,7 +125,7 @@ class Forget extends Component {
               marginRight: 200,
               marginTop: 20
             }}
-          />
+          /> */}
           <View style={{ marginHorizontal: 20 }}>
             <TouchableOpacity style={styles.btnForget} onPress={this.login}>
               <Text style={styles.solicitar}>Solicitar</Text>
