@@ -20,8 +20,8 @@ export const theme = {
     textSideMenu: "#757575",
     bgTxtSideMenu: "#FFF",
     fontColorIcon: "#FFF",
-    txtWithBg: "#FFF",
-    txtPrimary: "#000",
+    txtWithBg: "#000",
+    txtPrimary: "#fff",
     txtSecondary: "#404040"
   }
 };

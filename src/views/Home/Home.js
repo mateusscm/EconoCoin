@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.5)"
   },
   text: {
-    fontSize: 30
+    fontSize: 30,
+    color: theme.palette.txtPrimary
   }
 });
 

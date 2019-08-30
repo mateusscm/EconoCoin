@@ -10,7 +10,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.palette.backgroundMain
   },
   text: {
-    fontSize: 30
+    fontSize: 30,
+    color: theme.palette.txtPrimary
   },
   header: {
     height: 250,
