@@ -67,6 +67,12 @@ export default class MenuDrawer extends React.Component {
           <View style={styles.bottomLinks}>
             {this.navLink("Home", "Visão Geral", "MaterialIcons", "dashboard")}
             {this.navLink(
+              "AccountBalance",
+              "Saldo em Contas",
+              "MaterialIcons",
+              "playlist-add"
+            )}
+            {this.navLink(
               "Settings",
               "Preferências",
               "MaterialIcons",

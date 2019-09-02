@@ -17,6 +17,7 @@ import Forget from "../views/Forget/Forget";
 import Settings from "../views/Settings/Settings";
 import AuthLoading from "../views/AuthLoading/AuthLoading";
 import Profile from "../views/Profile/Profile";
+import AccountBalance from "../views/AccountBalance/AccountBalance";
 
 import MenuDrawer from "../components/MenuDrawer/MenuDrawer";
 
@@ -47,6 +48,9 @@ const HomeStack = createStackNavigator(
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
+    AccountBalance: {
+      screen: AccountBalance
+    },
     Settings: {
       screen: Settings
     },

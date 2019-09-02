@@ -7,7 +7,7 @@ import { theme } from "../../config/_theme";
 
 const styles = StyleSheet.create({
   menu: {
-    height: 50,
+    height: 60,
     backgroundColor: theme.palette.primary,
     elevation: 4
   },
