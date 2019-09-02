@@ -73,6 +73,12 @@ export default class MenuDrawer extends React.Component {
               "playlist-add"
             )}
             {this.navLink(
+              "Extract",
+              "Extrato",
+              "MaterialIcons",
+              "account-balance-wallet"
+            )}
+            {this.navLink(
               "Settings",
               "Preferências",
               "MaterialIcons",

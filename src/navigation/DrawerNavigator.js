@@ -18,6 +18,7 @@ import Settings from "../views/Settings/Settings";
 import AuthLoading from "../views/AuthLoading/AuthLoading";
 import Profile from "../views/Profile/Profile";
 import AccountBalance from "../views/AccountBalance/AccountBalance";
+import Extract from "../views/Extract/Extract";
 
 import MenuDrawer from "../components/MenuDrawer/MenuDrawer";
 
@@ -56,6 +57,9 @@ const DrawerNavigator = createDrawerNavigator(
     },
     Profile: {
       screen: Profile
+    },
+    Extract: {
+      screen: Extract
     }
   },
   DrawerConfig

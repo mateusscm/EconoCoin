@@ -42,7 +42,11 @@ class ExtractSummary extends Component {
   render() {
     return (
       <Content style={styles.content}>
-        <Text style={styles.mainTitle}>RESUMO DE EXTRATO</Text>
+        {this.props.view === "Home" ? (
+          <Text style={styles.mainTitle}>RESUMO DE EXTRATO</Text>
+        ) : (
+          <Text style={styles.mainTitle}>EXTRATO COMPLETO</Text>
+        )}
         <Card>
           {this.props.infos.map((info, i) => {
             return <ContentExtract info={info} key={i} />;
@@ -50,15 +54,17 @@ class ExtractSummary extends Component {
           <CardItem style={{ justifyContent: "flex-end" }}>
             <Text>Total: R${this.props.total}</Text>
           </CardItem>
-          <CardItem
-            style={[styles.align, styles.border]}
-            footer
-            bordered
-            button
-            onPress={() => alert("This is Card Footer")}
-          >
-            <Text>Conferir Extrato</Text>
-          </CardItem>
+          {this.props.view === "Home" ? (
+            <CardItem
+              style={[styles.align, styles.border]}
+              footer
+              bordered
+              button
+              onPress={() => this.props.navigation.navigate("Extract")}
+            >
+              <Text>Conferir Extrato</Text>
+            </CardItem>
+          ) : null}
         </Card>
       </Content>
     );

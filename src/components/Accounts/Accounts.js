@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   mainTitle: {
     paddingTop: 10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 18,
     paddingBottom: 5,
     fontWeight: "700",
     color: "#6e6e6e"

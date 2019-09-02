@@ -94,13 +94,15 @@ class InsideCardAccounts extends Component {
                     width: 50,
                     height: 50,
                     borderRadius: 50,
-                    backgroundColor: "#cd0293",
+                    backgroundColor: "#365280",
                     marginBottom: 10,
                     alignItems: "center",
                     justifyContent: "center"
                   }}
                 >
-                  <Text style={{ fontSize: 30 }}>{this.props.conta.sigla}</Text>
+                  <Text style={{ fontSize: 30, color: "white" }}>
+                    {this.props.conta.sigla}
+                  </Text>
                 </View>
               </Left>
               <Body

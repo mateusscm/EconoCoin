@@ -8,8 +8,7 @@ import { theme } from "../../config/_theme";
 import PreviewBalance from "../../components/PreviewBalance/PreviewBalance";
 import ExtractSummary from "../../components/ExtractSummary/ExtractSummary";
 
-import burger from "./../../assets/img/burger.png";
-import shirt from "./../../assets/img/shirt.png";
+import { infos } from "./../../data";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -33,37 +32,6 @@ const styles = StyleSheet.create({
   }
 });
 
-const infos = [
-  {
-    data: "28/08/2019",
-    img: "./../../assets/img/burger.png",
-    local: "Lanchonete Kastor",
-    categoria: "Alimentação",
-    gasto: 28.0
-  },
-  {
-    data: "29/08/2019",
-    img: "./../../assets/img/shirt.png",
-    local: "Riachuelo",
-    categoria: "Roupas",
-    gasto: 125.9
-  }
-  // {
-  //   data: '',
-  //   img: {},
-  //   local: '',
-  //   categoria: '',
-  //   gasto: ''
-  // },
-  // {
-  //   data: '',
-  //   img: {},
-  //   local: '',
-  //   categoria: '',
-  //   gasto: ''
-  // },
-];
-
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -86,7 +54,12 @@ class Home extends Component {
         <MenuButton navigation={this.props.navigation} />
         <View style={styles.allCont}>
           <PreviewBalance view="Home" navigation={this.props.navigation} />
-          <ExtractSummary view="Home" infos={infos} total={this.state.total} />
+          <ExtractSummary
+            view="Home"
+            navigation={this.props.navigation}
+            infos={infos}
+            total={this.state.total}
+          />
           <FloatingButtonHome navigation={this.props.navigation} />
         </View>
       </Container>
