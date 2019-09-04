@@ -21,7 +21,7 @@ class FloatingButtonHome extends Component {
         direction="up"
         containerStyle={{}}
         style={{ backgroundColor: theme.palette.primary }}
-        position="bottomRight"
+        position="bottomLeft"
         onPress={() => this.setState({ active: !this.state.active })}
       >
         <Icon
@@ -38,7 +38,8 @@ class FloatingButtonHome extends Component {
                 ? {
                     display: "flex",
                     position: "absolute",
-                    left: -115,
+                    right: -108,
+                    // left: -115,
                     backgroundColor: "rgba(0,0,0,0.5)",
                     color: theme.palette.fontColorIcon,
                     padding: 5,
@@ -52,7 +53,7 @@ class FloatingButtonHome extends Component {
           <Icon type="MaterialCommunityIcons" name="arrow-down" />
         </Button>
         <Button
-          style={{ backgroundColor: "#259425" }}
+          style={{ backgroundColor: "#14c6cc" }}
           onPress={() => this.props.navigation.navigate("HomeNewIncome")}
         >
           <Text
@@ -61,7 +62,8 @@ class FloatingButtonHome extends Component {
                 ? {
                     display: "flex",
                     position: "absolute",
-                    left: -110,
+                    right: -100,
+                    // left: -110,
                     backgroundColor: "rgba(0,0,0,0.5)",
                     color: theme.palette.fontColorIcon,
                     padding: 5,
@@ -84,7 +86,8 @@ class FloatingButtonHome extends Component {
                 ? {
                     display: "flex",
                     position: "absolute",
-                    left: -140,
+                    right: -130,
+                    // left: -140,
                     backgroundColor: "rgba(0,0,0,0.5)",
                     color: theme.palette.fontColorIcon,
                     padding: 5,

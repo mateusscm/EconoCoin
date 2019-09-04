@@ -62,7 +62,7 @@ class Profile extends Component {
   render() {
     return (
       <View style={styles.allCont}>
-        <MenuButton navigation={this.props.navigation} />
+        <MenuButton view="Perfil" navigation={this.props.navigation} />
         <View style={styles.header}>
           <View style={styles.profile}>
             <View style={styles.imgView}>

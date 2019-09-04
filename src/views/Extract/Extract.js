@@ -5,6 +5,7 @@ import MenuButton from "./../../components/MenuButton/MenuButton";
 import { Container, Content, View } from "native-base";
 import { theme } from "../../config/_theme";
 import { infos } from "./../../data";
+import { ScrollView } from "react-native-gesture-handler";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -34,14 +35,16 @@ class Extract extends Component {
   render() {
     return (
       <Container>
-        <MenuButton navigation={this.props.navigation} />
-        <View style={styles.allCont}>
-          <ExtractSummary
-            view="Extract"
-            infos={infos}
-            total={this.state.total}
-          />
-        </View>
+        <MenuButton view="Extrato" navigation={this.props.navigation} />
+        <ScrollView style={{ width: "100%" }}>
+          <View style={styles.allCont}>
+            <ExtractSummary
+              view="Extract"
+              infos={infos}
+              total={this.state.total}
+            />
+          </View>
+        </ScrollView>
       </Container>
     );
   }

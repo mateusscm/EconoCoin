@@ -51,17 +51,19 @@ class Home extends Component {
   render() {
     return (
       <Container>
-        <MenuButton navigation={this.props.navigation} />
-        <View style={styles.allCont}>
-          <PreviewBalance view="Home" navigation={this.props.navigation} />
-          <ExtractSummary
-            view="Home"
-            navigation={this.props.navigation}
-            infos={infos}
-            total={this.state.total}
-          />
-          <FloatingButtonHome navigation={this.props.navigation} />
-        </View>
+        <MenuButton view="Visão Geral" navigation={this.props.navigation} />
+        <ScrollView style={{ width: "100%" }}>
+          <View style={styles.allCont}>
+            <PreviewBalance view="Home" navigation={this.props.navigation} />
+            <ExtractSummary
+              view="Home"
+              navigation={this.props.navigation}
+              infos={infos}
+              total={this.state.total}
+            />
+          </View>
+        </ScrollView>
+        <FloatingButtonHome navigation={this.props.navigation} />
       </Container>
     );
   }

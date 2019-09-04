@@ -29,7 +29,7 @@ class Settings extends Component {
   render() {
     return (
       <Container>
-        <MenuButton navigation={this.props.navigation} />
+        <MenuButton view="Preferências" navigation={this.props.navigation} />
         <View style={styles.allCont}>
           <Text style={styles.text}>Settings</Text>
           <Switch

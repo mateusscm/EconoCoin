@@ -31,7 +31,7 @@ class ContentExtract extends Component {
             paddingTop: 5
           }}
         >
-          -`${this.props.info.data}`-
+          -{this.props.info.data}-
         </Text>
         <ListItem avatar>
           <Left>

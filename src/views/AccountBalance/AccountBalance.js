@@ -7,6 +7,8 @@ import { theme } from "../../config/_theme";
 import Accounts from "../../components/Accounts/Accounts";
 import { ScrollView } from "react-native-gesture-handler";
 
+import { contas } from "./../../data";
+
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
@@ -26,34 +28,6 @@ const styles = StyleSheet.create({
   }
 });
 
-const contas = [
-  {
-    nome: "Banco do Brasil",
-    saldo: 43.0,
-    sigla: "BB"
-  },
-  {
-    nome: "Banco Itaú",
-    saldo: 43.0,
-    sigla: "I"
-  },
-  {
-    nome: "Carteira",
-    saldo: 43.0,
-    sigla: "Ca"
-  },
-  {
-    nome: "Caixa",
-    saldo: 43.0,
-    sigla: "Cx"
-  },
-  {
-    nome: "Cofre",
-    saldo: 43.0,
-    sigla: "Co"
-  }
-];
-
 class AccountBalance extends Component {
   constructor(props) {
     super(props);
@@ -71,7 +45,7 @@ class AccountBalance extends Component {
             zIndex: 1000,
             width: 40,
             height: 40,
-            backgroundColor: "red",
+            backgroundColor: "#36a386",
             borderRadius: 50,
             alignItems: "center",
             justifyContent: "center"
@@ -81,7 +55,7 @@ class AccountBalance extends Component {
         >
           <Text style={styles.fontColor}>+</Text>
         </Button>
-        <MenuButton navigation={this.props.navigation} />
+        <MenuButton view="Contas" navigation={this.props.navigation} />
         <View style={styles.allCont}>
           <PreviewBalance />
           <Accounts contas={contas} />
