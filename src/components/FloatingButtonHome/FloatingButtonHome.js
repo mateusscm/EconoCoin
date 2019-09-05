@@ -10,22 +10,22 @@ class FloatingButtonHome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: false
+      // active: false
     };
   }
 
   render() {
     return (
       <Fab
-        active={this.state.active}
+        active={this.props.active}
         direction="up"
         containerStyle={{}}
-        style={{ backgroundColor: theme.palette.primary }}
+        style={{ backgroundColor: theme.palette.primary, zIndex: 1000 }}
         position="bottomLeft"
-        onPress={() => this.setState({ active: !this.state.active })}
+        onPress={() => this.props.toggleBtn()}
       >
         <Icon
-          name={this.state.active ? "ios-close" : "ios-add"}
+          name={this.props.active ? "ios-close" : "ios-add"}
           style={{ fontSize: 30 }}
         />
         <Button
@@ -34,7 +34,7 @@ class FloatingButtonHome extends Component {
         >
           <Text
             style={
-              this.state.active
+              this.props.active
                 ? {
                     display: "flex",
                     position: "absolute",
@@ -58,7 +58,7 @@ class FloatingButtonHome extends Component {
         >
           <Text
             style={
-              this.state.active
+              this.props.active
                 ? {
                     display: "flex",
                     position: "absolute",
@@ -82,7 +82,7 @@ class FloatingButtonHome extends Component {
         >
           <Text
             style={
-              this.state.active
+              this.props.active
                 ? {
                     display: "flex",
                     position: "absolute",

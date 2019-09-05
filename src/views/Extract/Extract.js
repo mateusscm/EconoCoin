@@ -29,7 +29,17 @@ const styles = StyleSheet.create({
 class Extract extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      total: 0
+    };
+  }
+
+  componentDidMount() {
+    const newTotal = infos.reduce(
+      (totalValue, inf) => totalValue + inf.gasto,
+      0
+    );
+    this.setState({ total: newTotal });
   }
 
   render() {

@@ -52,7 +52,7 @@ class PreviewBalance extends Component {
     return (
       <View style={styles.content}>
         <Text style={styles.mainTitle}>SALDO TOTAL DE CONTAS</Text>
-        <Card>
+        <Card style={{ zIndex: 0 }}>
           <CardItem header>
             <Body style={styles.align}>
               <Text style={styles.title}>R$540,20</Text>

@@ -20,6 +20,14 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: theme.palette.backgroundMain
   },
+  opacity: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    zIndex: 1
+  },
   text: {
     fontSize: 30,
     color: theme.palette.txtPrimary
@@ -36,8 +44,10 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      total: 0
+      total: 0,
+      active: false
     };
+    this.toggleBtn = this.toggleBtn.bind(this);
   }
 
   componentDidMount() {
@@ -48,22 +58,31 @@ class Home extends Component {
     this.setState({ total: newTotal });
   }
 
+  toggleBtn() {
+    this.setState({ active: !this.state.active });
+  }
+
   render() {
     return (
       <Container>
         <MenuButton view="Visão Geral" navigation={this.props.navigation} />
         <ScrollView style={{ width: "100%" }}>
+          {/* <View style={this.state.active ? styles.opacity : null} /> */}
           <View style={styles.allCont}>
             <PreviewBalance view="Home" navigation={this.props.navigation} />
             <ExtractSummary
               view="Home"
               navigation={this.props.navigation}
-              infos={infos}
+              infos={infos.slice(0, 3)}
               total={this.state.total}
             />
           </View>
         </ScrollView>
-        <FloatingButtonHome navigation={this.props.navigation} />
+        <FloatingButtonHome
+          toggleBtn={this.toggleBtn}
+          active={this.state.active}
+          navigation={this.props.navigation}
+        />
       </Container>
     );
   }

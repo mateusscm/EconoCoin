@@ -47,7 +47,7 @@ class ExtractSummary extends Component {
         ) : (
           <Text style={styles.mainTitle}>EXTRATO COMPLETO</Text>
         )}
-        <Card>
+        <Card style={{ zIndex: 0 }}>
           {this.props.infos.map((info, i) => {
             return <ContentExtract info={info} key={i} />;
           })}
@@ -62,7 +62,7 @@ class ExtractSummary extends Component {
               button
               onPress={() => this.props.navigation.navigate("Extract")}
             >
-              <Text>Conferir Extrato</Text>
+              <Text>Conferir Extrato Total</Text>
             </CardItem>
           ) : null}
         </Card>
