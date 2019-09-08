@@ -12,6 +12,7 @@ import {
 import bgImage from "./../../assets/img/background.jpg";
 import Icon from "react-native-vector-icons/Ionicons";
 import { theme } from "../../config/_theme";
+import { ScrollView } from "react-native-gesture-handler";
 // import DatePicker from "react-native-datepicker";
 
 // const { width: WIDTH } = Dimensions.get("window");
@@ -104,111 +105,113 @@ class SignUp extends Component {
         imageStyle={{ opacity: 0.7 }}
       >
         <View style={styles.allCont}>
-          <View style={{ padding: 20, marginTop: 30 }}>
-            <Text style={styles.text}>Faça seu cadastro</Text>
-            <Text style={styles.subtext}>e acompanhe seus gastos!</Text>
-          </View>
-          <View style={styles.line} />
-          <View style={{ padding: 20 }}>
-            <Text style={styles.frase}>Insira alguns dados abaixo:</Text>
-            <View style={styles.inputContainer}>
-              <Icon
-                name={"ios-person"}
-                size={28}
-                color="#ffffff"
-                style={styles.inputIcon}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder={"Nome Completo"}
-                placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
-                underlineColorAndroid="transparent"
-              />
+          <ScrollView>
+            <View style={{ padding: 20, marginTop: 30 }}>
+              <Text style={styles.text}>Faça seu cadastro</Text>
+              <Text style={styles.subtext}>e acompanhe seus gastos!</Text>
             </View>
-            <View style={styles.inputContainer}>
-              <Icon
-                name={"ios-person"}
-                size={28}
-                color="#ffffff"
-                style={styles.inputIcon}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder={"E-mail"}
-                placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
-                underlineColorAndroid="transparent"
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <Icon
-                name={"ios-lock"}
-                size={28}
-                color="#ffffff"
-                style={styles.inputIcon}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder={"Senha"}
-                secureTextEntry={true}
-                placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
-                underlineColorAndroid="transparent"
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <Icon
-                name={"ios-lock"}
-                size={28}
-                color="#ffffff"
-                style={styles.inputIcon}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder={"Insira a senha novamente"}
-                secureTextEntry={true}
-                placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
-                underlineColorAndroid="transparent"
-              />
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                marginTop: 20,
-                justifyContent: "space-between"
-              }}
-            >
-              <Icon
-                name={"md-time"}
-                size={28}
-                color="#ffffff"
-                style={styles.inputIconDate}
-              />
-              <Text
+            <View style={styles.line} />
+            <View style={{ padding: 20 }}>
+              <Text style={styles.frase}>Insira alguns dados abaixo:</Text>
+              <View style={styles.inputContainer}>
+                <Icon
+                  name={"ios-person"}
+                  size={28}
+                  color="#ffffff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder={"Nome Completo"}
+                  placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <Icon
+                  name={"ios-person"}
+                  size={28}
+                  color="#ffffff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder={"E-mail"}
+                  placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <Icon
+                  name={"ios-lock"}
+                  size={28}
+                  color="#ffffff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder={"Senha"}
+                  secureTextEntry={true}
+                  placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                <Icon
+                  name={"ios-lock"}
+                  size={28}
+                  color="#ffffff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder={"Insira a senha novamente"}
+                  secureTextEntry={true}
+                  placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+              <View
                 style={{
-                  color: "#fff",
-                  paddingLeft: 45,
-                  borderBottomWidth: 1,
-                  borderBottomColor: "#fff"
+                  flexDirection: "row",
+                  marginTop: 20,
+                  justifyContent: "space-between"
                 }}
               >
-                22/08/2019
-              </Text>
-              <Picker
-                style={styles.sexo}
-                // selectedValue={this.props.operacao}
-                // onValueChange={op => {
-                //   this.props.attOperacao(op);
-                // }}
-              >
-                <Picker.Item label="Masculino" value="masc" />
-                <Picker.Item label="Feminino" value="fem" />
-              </Picker>
+                <Icon
+                  name={"md-time"}
+                  size={28}
+                  color="#ffffff"
+                  style={styles.inputIconDate}
+                />
+                <Text
+                  style={{
+                    color: "#fff",
+                    paddingLeft: 45,
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#fff"
+                  }}
+                >
+                  22/08/2019
+                </Text>
+                <Picker
+                  style={styles.sexo}
+                  // selectedValue={this.props.operacao}
+                  // onValueChange={op => {
+                  //   this.props.attOperacao(op);
+                  // }}
+                >
+                  <Picker.Item label="Masculino" value="masc" />
+                  <Picker.Item label="Feminino" value="fem" />
+                </Picker>
+              </View>
             </View>
-          </View>
-          <View style={{ marginHorizontal: 20 }}>
-            <TouchableOpacity style={styles.btnSignup} onPress={this.login}>
-              <Text style={styles.signup}>Cadastrar</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={{ marginHorizontal: 20 }}>
+              <TouchableOpacity style={styles.btnSignup} onPress={this.login}>
+                <Text style={styles.signup}>Cadastrar</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </View>
       </ImageBackground>
     );

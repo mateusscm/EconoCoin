@@ -12,6 +12,7 @@ import {
 import bgImage from "./../../assets/img/background.jpg";
 import Icon from "react-native-vector-icons/Ionicons";
 import { theme } from "../../config/_theme";
+import { ScrollView } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
   backgroundContainer: {
@@ -86,38 +87,41 @@ class Forget extends Component {
         imageStyle={{ opacity: 0.7 }}
       >
         <View style={styles.allCont}>
-          <View style={{ padding: 20, marginTop: 30 }}>
-            <Text style={styles.text}>Esqueceu a Senha?</Text>
-            <Text style={styles.subtext}>
-              Não se preocupe! Vamos te ajudar!
-            </Text>
-          </View>
-          <View
-            style={{
-              borderWidth: 1,
-              borderColor: theme.palette.secondary,
-              marginRight: 200,
-              marginLeft: 20
-            }}
-          />
-          <View style={{ padding: 20 }}>
-            <Text style={styles.frase}>Digite seu E-mail no campo abaixo:</Text>
-            <View style={styles.inputContainer}>
-              <Icon
-                name={"ios-person"}
-                size={28}
-                color="#ffffff"
-                style={styles.inputIcon}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder={"E-mail"}
-                placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
-                underlineColorAndroid="transparent"
-              />
+          <ScrollView>
+            <View style={{ padding: 20, marginTop: 30 }}>
+              <Text style={styles.text}>Esqueceu a Senha?</Text>
+              <Text style={styles.subtext}>
+                Não se preocupe! Vamos te ajudar!
+              </Text>
             </View>
-          </View>
-          {/* <View
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: theme.palette.secondary,
+                marginRight: 200,
+                marginLeft: 20
+              }}
+            />
+            <View style={{ padding: 20 }}>
+              <Text style={styles.frase}>
+                Digite seu E-mail no campo abaixo:
+              </Text>
+              <View style={styles.inputContainer}>
+                <Icon
+                  name={"ios-person"}
+                  size={28}
+                  color="#ffffff"
+                  style={styles.inputIcon}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder={"E-mail"}
+                  placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
+                  underlineColorAndroid="transparent"
+                />
+              </View>
+            </View>
+            {/* <View
             style={{
               borderWidth: 1,
               borderColor: theme.palette.secondary,
@@ -126,11 +130,12 @@ class Forget extends Component {
               marginTop: 20
             }}
           /> */}
-          <View style={{ marginHorizontal: 20 }}>
-            <TouchableOpacity style={styles.btnForget} onPress={this.login}>
-              <Text style={styles.solicitar}>Solicitar</Text>
-            </TouchableOpacity>
-          </View>
+            <View style={{ marginHorizontal: 20 }}>
+              <TouchableOpacity style={styles.btnForget} onPress={this.login}>
+                <Text style={styles.solicitar}>Solicitar</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </View>
       </ImageBackground>
     );

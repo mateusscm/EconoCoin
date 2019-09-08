@@ -21,7 +21,7 @@ class FloatingButtonHome extends Component {
         direction="up"
         containerStyle={{}}
         style={{ backgroundColor: theme.palette.primary, zIndex: 1000 }}
-        position="bottomLeft"
+        position="bottomRight"
         onPress={() => this.props.toggleBtn()}
       >
         <Icon
