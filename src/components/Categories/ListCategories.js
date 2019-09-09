@@ -9,7 +9,8 @@ import {
   Body,
   Right,
   Button,
-  Icon
+  Icon,
+  Thumbnail
 } from "native-base";
 import { theme } from "../../config/_theme";
 
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
   }
 });
 
-class InsideCardAccounts extends Component {
+class ListCategories extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -57,44 +58,35 @@ class InsideCardAccounts extends Component {
     return (
       <Content scrollEnabled={false}>
         <View style={styles.standaloneRowFront}>
-          <ListItem avatar>
-            <Left style={{ alignItems: "center", justifyContent: "center" }}>
-              <View
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 50,
-                  backgroundColor: "#365280",
-                  marginBottom: 10,
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                <Text style={{ fontSize: 30, color: "white" }}>
-                  {this.props.conta.sigla}
-                </Text>
-              </View>
+          <ListItem
+            avatar
+            style={{ borderBottomColor: "transparent", borderBottomWidth: 0.8 }}
+          >
+            <Left>
+              <Thumbnail source={this.props.info.img} />
             </Left>
             <Body
               style={{
                 alignItems: "flex-start",
                 justifyContent: "center",
-                borderBottomColor: "#cdcdcd",
+                borderBottomColor: "transparent",
                 borderBottomWidth: 0.8
               }}
             >
-              <View style={{ width: 150 }}>
-                <Text style={{ fontSize: 20 }}>{this.props.conta.nome}</Text>
-                <Text note>R${this.props.conta.saldo}</Text>
+              <View>
+                <Text style={{ fontSize: 20 }}>
+                  {this.props.info.categoria}
+                </Text>
               </View>
             </Body>
             <Right
               style={{
                 alignItems: "center",
-                justifyContent: "center",
+                justifyContent: "flex-end",
                 flex: 1,
                 flexDirection: "row",
-                justifyContent: "flex-end"
+                borderBottomColor: "transparent",
+                borderBottomWidth: 0.8
               }}
             >
               <Button transparent onPress={() => alert("editando")}>
@@ -119,4 +111,4 @@ class InsideCardAccounts extends Component {
   }
 }
 
-export default InsideCardAccounts;
+export default ListCategories;

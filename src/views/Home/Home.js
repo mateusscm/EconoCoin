@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, ScrollView } from "react-native";
 import { Container, View } from "native-base";
-import FloatingButtonHome from "./../../components/FloatingButtonHome/FloatingButtonHome";
+import FloatingButton from "./../../components/FloatingButton/FloatingButton";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
 import { theme } from "../../config/_theme";
@@ -78,11 +78,7 @@ class Home extends Component {
             />
           </View>
         </ScrollView>
-        <FloatingButtonHome
-          toggleBtn={this.toggleBtn}
-          active={this.state.active}
-          navigation={this.props.navigation}
-        />
+        <FloatingButton view="Home" navigation={this.props.navigation} />
       </Container>
     );
   }

@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import PreviewBalance from "./../../components/PreviewBalance/PreviewBalance";
 import MenuButton from "./../../components/MenuButton/MenuButton";
-import { Button, Icon } from "native-base";
+import { Button, Tab, Tabs } from "native-base";
 import { theme } from "../../config/_theme";
 import Accounts from "../../components/Accounts/Accounts";
+import Categories from "../../components/Categories/Categories";
 import { ScrollView } from "react-native-gesture-handler";
+import FloatingButton from "../../components/FloatingButton/FloatingButton";
 
-import { contas } from "./../../data";
+import { contas, infos } from "./../../data";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -31,12 +33,22 @@ const styles = StyleSheet.create({
 class AccountBalance extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      dialogVisible: false
+    };
   }
+
+  showDialog = () => {
+    this.setState({ dialogVisible: true });
+  };
+
+  handleCancel = () => {
+    this.setState({ dialogVisible: false });
+  };
 
   render() {
     return (
-      <ScrollView>
+      <React.Fragment>
         <Button
           style={{
             position: "absolute",
@@ -55,12 +67,35 @@ class AccountBalance extends Component {
         >
           <Text style={styles.fontColor}>+</Text>
         </Button>
-        <MenuButton view="Contas" navigation={this.props.navigation} />
-        <View style={styles.allCont}>
-          <PreviewBalance />
-          <Accounts contas={contas} />
-        </View>
-      </ScrollView>
+        <MenuButton
+          view="Contas e Categorias"
+          navigation={this.props.navigation}
+        />
+        <Tabs>
+          <Tab heading="Contas">
+            <ScrollView>
+              <View style={styles.allCont}>
+                <PreviewBalance />
+                <Accounts contas={contas} />
+              </View>
+            </ScrollView>
+          </Tab>
+          <Tab heading="Categorias">
+            <ScrollView>
+              <View style={styles.allCont}>
+                <Categories infos={infos} />
+              </View>
+            </ScrollView>
+            <FloatingButton
+              view="Categoria"
+              navigation={this.props.navigation}
+              showDialog={this.showDialog}
+              handleCancel={this.handleCancel}
+              dialogVisible={this.state.dialogVisible}
+            />
+          </Tab>
+        </Tabs>
+      </React.Fragment>
     );
   }
 }
