@@ -9,6 +9,7 @@ import {
   Dimensions,
   TouchableOpacity
 } from "react-native";
+// import { Toast } from "native-base";
 
 import bgImage from "./../../assets/img/background.jpg";
 import logo from "./../../assets/img/logo.png";
@@ -16,6 +17,8 @@ import logo from "./../../assets/img/logo.png";
 import Icon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-community/async-storage";
 import { theme } from "../../config/_theme";
+
+import * as firebase from "firebase";
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -94,6 +97,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 10
+  },
+  errorMessage: {
+    // height: 72,
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 30
+  },
+  error: {
+    color: "#E9446A",
+    fontSize: 13,
+    fontWeight: "600",
+    textAlign: "center"
   }
 });
 
@@ -102,13 +117,21 @@ class Login extends Component {
     super(props);
     this.state = {
       showPass: true,
-      press: false
+      press: false,
+      email: "",
+      password: "",
+      errorMessage: null
     };
   }
 
   login = async () => {
-    await AsyncStorage.setItem("userToken", "mateus");
-    this.props.navigation.navigate("Home");
+    const { email, password } = this.state;
+
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => this.props.navigation.navigate("Home"))
+      .catch(error => this.setState({ errorMessage: error.message }));
   };
 
   showPass = () => {
@@ -132,6 +155,12 @@ class Login extends Component {
             <Text style={styles.logoText}>Bem-vindo!</Text>
           </View>
 
+          <View style={styles.errorMessage}>
+            {this.state.errorMessage && (
+              <Text style={styles.error}>{this.state.errorMessage}</Text>
+            )}
+          </View>
+
           <View style={styles.inputContainer}>
             <Icon
               name={"ios-person"}
@@ -144,6 +173,8 @@ class Login extends Component {
               placeholder={"E-mail"}
               placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
               underlineColorAndroid="transparent"
+              onChangeText={email => this.setState({ email })}
+              value={this.state.email}
             />
           </View>
 
@@ -160,6 +191,9 @@ class Login extends Component {
               secureTextEntry={this.state.showPass}
               placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
               underlineColorAndroid="transparent"
+              autoCapitalize="none"
+              value={this.state.password}
+              onChangeText={password => this.setState({ password })}
             />
 
             <TouchableOpacity
@@ -190,6 +224,7 @@ class Login extends Component {
               <Text style={styles.text2}>Cadastre-se!</Text>
             </TouchableOpacity>
           </View>
+          <View></View>
         </View>
       </ImageBackground>
     );

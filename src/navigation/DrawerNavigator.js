@@ -88,10 +88,15 @@ const LoginNavigator = createStackNavigator({
   }
 });
 
-const Navigator = createSwitchNavigator({
-  AuthLoading: AuthLoading,
-  Auth: LoginNavigator,
-  Home: DrawerNavigator
-});
+const Navigator = createSwitchNavigator(
+  {
+    AuthLoading: AuthLoading,
+    Auth: LoginNavigator,
+    Home: DrawerNavigator
+  },
+  {
+    initialRouteName: "AuthLoading"
+  }
+);
 
 export default createAppContainer(Navigator);

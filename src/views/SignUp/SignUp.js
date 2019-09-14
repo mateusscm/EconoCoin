@@ -14,6 +14,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { theme } from "../../config/_theme";
 import { ScrollView } from "react-native-gesture-handler";
 // import DatePicker from "react-native-datepicker";
+import * as firebase from "firebase";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -89,14 +90,42 @@ const styles = StyleSheet.create({
     borderColor: theme.palette.secondary,
     marginRight: 200,
     marginLeft: 20
+  },
+  errorMessage: {
+    // height: 72,
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 30
+  },
+  error: {
+    color: "#E9446A",
+    fontSize: 13,
+    fontWeight: "600",
+    textAlign: "center"
   }
 });
 
 class SignUp extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      name: "",
+      email: "",
+      password: "",
+      errorMessage: null
+    };
   }
+
+  handleSignUp = () => {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .then(() => {
+        alert("acho que criou");
+      })
+      .catch(error => this.setState({ errorMessage: error.message }));
+  };
+
   render() {
     return (
       <ImageBackground
@@ -111,6 +140,11 @@ class SignUp extends Component {
               <Text style={styles.subtext}>e acompanhe seus gastos!</Text>
             </View>
             <View style={styles.line} />
+            <View style={styles.errorMessage}>
+              {this.state.errorMessage && (
+                <Text style={styles.error}>{this.state.errorMessage}</Text>
+              )}
+            </View>
             <View style={{ padding: 20 }}>
               <Text style={styles.frase}>Insira alguns dados abaixo:</Text>
               <View style={styles.inputContainer}>
@@ -125,6 +159,8 @@ class SignUp extends Component {
                   placeholder={"Nome Completo"}
                   placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
                   underlineColorAndroid="transparent"
+                  onChangeText={name => this.setState({ name })}
+                  value={this.state.name}
                 />
               </View>
               <View style={styles.inputContainer}>
@@ -139,6 +175,8 @@ class SignUp extends Component {
                   placeholder={"E-mail"}
                   placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
                   underlineColorAndroid="transparent"
+                  onChangeText={email => this.setState({ email })}
+                  value={this.state.email}
                 />
               </View>
               <View style={styles.inputContainer}>
@@ -154,21 +192,9 @@ class SignUp extends Component {
                   secureTextEntry={true}
                   placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
                   underlineColorAndroid="transparent"
-                />
-              </View>
-              <View style={styles.inputContainer}>
-                <Icon
-                  name={"ios-lock"}
-                  size={28}
-                  color="#ffffff"
-                  style={styles.inputIcon}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder={"Insira a senha novamente"}
-                  secureTextEntry={true}
-                  placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
-                  underlineColorAndroid="transparent"
+                  autoCapitalize="none"
+                  onChangeText={password => this.setState({ password })}
+                  value={this.state.password}
                 />
               </View>
               <View
@@ -207,7 +233,10 @@ class SignUp extends Component {
               </View>
             </View>
             <View style={{ marginHorizontal: 20 }}>
-              <TouchableOpacity style={styles.btnSignup} onPress={this.login}>
+              <TouchableOpacity
+                style={styles.btnSignup}
+                onPress={this.handleSignUp}
+              >
                 <Text style={styles.signup}>Cadastrar</Text>
               </TouchableOpacity>
             </View>
