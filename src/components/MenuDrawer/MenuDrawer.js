@@ -17,7 +17,16 @@ import * as firebase from "firebase";
 export default class MenuDrawer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      email: "",
+      displayName: ""
+    };
+  }
+
+  componentDidMount() {
+    const { email, displayName } = firebase.auth().currentUser;
+
+    this.setState({ email, displayName });
   }
 
   navLink(nav, text, typeIcon, icon) {
@@ -61,7 +70,7 @@ export default class MenuDrawer extends React.Component {
                 />
               </View>
               <View style={styles.profileText}>
-                <Text style={styles.name}>Usuário 1</Text>
+                <Text style={styles.name}>{this.state.displayName}</Text>
                 <Text style={styles.subname}>Ver Perfil</Text>
               </View>
             </View>

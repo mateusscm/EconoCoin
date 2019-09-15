@@ -120,8 +120,12 @@ class SignUp extends Component {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => {
-        alert("acho que criou");
+      .then(userCredentials => {
+        return (
+          userCredentials.user.updateProfile({
+            displayName: this.state.name
+          }) && alert("acho que deu")
+        );
       })
       .catch(error => this.setState({ errorMessage: error.message }));
   };
