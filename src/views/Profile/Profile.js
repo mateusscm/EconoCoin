@@ -4,7 +4,7 @@ import { Form, Item, Label, Input } from "native-base";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
 import { theme } from "../../config/_theme";
-import * as firebase from "firebase";
+import { FA } from "../../Firebase";
 import { ScrollView } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
@@ -88,7 +88,7 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    const { email, displayName } = firebase.auth().currentUser;
+    const { email, displayName } = FA.currentUser;
 
     this.setState({ email, displayName });
   }

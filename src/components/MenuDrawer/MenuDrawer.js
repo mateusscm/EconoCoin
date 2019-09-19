@@ -12,7 +12,7 @@ import {
 import AsyncStorage from "@react-native-community/async-storage";
 import { Icon } from "native-base";
 import { theme } from "../../config/_theme";
-import * as firebase from "firebase";
+import { FA } from "../../Firebase";
 
 export default class MenuDrawer extends React.Component {
   constructor(props) {
@@ -24,7 +24,7 @@ export default class MenuDrawer extends React.Component {
   }
 
   componentDidMount() {
-    const { email, displayName } = firebase.auth().currentUser;
+    const { email, displayName } = FA.currentUser;
 
     this.setState({ email, displayName });
   }
@@ -48,7 +48,7 @@ export default class MenuDrawer extends React.Component {
 
   logout = async () => {
     AsyncStorage.clear();
-    firebase.auth().signOut();
+    FA.signOut();
     this.props.navigation.navigate("AuthLoading");
   };
 

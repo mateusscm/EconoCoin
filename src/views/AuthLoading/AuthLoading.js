@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, StyleSheet, ActivityIndicator } from "react-native";
 
-import * as firebase from "firebase";
+import { FA } from "../../Firebase";
 
 const styles = StyleSheet.create({
   container: {
@@ -18,7 +18,7 @@ class AuthLoading extends Component {
   }
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(user => {
+    FA.onAuthStateChanged(user => {
       this.props.navigation.navigate(user ? "Home" : "Auth");
     });
   }

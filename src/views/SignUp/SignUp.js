@@ -14,7 +14,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { theme } from "../../config/_theme";
 import { ScrollView } from "react-native-gesture-handler";
 // import DatePicker from "react-native-datepicker";
-import * as firebase from "firebase";
+import { FA, FFS } from "../../Firebase";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -116,29 +116,26 @@ class SignUp extends Component {
     };
   }
 
-  handleSignUp = () => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(async userCredentials => {
-        let user_info = await firebase.auth().getUser(userCredentials.uid);
+  handleSignUp = async () => {
+    try {
+      let userCredentials = await FA.createUserWithEmailAndPassword(this.state.email, this.state.password);
+      await FFS.collection("users")
+        .doc(userCredentials.user.uid)
+        .set({
+          email: this.state.email,
+          name: this.state.name,
+          id: userCredentials.user.uid
+        });
+      return (
+        userCredentials.user.updateProfile({
+          displayName: this.state.name,
+        }) && alert("acho que deu")
+      );
+    } catch (error) {
+      console.log(error)
 
-        await firebase
-          .firestore()
-          .collection("users")
-          .doc(user_info.uid)
-          .set({
-            email: user_info.email,
-            name: request.body.name,
-            id: user_info.uid
-          });
-        return (
-          userCredentials.user.updateProfile({
-            displayName: this.state.name
-          }) && alert("acho que deu")
-        );
-      })
-      .catch(error => this.setState({ errorMessage: error.message }));
+      this.setState({ errorMessage: error.message })
+    }
   };
 
   render() {
@@ -237,10 +234,10 @@ class SignUp extends Component {
                 </Text>
                 <Picker
                   style={styles.sexo}
-                  // selectedValue={this.props.operacao}
-                  // onValueChange={op => {
-                  //   this.props.attOperacao(op);
-                  // }}
+                // selectedValue={this.props.operacao}
+                // onValueChange={op => {
+                //   this.props.attOperacao(op);
+                // }}
                 >
                   <Picker.Item label="Masculino" value="masc" />
                   <Picker.Item label="Feminino" value="fem" />

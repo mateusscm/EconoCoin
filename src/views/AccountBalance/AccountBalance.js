@@ -36,6 +36,7 @@ class AccountBalance extends Component {
     this.state = {
       dialogVisible: false
     };
+    this.child = React.createRef();
   }
 
   showDialog = () => {
@@ -45,6 +46,12 @@ class AccountBalance extends Component {
   handleCancel = () => {
     this.setState({ dialogVisible: false });
   };
+
+  componentDidUpdate() {
+    if (this.props.navigation.getParam('value', '') !== '') {
+      this.child.current.update();
+    }
+  }
 
   render() {
     return (
@@ -83,7 +90,10 @@ class AccountBalance extends Component {
           <Tab heading="Categorias">
             <ScrollView>
               <View style={styles.allCont}>
-                <Categories infos={infos} />
+                <Categories
+                  ref={this.child}
+                  navigation={this.props.navigation}
+                />
               </View>
             </ScrollView>
             <FloatingButton

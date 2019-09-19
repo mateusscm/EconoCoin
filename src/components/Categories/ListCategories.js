@@ -85,14 +85,14 @@ class ListCategories extends Component {
                 borderBottomWidth: 0.8
               }}
             >
-              <Button transparent onPress={() => alert("editando")}>
+              <Button transparent onPress={() => { this.props.navigation.navigate("DialogCategorie", { value: this.props.info.value, id: this.props.info.id }); }}>
                 <Icon
                   style={styles.backTextWhite}
                   type="MaterialIcons"
                   name="edit"
                 />
               </Button>
-              <Button transparent onPress={() => alert("excluindo")}>
+              <Button transparent onPress={() => { this.props.onDelete(this.props.info); }}>
                 <Icon
                   style={styles.backTextWhite}
                   type="Ionicons"
@@ -102,7 +102,7 @@ class ListCategories extends Component {
             </Right>
           </ListItem>
         </View>
-      </Content>
+      </Content >
     );
   }
 }

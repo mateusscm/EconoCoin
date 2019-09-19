@@ -18,7 +18,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-community/async-storage";
 import { theme } from "../../config/_theme";
 
-import * as firebase from "firebase";
+import { FA } from "../../Firebase";
 
 const { width: WIDTH } = Dimensions.get("window");
 
@@ -127,9 +127,7 @@ class Login extends Component {
   login = async () => {
     const { email, password } = this.state;
 
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
+    FA.signInWithEmailAndPassword(email, password)
       .then(() => this.props.navigation.navigate("Home"))
       .catch(error => this.setState({ errorMessage: error.message }));
   };

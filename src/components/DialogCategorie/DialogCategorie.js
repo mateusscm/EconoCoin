@@ -15,6 +15,7 @@ import {
   Button
 } from "native-base";
 import { theme } from "../../config/_theme";
+import { FA, FFS } from "../../Firebase";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -57,18 +58,43 @@ class DialogCategorie extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newCategorie: ""
+      categorie: "",
+      id: ""
     };
+    this.handleclick = this.handleclick.bind(this);
   }
+
 
   // handleCreate() {
   //   firebase.firestore().collection("categoria_user").doc(user.id).collection("categoria").doc().set({});
   // }
+  componentDidMount() {
+    if (this.props.navigation.getParam('type', 'edit') === "edit")
+      this.setState({ categorie: this.props.navigation.getParam('value', ''), id: this.props.navigation.getParam('id', '') });
+  }
+
+  async handleclick() {
+    try {
+      let user = await FA.currentUser;
+      if (this.props.navigation.getParam('type', 'edit') === "edit") {
+        await FFS.collection("user_categoria").doc(user.uid).collection("categorias").doc(this.state.id).set({ id: this.state.id, value: this.state.categorie });
+        this.props.navigation.goBack()
+      } else {
+        let ref = await FFS.collection("user_categoria").doc(user.uid).collection("categorias").doc();
+        ref.set({ id: ref.id, value: this.state.categorie });
+        this.props.navigation.goBack()
+      }
+    } catch (err) {
+      alert(err)
+    }
+  }
 
   render() {
+    const type = this.props.navigation.getParam('type', 'edit');
+
     return (
       <Container>
-        <MenuButtonBack view="Categorie" navigation={this.props.navigation} />
+        <MenuButtonBack view="Categoria" navigation={this.props.navigation} />
         <Content style={styles.allCont}>
           {/* <View style={styles.header}>
             <Text>dwqdqwdqwd</Text>
@@ -90,21 +116,23 @@ class DialogCategorie extends Component {
                   color: "rgba(0, 0, 0, 0.5)"
                 }}
               >
-                Nova Categoria
+                {type !== "edit" ? "Nova" : "Editar"} Categoria
               </Label>
               <Input
                 style={{
                   fontSize: 24,
                   paddingLeft: 5
                 }}
-                onChangeText={e =>
-                  this.setState({ newCategorie: e.target.value })
-                }
+                value={this.state.categorie}
+                onChangeText={categorie => {
+                  this.setState({ categorie })
+                }}
               />
             </Item>
           </Form>
         </Content>
         <Button
+          onPress={this.handleclick}
           transparent
           light
           style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}

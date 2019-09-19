@@ -4,7 +4,7 @@ import { Content, Text } from "native-base";
 import { theme } from "../../config/_theme";
 import FloatingButton from "../FloatingButton/FloatingButton";
 import ListCategories from "./ListCategories";
-import * as firebase from "firebase";
+import { FA, FFS } from "../../Firebase";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -30,13 +30,17 @@ class Categories extends Component {
     };
   }
 
+  componentDidMount() {
+    this.getCat();
+  }
+
+  update = async () => {
+    this.getCat();
+  }
+
   getCat = async () => {
-    let resp = await firebase
-      .firestore()
-      .collection("user_categoria")
-      .doc(user.id)
-      .collection("categorias")
-      .get();
+    let user = await FA.currentUser;
+    let resp = await FFS.collection("user_categoria").doc(user.uid).collection("categorias").get();
     if (!resp.empty) {
       let temp = [];
       resp.forEach(r => {
@@ -46,13 +50,28 @@ class Categories extends Component {
     }
   };
 
+  onDelete = async (info) => {
+    try {
+      let user = await FA.currentUser;
+      await FFS.collection("user_categoria").doc(user.uid).collection("categorias").doc(info.id).delete();
+      let temp = this.state.categories;
+      temp.splice(this.state.categories.findIndex(c => {
+        return c.id === info.id
+      }), 1);
+      this.setState({ categories: temp });
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   render() {
     return (
       <Content style={styles.content}>
         <Text style={styles.mainTitle}>CATEGORIAS EXISTENTES</Text>
         {/* <InsideCardAccount />; */}
         {this.state.categories.map((info, i) => {
-          return <ListCategories info={info} key={i} />;
+          return <ListCategories navigation={this.props.navigation} info={info} key={i} onDelete={(e) => { this.onDelete(e) }} />;
         })}
         {/* {this.props.infos.map((info, i) => {
             return <InsideCardAccount info={info} key={i} />;

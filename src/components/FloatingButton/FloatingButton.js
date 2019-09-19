@@ -17,8 +17,10 @@ class FloatingButton extends Component {
     this.goToNavigate = this.goToNavigate.bind(this);
   }
 
-  goToNavigate(nav) {
-    this.props.navigation.navigate(nav);
+  goToNavigate(nav, p) {
+    if (p !== "") this.props.navigation.navigate(nav, p);
+    else this.props.navigation.navigate(nav);
+
 
     this.setState({
       active1: !this.state.active1,
@@ -44,21 +46,21 @@ class FloatingButton extends Component {
             />
             <Button
               style={{ backgroundColor: "#821d20" }}
-              onPress={() => this.goToNavigate("HomeNewExpense")}
+              onPress={() => this.goToNavigate("HomeNewExpense", "")}
             >
               <Text
                 style={
                   this.state.active1
                     ? {
-                        display: "flex",
-                        position: "absolute",
-                        left: -105,
-                        // left: -115,
-                        backgroundColor: "rgba(0,0,0,0.5)",
-                        color: theme.palette.fontColorIcon,
-                        padding: 5,
-                        borderRadius: 5
-                      }
+                      display: "flex",
+                      position: "absolute",
+                      left: -105,
+                      // left: -115,
+                      backgroundColor: "rgba(0,0,0,0.5)",
+                      color: theme.palette.fontColorIcon,
+                      padding: 5,
+                      borderRadius: 5
+                    }
                     : { display: "none" }
                 }
               >
@@ -68,21 +70,21 @@ class FloatingButton extends Component {
             </Button>
             <Button
               style={{ backgroundColor: "#14c6cc" }}
-              onPress={() => this.goToNavigate("HomeNewIncome")}
+              onPress={() => this.goToNavigate("HomeNewIncome", "")}
             >
               <Text
                 style={
                   this.state.active1
                     ? {
-                        display: "flex",
-                        position: "absolute",
-                        left: -100,
-                        // left: -110,
-                        backgroundColor: "rgba(0,0,0,0.5)",
-                        color: theme.palette.fontColorIcon,
-                        padding: 5,
-                        borderRadius: 5
-                      }
+                      display: "flex",
+                      position: "absolute",
+                      left: -100,
+                      // left: -110,
+                      backgroundColor: "rgba(0,0,0,0.5)",
+                      color: theme.palette.fontColorIcon,
+                      padding: 5,
+                      borderRadius: 5
+                    }
                     : { display: "none" }
                 }
               >
@@ -92,21 +94,21 @@ class FloatingButton extends Component {
             </Button>
             <Button
               style={{ backgroundColor: "#8f34eb" }}
-              onPress={() => this.goToNavigate("HomeNewTransf")}
+              onPress={() => this.goToNavigate("HomeNewTransf", "")}
             >
               <Text
                 style={
                   this.state.active1
                     ? {
-                        display: "flex",
-                        position: "absolute",
-                        left: -130,
-                        // left: -140,
-                        backgroundColor: "rgba(0,0,0,0.5)",
-                        color: theme.palette.fontColorIcon,
-                        padding: 5,
-                        borderRadius: 5
-                      }
+                      display: "flex",
+                      position: "absolute",
+                      left: -130,
+                      // left: -140,
+                      backgroundColor: "rgba(0,0,0,0.5)",
+                      color: theme.palette.fontColorIcon,
+                      padding: 5,
+                      borderRadius: 5
+                    }
                     : { display: "none" }
                 }
               >
@@ -116,23 +118,23 @@ class FloatingButton extends Component {
             </Button>
           </Fab>
         ) : (
-          <>
-            <Fab
-              active={this.state.active2}
-              direction="up"
-              containerStyle={{}}
-              style={{ backgroundColor: "#e00000", zIndex: 1000 }}
-              position="bottomRight"
-              onPress={() => this.goToNavigate("DialogCategorie")}
-            >
-              <Icon name={"ios-add"} style={{ fontSize: 30 }} />
-            </Fab>
-            {/* <DialogCreate
+            <>
+              <Fab
+                active={this.state.active2}
+                direction="up"
+                containerStyle={{}}
+                style={{ backgroundColor: "#e00000", zIndex: 1000 }}
+                position="bottomRight"
+                onPress={() => this.goToNavigate("DialogCategorie", { type: "newCat" , value: ""})}
+              >
+                <Icon name={"ios-add"} style={{ fontSize: 30 }} />
+              </Fab>
+              {/* <DialogCreate
               dialogVisible={this.props.dialogVisible}
               showDialog={this.props.showDialog}
               handleCancel={this.props.handleCancel}
             /> */}
-            {/* <Dialog.Container visible={this.props.dialogVisible}>
+              {/* <Dialog.Container visible={this.props.dialogVisible}>
               <Dialog.Title>Adicionando Categoria</Dialog.Title>
               <Dialog.Input label="Nome da Categoria" onChangeText={e => {this.setState({newCategorie: e.target.value})}} />
               <Dialog.Button
@@ -144,8 +146,8 @@ class FloatingButton extends Component {
                 onPress={() => this.createCategorie()}
               />
             </Dialog.Container> */}
-          </>
-        )}
+            </>
+          )}
       </>
     );
   }
