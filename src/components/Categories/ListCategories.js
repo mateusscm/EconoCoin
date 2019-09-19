@@ -62,9 +62,7 @@ class ListCategories extends Component {
             avatar
             style={{ borderBottomColor: "transparent", borderBottomWidth: 0.8 }}
           >
-            <Left>
-              <Thumbnail source={this.props.info.img} />
-            </Left>
+            <Left>{/* <Thumbnail source={this.props.info.img} /> */}</Left>
             <Body
               style={{
                 alignItems: "flex-start",
@@ -74,9 +72,7 @@ class ListCategories extends Component {
               }}
             >
               <View>
-                <Text style={{ fontSize: 20 }}>
-                  {this.props.info.categoria}
-                </Text>
+                <Text style={{ fontSize: 20 }}>{this.props.info.value}</Text>
               </View>
             </Body>
             <Right

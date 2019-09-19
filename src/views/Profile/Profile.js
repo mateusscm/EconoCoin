@@ -1,13 +1,19 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Form, Item, Label, Input } from "native-base";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
 import { theme } from "../../config/_theme";
+import * as firebase from "firebase";
+import { ScrollView } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
   allCont: {
     flex: 1,
     backgroundColor: theme.palette.backgroundMain
+  },
+  scroller: {
+    flex: 1
   },
   text: {
     fontSize: 30,
@@ -51,35 +57,150 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "left"
   },
+  data: {
+    flex: 1
+  },
   description: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    width: "100%",
+    marginLeft: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    marginRight: 0
+  },
+  save: {
+    flex: 1
+  },
+  btnLogout: {
+    backgroundColor: "black",
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
 
 class Profile extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: "",
+      displayName: ""
+    };
+  }
+
+  componentDidMount() {
+    const { email, displayName } = firebase.auth().currentUser;
+
+    this.setState({ email, displayName });
+  }
+
   render() {
     return (
       <View style={styles.allCont}>
         <MenuButton view="Perfil" navigation={this.props.navigation} />
-        <View style={styles.header}>
-          <View style={styles.profile}>
-            <View style={styles.imgView}>
-              <Image
-                style={styles.img}
-                source={require("../../assets/img/logo.png")}
-              />
-            </View>
-            <View style={styles.profileText}>
-              <Text style={styles.name}>Usuário 1</Text>
-              {/* <Text style={styles.subname}>Ver Perfil</Text> */}
+        <ScrollView style={styles.scroller}>
+          <View style={styles.header}>
+            <View style={styles.profile}>
+              <View style={styles.imgView}>
+                <Image
+                  style={styles.img}
+                  source={require("../../assets/img/logo.png")}
+                />
+              </View>
+              <View style={styles.profileText}>
+                <Text style={styles.name}>{this.state.displayName}</Text>
+                {/* <Text style={styles.subname}>Ver Perfil</Text> */}
+              </View>
             </View>
           </View>
-        </View>
-        <View style={styles.description}>
-          <Text style={styles.text}>Profile</Text>
-        </View>
+          <View style={styles.data}>
+            <Form>
+              <Item stackedLabel style={styles.description}>
+                <Label
+                  style={{
+                    fontSize: 18,
+                    paddingLeft: 0,
+                    color: "rgba(0, 0, 0, 0.5)"
+                  }}
+                >
+                  Nome do usuário
+                </Label>
+                <Input
+                  value={this.state.displayName}
+                  style={{
+                    fontSize: 18,
+                    // paddingLeft: 5,
+                    paddingVertical: 5
+                  }}
+                />
+              </Item>
+              <Item stackedLabel style={styles.description}>
+                <Label
+                  style={{
+                    fontSize: 18,
+                    paddingLeft: 0,
+                    color: "rgba(0, 0, 0, 0.5)"
+                  }}
+                >
+                  Email
+                </Label>
+                <Input
+                  disabled
+                  style={{
+                    fontSize: 18,
+                    // paddingLeft: 5,
+                    paddingVertical: 5
+                  }}
+                  value={this.state.email}
+                />
+              </Item>
+              <Item stackedLabel style={styles.description}>
+                <Label
+                  style={{
+                    fontSize: 18,
+                    paddingLeft: 0,
+                    color: "rgba(0, 0, 0, 0.5)"
+                  }}
+                >
+                  Senha atual
+                </Label>
+                <Input
+                  style={{
+                    fontSize: 18,
+                    // paddingLeft: 5,
+                    paddingVertical: 5
+                  }}
+                  secureTextEntry={true}
+                  // value={this.state.email}
+                />
+              </Item>
+              <Item stackedLabel style={styles.description}>
+                <Label
+                  style={{
+                    fontSize: 18,
+                    paddingLeft: 0,
+                    color: "rgba(0, 0, 0, 0.5)"
+                  }}
+                >
+                  Nova Senha
+                </Label>
+                <Input
+                  style={{
+                    fontSize: 18,
+                    // paddingLeft: 5,
+                    paddingVertical: 5
+                  }}
+                  secureTextEntry={true}
+                  // value={this.state.email}
+                />
+              </Item>
+            </Form>
+          </View>
+        </ScrollView>
+        {/* <View style={styles.save}>
+            <TouchableOpacity onPress={this.logout} style={styles.btnLogout}>
+              <Text style={{ color: "#fff" }}>Sair</Text>
+            </TouchableOpacity>
+          </View> */}
       </View>
     );
   }

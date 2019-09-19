@@ -120,7 +120,18 @@ class SignUp extends Component {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(userCredentials => {
+      .then(async userCredentials => {
+        let user_info = await firebase.auth().getUser(userCredentials.uid);
+
+        await firebase
+          .firestore()
+          .collection("users")
+          .doc(user_info.uid)
+          .set({
+            email: user_info.email,
+            name: request.body.name,
+            id: user_info.uid
+          });
         return (
           userCredentials.user.updateProfile({
             displayName: this.state.name

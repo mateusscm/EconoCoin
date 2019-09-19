@@ -123,7 +123,7 @@ class FloatingButton extends Component {
               containerStyle={{}}
               style={{ backgroundColor: "#e00000", zIndex: 1000 }}
               position="bottomRight"
-              onPress={() => this.props.showDialog()}
+              onPress={() => this.goToNavigate("DialogCategorie")}
             >
               <Icon name={"ios-add"} style={{ fontSize: 30 }} />
             </Fab>
@@ -132,18 +132,18 @@ class FloatingButton extends Component {
               showDialog={this.props.showDialog}
               handleCancel={this.props.handleCancel}
             /> */}
-            <Dialog.Container visible={this.props.dialogVisible}>
+            {/* <Dialog.Container visible={this.props.dialogVisible}>
               <Dialog.Title>Adicionando Categoria</Dialog.Title>
-              <Dialog.Input label="Nome da Categoria" />
+              <Dialog.Input label="Nome da Categoria" onChangeText={e => {this.setState({newCategorie: e.target.value})}} />
               <Dialog.Button
                 label="Cancelar"
                 onPress={() => this.props.handleCancel()}
               />
               <Dialog.Button
                 label="Adicionar"
-                onPress={() => alert("deletando")}
+                onPress={() => this.createCategorie()}
               />
-            </Dialog.Container>
+            </Dialog.Container> */}
           </>
         )}
       </>

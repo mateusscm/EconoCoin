@@ -64,10 +64,7 @@ class MenuButtonBack extends Component {
         >
           <StatusBar backgroundColor="black" barStyle="light-content" />
           <Left>
-            <Button
-              transparent
-              onPress={() => this.props.navigation.navigate("Home")}
-            >
+            <Button transparent onPress={() => this.props.navigation.goBack()}>
               <Icon
                 type="MaterialIcons"
                 name="close"

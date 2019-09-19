@@ -4,6 +4,7 @@ import { Content, Text } from "native-base";
 import { theme } from "../../config/_theme";
 import FloatingButton from "../FloatingButton/FloatingButton";
 import ListCategories from "./ListCategories";
+import * as firebase from "firebase";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -24,15 +25,33 @@ const styles = StyleSheet.create({
 class Categories extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      categories: []
+    };
   }
+
+  getCat = async () => {
+    let resp = await firebase
+      .firestore()
+      .collection("user_categoria")
+      .doc(user.id)
+      .collection("categorias")
+      .get();
+    if (!resp.empty) {
+      let temp = [];
+      resp.forEach(r => {
+        temp.push(r.data());
+      });
+      this.setState({ categories: temp });
+    }
+  };
 
   render() {
     return (
       <Content style={styles.content}>
         <Text style={styles.mainTitle}>CATEGORIAS EXISTENTES</Text>
         {/* <InsideCardAccount />; */}
-        {this.props.infos.map((info, i) => {
+        {this.state.categories.map((info, i) => {
           return <ListCategories info={info} key={i} />;
         })}
         {/* {this.props.infos.map((info, i) => {
