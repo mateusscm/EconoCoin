@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Picker
 } from "react-native";
-
+import { DatePicker, Item, Label } from "native-base";
 import bgImage from "./../../assets/img/background.jpg";
 import Icon from "react-native-vector-icons/Ionicons";
 import { theme } from "../../config/_theme";
@@ -112,33 +112,46 @@ class SignUp extends Component {
       name: "",
       email: "",
       password: "",
+      sexo: "feminino",
+      data: new Date(),
       errorMessage: null
     };
   }
 
   handleSignUp = async () => {
     try {
-      let userCredentials = await FA.createUserWithEmailAndPassword(this.state.email, this.state.password);
+      let userCredentials = await FA.createUserWithEmailAndPassword(
+        this.state.email,
+        this.state.password
+      );
       await FFS.collection("users")
         .doc(userCredentials.user.uid)
         .set({
           email: this.state.email,
           name: this.state.name,
+          first: this.state.name,
+          sexo: this.state.sexo,
+          data: this.state.data,
           id: userCredentials.user.uid
         });
       return (
         userCredentials.user.updateProfile({
-          displayName: this.state.name,
+          displayName: this.state.name
         }) && alert("acho que deu")
       );
     } catch (error) {
-      console.log(error)
+      console.log(error);
 
-      this.setState({ errorMessage: error.message })
+      this.setState({ errorMessage: error.message });
     }
   };
 
+  setDate = newDate => {
+    this.setState({ data: newDate });
+  };
+
   render() {
+    console.log(this.state.data);
     return (
       <ImageBackground
         source={bgImage}
@@ -213,35 +226,46 @@ class SignUp extends Component {
                 style={{
                   flexDirection: "row",
                   marginTop: 20,
-                  justifyContent: "space-between"
+                  justifyContent: "space-between",
+                  borderBottomColor: "#fff",
+                  borderBottomWidth: 1
                 }}
               >
-                <Icon
-                  name={"md-time"}
-                  size={28}
-                  color="#ffffff"
-                  style={styles.inputIconDate}
-                />
-                <Text
-                  style={{
-                    color: "#fff",
-                    paddingLeft: 45,
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#fff"
-                  }}
-                >
-                  22/08/2019
-                </Text>
                 <Picker
                   style={styles.sexo}
-                // selectedValue={this.props.operacao}
-                // onValueChange={op => {
-                //   this.props.attOperacao(op);
-                // }}
+                  selectedValue={this.state.sexo}
+                  onValueChange={ev => {
+                    this.setState({ sexo: ev });
+                  }}
                 >
-                  <Picker.Item label="Masculino" value="masc" />
-                  <Picker.Item label="Feminino" value="fem" />
+                  <Picker.Item label="Masculino" value="masculino" />
+                  <Picker.Item label="Feminino" value="feminino" />
                 </Picker>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 20,
+                  justifyContent: "space-between",
+                  borderBottomColor: "#fff",
+                  borderBottomWidth: 1
+                }}
+              >
+                <DatePicker
+                  defaultDate={new Date(1997, 4, 4)}
+                  minimumDate={new Date(1900, 1, 1)}
+                  maximumDate={new Date(2001, 1, 1)}
+                  locale={"en"}
+                  timeZoneOffsetInMinutes={undefined}
+                  modalTransparent={false}
+                  animationType={"fade"}
+                  androidMode={"default"}
+                  placeHolderText="Data de Nascimento"
+                  textStyle={{ color: "white" }}
+                  placeHolderTextStyle={{ color: "#d3d3d3" }}
+                  onDateChange={this.setDate}
+                  disabled={false}
+                />
               </View>
             </View>
             <View style={{ marginHorizontal: 20 }}>

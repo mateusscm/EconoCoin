@@ -10,6 +10,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import FloatingButton from "../../components/FloatingButton/FloatingButton";
 
 import { contas, infos } from "./../../data";
+import AddAccount from "../../components/FloatingButton/AddAccount";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -48,7 +49,7 @@ class AccountBalance extends Component {
   };
 
   componentDidUpdate() {
-    if (this.props.navigation.getParam('value', '') !== '') {
+    if (this.props.navigation.getParam("value", "") !== "") {
       this.child.current.update();
     }
   }
@@ -82,10 +83,11 @@ class AccountBalance extends Component {
           <Tab heading="Contas">
             <ScrollView>
               <View style={styles.allCont}>
-                <PreviewBalance />
+                <PreviewBalance navigation={this.props.navigation} />
                 <Accounts contas={contas} />
               </View>
             </ScrollView>
+            <AddAccount view="Conta" navigation={this.props.navigation} />
           </Tab>
           <Tab heading="Categorias">
             <ScrollView>

@@ -7,9 +7,15 @@ import {
   Body,
   Text,
   Right,
-  Thumbnail
+  Thumbnail,
+  Icon,
+  Button
 } from "native-base";
 import { theme } from "../../config/_theme";
+import {
+  TouchableOpacity,
+  TouchableHighlight
+} from "react-native-gesture-handler";
 // import logo from "./../../assets/img/logo.png";
 
 // const { width: WIDTH } = Dimensions.get("window");

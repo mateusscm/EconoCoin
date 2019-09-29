@@ -22,6 +22,7 @@ import Extract from "../views/Extract/Extract";
 
 import MenuDrawer from "../components/MenuDrawer/MenuDrawer";
 import DialogCategorie from "../components/DialogCategorie/DialogCategorie";
+import DialogAccount from "../components/DialogAccount/DialogAccount";
 
 const WIDTH = Dimensions.get("window").width;
 
@@ -38,7 +39,8 @@ const HomeStack = createStackNavigator(
     HomeNewExpense: HomeNewExpense,
     HomeNewIncome: HomeNewIncome,
     HomeNewTransf: HomeNewTransf,
-    DialogCategorie: DialogCategorie
+    DialogCategorie: DialogCategorie,
+    DialogAccount: DialogAccount
   },
   {
     headerMode: "none",
