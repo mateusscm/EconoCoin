@@ -1,14 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
-import {
-  Content,
-  Card,
-  CardItem,
-  Text,
-  ListItem,
-  Button,
-  Icon
-} from "native-base";
+import { Content, Text, Spinner } from "native-base";
 import InsideCardAccount from "./InsideCardAccount";
 import { FA, FFS } from "../../Firebase";
 
@@ -46,7 +38,8 @@ class Accounts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      contas: []
+      contas: [],
+      loading: false
     };
   }
 
@@ -59,6 +52,7 @@ class Accounts extends Component {
   };
 
   getContas = async () => {
+    this.setState({ loading: true });
     let user = await FA.currentUser;
     let resp = await FFS.collection("user_conta")
       .doc(user.uid)
@@ -69,7 +63,8 @@ class Accounts extends Component {
       resp.forEach(r => {
         temp.push(r.data());
       });
-      this.setState({ contas: temp });
+      this.setState({ contas: temp, loading: false });
+      this.update();
     }
   };
 
@@ -98,7 +93,7 @@ class Accounts extends Component {
     return (
       <Content style={styles.content}>
         <Text style={styles.mainTitle}>CONTAS EXISTENTES</Text>
-        {/* <InsideCardAccount />; */}
+        {this.state.loading ? null : <Spinner color="green" />}
         {this.state.contas.map((conta, i) => {
           return (
             <InsideCardAccount
