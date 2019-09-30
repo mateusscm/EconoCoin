@@ -64,50 +64,48 @@ class DialogCategorie extends Component {
     this.handleclick = this.handleclick.bind(this);
   }
 
-
   // handleCreate() {
   //   firebase.firestore().collection("categoria_user").doc(user.id).collection("categoria").doc().set({});
   // }
   componentDidMount() {
-    if (this.props.navigation.getParam('type', 'edit') === "edit")
-      this.setState({ categorie: this.props.navigation.getParam('value', ''), id: this.props.navigation.getParam('id', '') });
+    if (this.props.navigation.getParam("type", "edit") === "edit")
+      this.setState({
+        categorie: this.props.navigation.getParam("value", ""),
+        id: this.props.navigation.getParam("id", "")
+      });
   }
 
   async handleclick() {
     try {
       let user = await FA.currentUser;
-      if (this.props.navigation.getParam('type', 'edit') === "edit") {
-        await FFS.collection("user_categoria").doc(user.uid).collection("categorias").doc(this.state.id).set({ id: this.state.id, value: this.state.categorie });
-        this.props.navigation.goBack()
+      if (this.props.navigation.getParam("type", "edit") === "edit") {
+        await FFS.collection("user_categoria")
+          .doc(user.uid)
+          .collection("categorias")
+          .doc(this.state.id)
+          .set({ id: this.state.id, value: this.state.categorie });
+        this.props.navigation.goBack();
       } else {
-        let ref = await FFS.collection("user_categoria").doc(user.uid).collection("categorias").doc();
+        let ref = await FFS.collection("user_categoria")
+          .doc(user.uid)
+          .collection("categorias")
+          .doc();
         ref.set({ id: ref.id, value: this.state.categorie });
-        this.props.navigation.goBack()
+        this.props.navigation.goBack();
       }
     } catch (err) {
-      alert(err)
+      alert(err);
     }
   }
 
   render() {
-    const type = this.props.navigation.getParam('type', 'edit');
+    const type = this.props.navigation.getParam("type", "edit");
 
     return (
       <Container>
         <MenuButtonBack view="Categoria" navigation={this.props.navigation} />
         <Content style={styles.allCont}>
-          {/* <View style={styles.header}>
-            <Text>dwqdqwdqwd</Text>
-          </View> */}
           <Form>
-            {/* <Item stackedLabel underline style={styles.header}>
-              <Label style={{ color: "#fff", fontSize: 16 }}>Valor</Label>
-              <Input
-                placeholder="R$"
-                placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                style={{ color: "#fff", fontSize: 44, paddingLeft: 10 }}
-              />
-            </Item> */}
             <Item stackedLabel style={styles.description}>
               <Label
                 style={{
@@ -125,7 +123,7 @@ class DialogCategorie extends Component {
                 }}
                 value={this.state.categorie}
                 onChangeText={categorie => {
-                  this.setState({ categorie })
+                  this.setState({ categorie });
                 }}
               />
             </Item>

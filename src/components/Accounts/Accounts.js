@@ -10,6 +10,7 @@ import {
   Icon
 } from "native-base";
 import InsideCardAccount from "./InsideCardAccount";
+import { FA, FFS } from "../../Firebase";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -44,16 +45,70 @@ const styles = StyleSheet.create({
 class Accounts extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      contas: []
+    };
   }
+
+  componentDidMount() {
+    this.getContas();
+  }
+
+  update = async () => {
+    this.getContas();
+  };
+
+  getContas = async () => {
+    let user = await FA.currentUser;
+    let resp = await FFS.collection("user_conta")
+      .doc(user.uid)
+      .collection("contas")
+      .get();
+    if (!resp.empty) {
+      let temp = [];
+      resp.forEach(r => {
+        temp.push(r.data());
+      });
+      this.setState({ contas: temp });
+    }
+  };
+
+  onDelete = async info => {
+    try {
+      let user = await FA.currentUser;
+      await FFS.collection("user_conta")
+        .doc(user.uid)
+        .collection("contas")
+        .doc(info.id)
+        .delete();
+      let temp = this.state.contas;
+      temp.splice(
+        this.state.contas.findIndex(c => {
+          return c.id === info.id;
+        }),
+        1
+      );
+      this.setState({ contas: temp });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   render() {
     return (
       <Content style={styles.content}>
         <Text style={styles.mainTitle}>CONTAS EXISTENTES</Text>
         {/* <InsideCardAccount />; */}
-        {this.props.contas.map((conta, i) => {
-          return <InsideCardAccount conta={conta} key={i} />;
+        {this.state.contas.map((conta, i) => {
+          return (
+            <InsideCardAccount
+              conta={conta}
+              key={i}
+              onDelete={e => {
+                this.onDelete(e);
+              }}
+            />
+          );
         })}
         {/* {this.props.infos.map((info, i) => {
             return <InsideCardAccount info={info} key={i} />;

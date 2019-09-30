@@ -15,7 +15,7 @@ import {
   Button
 } from "native-base";
 import { theme } from "../../config/_theme";
-// import { FA, FFS } from "../../Firebase";
+import { FA, FFS } from "../../Firebase";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -57,7 +57,32 @@ const styles = StyleSheet.create({
 class DialogAccount extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      conta: "",
+      balance: "",
+      id: "",
+      inicial: ""
+    };
+    this.createAccount = this.createAccount.bind(this);
+  }
+
+  async createAccount() {
+    try {
+      let user = await FA.currentUser;
+      let ref = await FFS.collection("user_conta")
+        .doc(user.uid)
+        .collection("contas")
+        .doc();
+      ref.set({
+        id: ref.id,
+        balance: this.state.balance,
+        value: this.state.conta,
+        sigla: this.state.sigla
+      });
+      this.props.navigation.goBack();
+    } catch (err) {
+      alert(err);
+    }
   }
 
   render() {
@@ -74,6 +99,10 @@ class DialogAccount extends Component {
                 placeholder="R$"
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
                 style={{ color: "#fff", fontSize: 44, paddingLeft: 10 }}
+                value={this.state.balance}
+                onChangeText={balance => {
+                  this.setState({ balance });
+                }}
               />
             </Item>
             <Item stackedLabel style={styles.description}>
@@ -91,16 +120,37 @@ class DialogAccount extends Component {
                   fontSize: 24,
                   paddingLeft: 5
                 }}
-                // value={this.state.categorie}
-                // onChangeText={categorie => {
-                //   this.setState({ categorie })
-                // }}
+                value={this.state.conta}
+                onChangeText={conta => {
+                  this.setState({ conta });
+                }}
+              />
+            </Item>
+            <Item stackedLabel style={styles.description}>
+              <Label
+                style={{
+                  fontSize: 18,
+                  paddingLeft: 0,
+                  color: "rgba(0, 0, 0, 0.5)"
+                }}
+              >
+                Sigla da Conta (Ex: "BB")
+              </Label>
+              <Input
+                style={{
+                  fontSize: 24,
+                  paddingLeft: 5
+                }}
+                value={this.state.sigla}
+                onChangeText={sigla => {
+                  this.setState({ sigla });
+                }}
               />
             </Item>
           </Form>
         </Content>
         <Button
-          //   onPress={this.handleclick}
+          onPress={this.createAccount}
           transparent
           light
           style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}

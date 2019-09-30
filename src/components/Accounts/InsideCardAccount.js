@@ -84,8 +84,8 @@ class InsideCardAccounts extends Component {
               }}
             >
               <View style={{ width: 150 }}>
-                <Text style={{ fontSize: 20 }}>{this.props.conta.nome}</Text>
-                <Text note>R${this.props.conta.saldo}</Text>
+                <Text style={{ fontSize: 20 }}>{this.props.conta.value}</Text>
+                <Text note>R${this.props.conta.balance}</Text>
               </View>
             </Body>
             <Right
@@ -97,14 +97,19 @@ class InsideCardAccounts extends Component {
                 justifyContent: "flex-end"
               }}
             >
-              <Button transparent onPress={() => alert("editando")}>
+              {/* <Button transparent onPress={() => alert("editando")}>
                 <Icon
                   style={styles.backTextWhite}
                   type="MaterialIcons"
                   name="edit"
                 />
-              </Button>
-              <Button transparent onPress={() => alert("excluindo")}>
+              </Button> */}
+              <Button
+                transparent
+                onPress={() => {
+                  this.props.onDelete(this.props.conta);
+                }}
+              >
                 <Icon
                   style={styles.backTextWhite}
                   type="Ionicons"
