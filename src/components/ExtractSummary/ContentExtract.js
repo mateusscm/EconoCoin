@@ -34,15 +34,15 @@ class ContentExtract extends Component {
           -{this.props.info.data}-
         </Text>
         <ListItem avatar>
-          <Left>
+          {/* <Left>
             <Thumbnail source={this.props.info.img} />
-          </Left>
+          </Left> */}
           <Body>
-            <Text>{this.props.info.local}</Text>
-            <Text note>{this.props.info.categoria}</Text>
+            <Text>{this.props.info.descricao}</Text>
+            <Text note>{this.props.info.categoria_id}</Text>
           </Body>
           <Right>
-            <Text>R${this.props.info.gasto}</Text>
+            <Text>R${this.props.info.balance}</Text>
           </Right>
         </ListItem>
         {/* <CardItem header>

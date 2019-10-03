@@ -124,13 +124,13 @@ class HomeNewIncome extends Component {
       conta_id: this.state.selected2,
       categoria_id: this.state.selected,
       data: this.state.date.toISOString().split("T")[0],
-      type: "receita"
+      type: "receita" //MUDAR "despesa"
     });
 
     if (c.exists) {
       var newBal = parseFloat(c.data().balance);
 
-      newBal += parseFloat(this.state.money);
+      newBal += parseFloat(this.state.money); //mudar para -=
       await FFS.collection("user_conta")
         .doc(user.uid)
         .collection("contas")

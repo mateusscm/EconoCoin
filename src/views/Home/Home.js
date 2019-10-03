@@ -7,8 +7,9 @@ import MenuButton from "./../../components/MenuButton/MenuButton";
 import { theme } from "../../config/_theme";
 import PreviewBalance from "../../components/PreviewBalance/PreviewBalance";
 import ExtractSummary from "../../components/ExtractSummary/ExtractSummary";
+import { FA, FFS } from "../../Firebase";
 
-import { infos } from "./../../data";
+// import { infos } from "./../../data";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -45,18 +46,36 @@ class Home extends Component {
     super(props);
     this.state = {
       total: 0,
-      active: false
+      active: false,
+      infos: []
     };
     this.toggleBtn = this.toggleBtn.bind(this);
   }
 
   componentDidMount() {
-    const newTotal = infos.reduce(
-      (totalValue, inf) => totalValue + inf.gasto,
+    this.getInfo();
+  }
+
+  getInfo = async () => {
+    const user = await FA.currentUser;
+    let temp = [];
+    let resp = await FFS.collection("user_movimentacao")
+      .doc(user.uid)
+      .collection("movimentacoes")
+      .limit(3)
+      .get();
+
+    if (!resp.empty) {
+      resp.forEach(r => {
+        temp.push(r.data());
+      });
+    }
+    const newTotal = temp.reduce(
+      (totalValue, inf) => totalValue + parseFloat(inf.balance),
       0
     );
-    this.setState({ total: newTotal });
-  }
+    this.setState({ total: newTotal, infos: temp });
+  };
 
   toggleBtn() {
     this.setState({ active: !this.state.active });
@@ -73,7 +92,7 @@ class Home extends Component {
             <ExtractSummary
               view="Home"
               navigation={this.props.navigation}
-              infos={infos.slice(0, 3)}
+              infos={this.state.infos}
               total={this.state.total}
             />
           </View>

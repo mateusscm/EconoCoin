@@ -4,8 +4,9 @@ import ExtractSummary from "./../../components/ExtractSummary/ExtractSummary";
 import MenuButton from "./../../components/MenuButton/MenuButton";
 import { Container, Content, View } from "native-base";
 import { theme } from "../../config/_theme";
-import { infos } from "./../../data";
 import { ScrollView } from "react-native-gesture-handler";
+import { FA, FFS } from "../../Firebase";
+
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -30,17 +31,33 @@ class Extract extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      total: 0
+      total: 0,
+      infos: []
     };
   }
-
   componentDidMount() {
-    const newTotal = infos.reduce(
-      (totalValue, inf) => totalValue + inf.gasto,
+    this.getInfo();
+  }
+
+  getInfo = async () => {
+    const user = await FA.currentUser;
+    let temp = [];
+    let resp = await FFS.collection("user_movimentacao")
+      .doc(user.uid)
+      .collection("movimentacoes")
+      .get();
+
+    if (!resp.empty) {
+      resp.forEach(r => {
+        temp.push(r.data());
+      });
+    }
+    const newTotal = temp.reduce(
+      (totalValue, inf) => totalValue + parseFloat(inf.balance),
       0
     );
-    this.setState({ total: newTotal });
-  }
+    this.setState({ total: newTotal, infos: temp });
+  };
 
   render() {
     return (
@@ -50,7 +67,7 @@ class Extract extends Component {
           <View style={styles.allCont}>
             <ExtractSummary
               view="Extract"
-              infos={infos}
+              infos={this.state.infos}
               total={this.state.total}
             />
           </View>
