@@ -113,7 +113,7 @@ class SignUp extends Component {
       email: "",
       password: "",
       sexo: "feminino",
-      data: new Date(),
+      data: new Date().toISOString().split("T")[0],
       errorMessage: null
     };
   }
@@ -147,7 +147,7 @@ class SignUp extends Component {
   };
 
   setDate = newDate => {
-    this.setState({ data: newDate });
+    this.setState({ data: newDate.toISOString().split("T")[0] });
   };
 
   render() {
