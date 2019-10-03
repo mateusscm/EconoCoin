@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
+import { FA, FFS } from "../../Firebase";
 
 // import { contas } from "./../../data";
 
@@ -59,25 +60,96 @@ class HomeNewIncome extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: undefined,
-      selected2: undefined,
-      chosenDate: new Date()
+      selected: null,
+      selected2: null,
+      contas: [],
+      categorias: [],
+      date: new Date(),
+      desc: "",
+      money: ""
     };
     this.onValueChange = this.onValueChange.bind(this);
     this.onValueChange2 = this.onValueChange2.bind(this);
     this.setDate = this.setDate.bind(this);
   }
 
+  componentDidMount() {
+    this.getInfo();
+  }
+
+  getInfo = async () => {
+    const user = await FA.currentUser;
+    let temp = [];
+    let resp = await FFS.collection("user_conta")
+      .doc(user.uid)
+      .collection("contas")
+      .get();
+    if (!resp.empty) {
+      resp.forEach(r => {
+        temp.push(r.data());
+      });
+      this.setState({ contas: temp });
+    }
+    temp = [];
+    resp = await FFS.collection("user_categoria")
+      .doc(user.uid)
+      .collection("categorias")
+      .get();
+    if (!resp.empty) {
+      resp.forEach(r => {
+        temp.push(r.data());
+      });
+      this.setState({ categorias: temp });
+    }
+  };
+
+  simpleMov = async () => {
+    const user = await FA.currentUser;
+
+    let c = await FFS.collection("user_conta")
+      .doc(user.uid)
+      .collection("contas")
+      .doc(this.state.selected2)
+      .get();
+
+    let ref = await FFS.collection("user_movimentacao")
+      .doc(user.uid)
+      .collection("movimentacoes")
+      .doc();
+
+    await ref.set({
+      id: ref.id,
+      descricao: this.state.desc,
+      balance: this.state.money,
+      conta_id: this.state.selected2,
+      categoria_id: this.state.selected,
+      data: this.state.date.toISOString().split("T")[0],
+      type: "receita"
+    });
+
+    if (c.exists) {
+      var newBal = parseFloat(c.data().balance);
+
+      newBal += parseFloat(this.state.money);
+      await FFS.collection("user_conta")
+        .doc(user.uid)
+        .collection("contas")
+        .doc(this.state.selected2)
+        .update({ balance: newBal });
+    }
+    this.props.navigation.navigate("Extract")
+  };
+
   setDate(newDate) {
-    this.setState({ chosenDate: newDate });
+    this.setState({ date: newDate });
   }
 
   onValueChange(event) {
-    this.setState({ [event.target.selected]: event.target.value });
+    this.setState({ selected: event.target.value });
   }
 
   onValueChange2(event) {
-    this.setState({ [event.target.selected2]: event.target.value });
+    this.setState({ selected2: event.target.value });
   }
 
   render() {
@@ -95,6 +167,10 @@ class HomeNewIncome extends Component {
                 placeholder="R$"
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
                 style={{ color: "#fff", fontSize: 44, paddingLeft: 10 }}
+                value={this.state.money}
+                onChangeText={money => {
+                  this.setState({ money });
+                }}
               />
             </Item>
             <Item stackedLabel style={styles.description}>
@@ -111,6 +187,10 @@ class HomeNewIncome extends Component {
                 style={{
                   fontSize: 24,
                   paddingLeft: 5
+                }}
+                value={this.state.desc}
+                onChangeText={desc => {
+                  this.setState({ desc });
                 }}
               />
             </Item>
@@ -131,22 +211,18 @@ class HomeNewIncome extends Component {
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.selected}
-                onValueChange={this.onValueChange}
+                onValueChange={ev => {
+                  this.setState({ selected: ev });
+                }}
               >
-                <Picker.Item label="Sem Categoria" value="" />
-                <Picker.Item label="Alimentação" value="alimentacao" />
-                <Picker.Item label="Roupas" value="roupas" />
-                <Picker.Item label="Animal de Estimação" value="animal" />
-                <Picker.Item label="Casa" value="casa" />
-                <Picker.Item label="Educação" value="educacao" />
-                <Picker.Item label="Gastos Pessoais" value="pessoal" />
-                <Picker.Item label="Impostos" value="impostos" />
-                <Picker.Item label="Lazer" value="lazer" />
-                <Picker.Item label="Saúde" value="saude" />
-                <Picker.Item label="Receita" value="receita" />
-                <Picker.Item label="Seguros" value="seguros" />
-                <Picker.Item label="Transporte" value="transportes" />
-                <Picker.Item label="Outros" value="outros" />
+                <Picker.Item
+                  disabled
+                  label="Escolha uma Categoria"
+                  value={null}
+                />
+                {this.state.categorias.map((c, i) => (
+                  <Picker.Item key={i} label={c.value} value={c.id} />
+                ))}
               </Picker>
             </Item>
             <Item picker stackedLabel style={styles.description}>
@@ -166,17 +242,14 @@ class HomeNewIncome extends Component {
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.selected2}
-                onValueChange={this.onValueChange2}
+                onValueChange={ev => {
+                  this.setState({ selected2: ev });
+                }}
               >
-                <Picker.Item label="Nenhum" value="" />
-                {/* {contas.map(conta => {
-                  <Picker.Item label={conta.nome} value={conta.sigla} />;
-                })} */}
-                <Picker.Item label="Banco do Brasil" value="BB" />
-                <Picker.Item label="Itau" value="I" />
-                <Picker.Item label="Carteira" value="Ca" />
-                <Picker.Item label="Caixa" value="Cx" />
-                <Picker.Item label="Cofre" value="Co" />
+                <Picker.Item disabled label="Escolha uma conta" value={null} />
+                {this.state.contas.map((c, i) => (
+                  <Picker.Item key={i} label={c.nome} value={c.id} />
+                ))}
               </Picker>
             </Item>
             <Item picker stackedLabel style={styles.description}>
@@ -204,9 +277,7 @@ class HomeNewIncome extends Component {
                 onDateChange={this.setDate}
                 disabled={false}
               />
-              <Text>
-                Data: {this.state.chosenDate.toString().substr(4, 12)}
-              </Text>
+              <Text>Data: {this.state.date.toString().substr(4, 12)}</Text>
             </Item>
           </Form>
         </Content>
@@ -214,6 +285,7 @@ class HomeNewIncome extends Component {
           transparent
           light
           style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}
+          onPress={this.simpleMov}
         >
           <Text>SALVAR</Text>
         </Button>
