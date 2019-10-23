@@ -18,7 +18,8 @@ const styles = StyleSheet.create({
   allCont: {
     flex: 1,
     // justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "center",
+    paddingHorizontal: 10,
     backgroundColor: theme.palette.backgroundMain
   },
   text: {
@@ -81,22 +82,22 @@ class AccountBalance extends Component {
         />
         <Tabs>
           <Tab heading="Contas">
-            <ScrollView>
-              <View style={styles.allCont}>
+            <ScrollView style={styles.allCont}>
+              {/* <View style={styles.allCont}> */}
                 <PreviewBalance navigation={this.props.navigation} />
                 <Accounts contas={contas} />
-              </View>
+              {/* </View> */}
             </ScrollView>
             <AddAccount view="Conta" navigation={this.props.navigation} />
           </Tab>
           <Tab heading="Categorias">
-            <ScrollView>
-              <View style={styles.allCont}>
+            <ScrollView style={styles.allCont}>
+              {/* <View style={styles.allCont}> */}
                 <Categories
                   ref={this.child}
                   navigation={this.props.navigation}
                 />
-              </View>
+              {/* </View> */}
             </ScrollView>
             <FloatingButton
               view="Categoria"

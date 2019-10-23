@@ -23,9 +23,13 @@ const styles = StyleSheet.create({
 class Settings extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      switchValue: false
+    };
   }
-
+  toggleSwitch = () => {
+    this.setState({switchValue: !this.state.switchValue})
+  }
   render() {
     return (
       <Container>
@@ -34,8 +38,8 @@ class Settings extends Component {
           <Text style={styles.text}>Settings</Text>
           <Switch
             style={{ backgroundColor: "white" }}
-            // onValueChange = {this.toggleSwitch}
-            // value = {this.state.switchValue}/>
+            onValueChange = {this.toggleSwitch}
+            value = {this.state.switchValue}
           />
         </View>
       </Container>
