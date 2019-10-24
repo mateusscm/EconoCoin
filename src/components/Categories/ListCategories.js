@@ -9,11 +9,11 @@ import {
   Body,
   Right,
   Button,
-  Icon,
   Thumbnail
 } from "native-base";
 import { theme } from "../../config/_theme";
-
+import IconM from "react-native-vector-icons/MaterialIcons";
+import IconI from "react-native-vector-icons/Ionicons";
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: "100%",
     borderLeftColor: "#8BC645",
-    borderLeftWidth: 10
+    borderLeftWidth: 10,
   },
   standaloneRowBack: {
     alignItems: "center",
@@ -56,11 +56,11 @@ class ListCategories extends Component {
 
   render() {
     return (
-      <Content scrollEnabled={false}>
+      // <Content style={{flex: 1}} scrollEnabled={false}>
         <View style={styles.standaloneRowFront}>
           <ListItem
             avatar
-            style={{ borderBottomColor: "transparent", borderBottomWidth: 0.8 }}
+            style={{ borderBottomColor: "transparent", borderBottomWidth: 0.8}}
           >
             <Left>{/* <Thumbnail source={this.props.info.img} /> */}</Left>
             <Body
@@ -86,23 +86,23 @@ class ListCategories extends Component {
               }}
             >
               <Button transparent onPress={() => { this.props.navigation.navigate("DialogCategorie", { value: this.props.info.value, id: this.props.info.id }); }}>
-                <Icon
-                  style={styles.backTextWhite}
-                  type="MaterialIcons"
+                <IconM
+                  color={styles.backTextWhite.color}
+                  size={styles.backTextWhite.fontSize}
                   name="edit"
                 />
               </Button>
               <Button transparent onPress={() => { this.props.onDelete(this.props.info); }}>
-                <Icon
-                  style={styles.backTextWhite}
-                  type="Ionicons"
+                <IconI
+                  color={styles.backTextWhite.color}
+                  size={styles.backTextWhite.fontSize}
                   name="ios-trash"
                 />
               </Button>
             </Right>
           </ListItem>
         </View>
-      </Content >
+      // </Content >
     );
   }
 }

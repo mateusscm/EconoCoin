@@ -7,7 +7,8 @@ import ContentExtract from "./ContentExtract";
 
 const styles = StyleSheet.create({
   content: {
-    width: "95%"
+    width: "100%",
+
   },
   align: {
     justifyContent: "center",

@@ -8,11 +8,10 @@ import {
   Left,
   Body,
   Right,
-  Button,
-  Icon
+  Button
 } from "native-base";
 import { theme } from "../../config/_theme";
-
+import Icon from "react-native-vector-icons/Ionicons";
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
@@ -111,8 +110,8 @@ class InsideCardAccounts extends Component {
                 }}
               >
                 <Icon
-                  style={styles.backTextWhite}
-                  type="Ionicons"
+                  color={styles.backTextWhite.color}
+                  size={styles.backTextWhite.fontSize}
                   name="ios-trash"
                 />
               </Button>

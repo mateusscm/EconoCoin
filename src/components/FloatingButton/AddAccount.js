@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
-import { View, Icon, Button } from "native-base";
+import { View, Button } from "native-base";
 // import logo from "./../../assets/img/logo.png";
+
+import Icon from "react-native-vector-icons/Ionicons";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -34,7 +36,7 @@ class AddAccount extends Component {
           }}
           onPress={() => this.props.navigation.navigate("DialogAccount")}
         >
-          <Icon type="Ionicons" name="ios-add" style={{ fontSize: 32 }} />
+          <Icon name="ios-add" size={24} color="#FFF" />
         </Button>
       </View>
     );
