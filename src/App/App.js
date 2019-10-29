@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { View, StyleSheet, StatusBar } from "react-native";
+import Reactotron from 'reactotron-react-native';
+
 // import store from "./../utils/store";
 // import { Provider } from "react-redux";
 // import * as firebase from "firebase";
@@ -20,6 +22,7 @@ import DrawerNavigator from "./../navigation/DrawerNavigator";
 
 export default class App extends Component {
   render() {
+    Reactotron.log("hello FUCKERS");;
     return (
       // <Provider store={store}>
       <View style={styles.container}>

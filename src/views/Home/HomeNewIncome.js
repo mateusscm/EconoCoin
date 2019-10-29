@@ -1,10 +1,11 @@
-import React, { Component } from "react";
-import { StyleSheet } from "react-native";
-import { FA, FFS } from "../../Firebase";
+import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
+import { FA, FFS } from '../../Firebase';
+import Reactotron from 'reactotron-react-native';
 
 // import { contas } from "./../../data";
 
-import MenuButtonBack from "./../../components/MenuButtonBack/MenuButtonBack";
+import MenuButtonBack from './../../components/MenuButtonBack/MenuButtonBack';
 import {
   Container,
   Form,
@@ -15,45 +16,45 @@ import {
   Picker,
   Button,
   Text,
-  DatePicker
-} from "native-base";
-import { theme } from "../../config/_theme";
+  DatePicker,
+} from 'native-base';
+import { theme } from '../../config/_theme';
 
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   allCont: {
-    backgroundColor: theme.palette.backgroundMain
+    backgroundColor: theme.palette.backgroundMain,
   },
   text: {
     fontSize: 30,
-    color: theme.palette.txtPrimary
+    color: theme.palette.txtPrimary,
   },
   header: {
     height: 100,
-    width: "100%",
-    backgroundColor: "#14c6cc",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '100%',
+    backgroundColor: '#14c6cc',
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 0,
     marginTop: 0,
     marginLeft: 0,
     paddingLeft: 10,
     paddingTop: 2,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(0, 0, 0, 0.5)"
+    borderBottomColor: 'rgba(0, 0, 0, 0.5)',
   },
   description: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 0,
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
     paddingTop: 2,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(0, 0, 0, 0.5)"
-  }
+    borderBottomColor: 'rgba(0, 0, 0, 0.5)',
+  },
 });
 
 class HomeNewIncome extends Component {
@@ -65,8 +66,8 @@ class HomeNewIncome extends Component {
       contas: [],
       categorias: [],
       date: new Date(),
-      desc: "",
-      money: ""
+      desc: '',
+      money: '',
     };
     this.onValueChange = this.onValueChange.bind(this);
     this.onValueChange2 = this.onValueChange2.bind(this);
@@ -80,10 +81,11 @@ class HomeNewIncome extends Component {
   getInfo = async () => {
     const user = await FA.currentUser;
     let temp = [];
-    let resp = await FFS.collection("user_conta")
+    let resp = await FFS.collection('user_conta')
       .doc(user.uid)
-      .collection("contas")
+      .collection('contas')
       .get();
+    Reactotron.log("FFS GET PORRA");
     if (!resp.empty) {
       resp.forEach(r => {
         temp.push(r.data());
@@ -91,10 +93,11 @@ class HomeNewIncome extends Component {
       this.setState({ contas: temp });
     }
     temp = [];
-    resp = await FFS.collection("user_categoria")
+    resp = await FFS.collection('user_categoria')
       .doc(user.uid)
-      .collection("categorias")
+      .collection('categorias')
       .get();
+    Reactotron.log('FFS GET PORRA');
     if (!resp.empty) {
       resp.forEach(r => {
         temp.push(r.data());
@@ -106,15 +109,16 @@ class HomeNewIncome extends Component {
   simpleMov = async () => {
     const user = await FA.currentUser;
 
-    let c = await FFS.collection("user_conta")
+    let c = await FFS.collection('user_conta')
       .doc(user.uid)
-      .collection("contas")
+      .collection('contas')
       .doc(this.state.selected2)
       .get();
+    Reactotron.log("FFS GET PORRA");
 
-    let ref = await FFS.collection("user_movimentacao")
+    let ref = await FFS.collection('user_movimentacao')
       .doc(user.uid)
-      .collection("movimentacoes")
+      .collection('movimentacoes')
       .doc();
 
     await ref.set({
@@ -123,21 +127,21 @@ class HomeNewIncome extends Component {
       balance: this.state.money,
       conta_id: this.state.selected2,
       categoria_id: this.state.selected,
-      data: this.state.date.toISOString().split("T")[0],
-      type: "receita" //MUDAR "despesa"
+      data: this.state.date.toISOString().split('T')[0],
+      type: 'receita', //MUDAR "despesa"
     });
 
     if (c.exists) {
       var newBal = parseFloat(c.data().balance);
 
       newBal += parseFloat(this.state.money); //mudar para -=
-      await FFS.collection("user_conta")
+      await FFS.collection('user_conta')
         .doc(user.uid)
-        .collection("contas")
+        .collection('contas')
         .doc(this.state.selected2)
         .update({ balance: newBal });
     }
-    this.props.navigation.navigate("Extract")
+    this.props.navigation.navigate('Extract');
   };
 
   setDate(newDate) {
@@ -162,11 +166,11 @@ class HomeNewIncome extends Component {
           </View> */}
           <Form>
             <Item stackedLabel underline style={styles.header}>
-              <Label style={{ color: "#fff", fontSize: 16 }}>Valor</Label>
+              <Label style={{ color: '#fff', fontSize: 16 }}>Valor</Label>
               <Input
                 placeholder="R$"
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                style={{ color: "#fff", fontSize: 44, paddingLeft: 10 }}
+                style={{ color: '#fff', fontSize: 44, paddingLeft: 10 }}
                 value={this.state.money}
                 onChangeText={money => {
                   this.setState({ money });
@@ -178,7 +182,7 @@ class HomeNewIncome extends Component {
                 style={{
                   fontSize: 18,
                   paddingLeft: 0,
-                  color: "rgba(0, 0, 0, 0.5)"
+                  color: 'rgba(0, 0, 0, 0.5)',
                 }}
               >
                 Breve descrição
@@ -186,7 +190,7 @@ class HomeNewIncome extends Component {
               <Input
                 style={{
                   fontSize: 24,
-                  paddingLeft: 5
+                  paddingLeft: 5,
                 }}
                 value={this.state.desc}
                 onChangeText={desc => {
@@ -199,16 +203,16 @@ class HomeNewIncome extends Component {
                 style={{
                   fontSize: 18,
                   paddingLeft: 0,
-                  color: "rgba(0, 0, 0, 0.5)"
+                  color: 'rgba(0, 0, 0, 0.5)',
                 }}
               >
                 Categoria
               </Label>
               <Picker
                 mode="dropdown"
-                style={{ width: "100%", paddingLeft: 0 }}
+                style={{ width: '100%', paddingLeft: 0 }}
                 placeholder="Select your SIM"
-                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderStyle={{ color: '#bfc6ea' }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.selected}
                 onValueChange={ev => {
@@ -230,16 +234,16 @@ class HomeNewIncome extends Component {
                 style={{
                   fontSize: 18,
                   paddingLeft: 0,
-                  color: "rgba(0, 0, 0, 0.5)"
+                  color: 'rgba(0, 0, 0, 0.5)',
                 }}
               >
                 Conta
               </Label>
               <Picker
                 mode="dropdown"
-                style={{ width: "100%", paddingLeft: 0 }}
+                style={{ width: '100%', paddingLeft: 0 }}
                 placeholder="Select your SIM"
-                placeholderStyle={{ color: "#bfc6ea" }}
+                placeholderStyle={{ color: '#bfc6ea' }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.selected2}
                 onValueChange={ev => {
@@ -257,7 +261,7 @@ class HomeNewIncome extends Component {
                 style={{
                   fontSize: 18,
                   paddingLeft: 0,
-                  color: "rgba(0, 0, 0, 0.5)"
+                  color: 'rgba(0, 0, 0, 0.5)',
                 }}
               >
                 Data
@@ -266,14 +270,14 @@ class HomeNewIncome extends Component {
                 defaultDate={new Date(2018, 4, 4)}
                 minimumDate={new Date(2018, 1, 1)}
                 maximumDate={new Date(2018, 12, 31)}
-                locale={"pt"}
+                locale={'pt'}
                 timeZoneOffsetInMinutes={undefined}
                 modalTransparent={false}
-                animationType={"fade"}
-                androidMode={"default"}
+                animationType={'fade'}
+                androidMode={'default'}
                 placeHolderText="Selecione a data"
-                textStyle={{ color: "black" }}
-                placeHolderTextStyle={{ color: "#d3d3d3" }}
+                textStyle={{ color: 'black' }}
+                placeHolderTextStyle={{ color: '#d3d3d3' }}
                 onDateChange={this.setDate}
                 disabled={false}
               />
@@ -284,7 +288,7 @@ class HomeNewIncome extends Component {
         <Button
           transparent
           light
-          style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}
+          style={{ position: 'absolute', zIndex: 10, right: 5, top: 7 }}
           onPress={this.simpleMov}
         >
           <Text>SALVAR</Text>

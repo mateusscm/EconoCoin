@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { Content, Text, Spinner } from "native-base";
 import InsideCardAccount from "./InsideCardAccount";
 import { FA, FFS } from "../../Firebase";
+import Reactotron from "reactotron-react-native";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -47,10 +48,6 @@ class Accounts extends Component {
     this.getContas();
   }
 
-  update = async () => {
-    this.getContas();
-  };
-
   getContas = async () => {
     this.setState({ loading: true });
     let user = await FA.currentUser;
@@ -58,13 +55,13 @@ class Accounts extends Component {
       .doc(user.uid)
       .collection("contas")
       .get();
+    Reactotron.log('FFS GET PORRA Conta');
     if (!resp.empty) {
       let temp = [];
       resp.forEach(r => {
         temp.push(r.data());
       });
       this.setState({ contas: temp, loading: false });
-      this.update();
     }
   };
 
@@ -93,7 +90,7 @@ class Accounts extends Component {
     return (
       <Content style={styles.content}>
         <Text style={styles.mainTitle}>CONTAS EXISTENTES</Text>
-        {this.state.loading ? null : <Spinner color="green" />}
+        {!this.state.loading ? null : <Spinner color="green" />}
         {this.state.contas.map((conta, i) => {
           return (
             <InsideCardAccount

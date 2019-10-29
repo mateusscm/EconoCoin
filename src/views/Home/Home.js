@@ -8,7 +8,7 @@ import { theme } from "../../config/_theme";
 import PreviewBalance from "../../components/PreviewBalance/PreviewBalance";
 import ExtractSummary from "../../components/ExtractSummary/ExtractSummary";
 import { FA, FFS } from "../../Firebase";
-
+import Reactotron from "reactotron-react-native";
 // import { infos } from "./../../data";
 
 // const { width: WIDTH } = Dimensions.get("window");
@@ -64,6 +64,7 @@ class Home extends Component {
       .collection("movimentacoes")
       .limit(3)
       .get();
+    Reactotron.log("FFS GET PORRA");
 
     if (!resp.empty) {
       resp.forEach(r => {

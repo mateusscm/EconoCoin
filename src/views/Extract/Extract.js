@@ -6,7 +6,7 @@ import { Container, Content, View } from "native-base";
 import { theme } from "../../config/_theme";
 import { ScrollView } from "react-native-gesture-handler";
 import { FA, FFS } from "../../Firebase";
-
+import Reactotron from "reactotron-react-native";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -46,6 +46,7 @@ class Extract extends Component {
       .doc(user.uid)
       .collection("movimentacoes")
       .get();
+    Reactotron.log('FFS GET PORRA');
 
     if (!resp.empty) {
       resp.forEach(r => {

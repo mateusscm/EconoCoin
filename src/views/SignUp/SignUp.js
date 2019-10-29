@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   ImageBackground,
   View,
@@ -6,115 +6,116 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Picker
-} from "react-native";
-import { DatePicker, Item, Label } from "native-base";
-import bgImage from "./../../assets/img/background.jpg";
-import Icon from "react-native-vector-icons/Ionicons";
-import { theme } from "../../config/_theme";
-import { ScrollView } from "react-native-gesture-handler";
+  Picker,
+} from 'react-native';
+import { DatePicker, Item, Label } from 'native-base';
+import bgImage from './../../assets/img/background.jpg';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { theme } from '../../config/_theme';
+import { ScrollView } from 'react-native-gesture-handler';
 // import DatePicker from "react-native-datepicker";
-import { FA, FFS } from "../../Firebase";
+import { FA, FFS } from '../../Firebase';
+import Reactotron from 'reactotron-react-native';
 
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   backgroundContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     width: null,
-    height: null
+    height: null,
   },
   allCont: {
     flex: 1,
-    width: "100%",
-    backgroundColor: "rgba(0,0,0,0.7)"
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,0.7)',
   },
   text: {
-    color: "#59BF3F",
+    color: '#59BF3F',
     fontSize: 25,
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
   subtext: {
     color: theme.palette.txtWithBg,
-    fontSize: 20
+    fontSize: 20,
   },
   frase: {
     color: theme.palette.txtWithBg,
-    fontSize: 16
+    fontSize: 16,
   },
   input: {
-    width: "100%",
+    width: '100%',
     height: 45,
     fontSize: 16,
     paddingLeft: 45,
-    color: "rgba(255, 255, 255, 0.7)",
+    color: 'rgba(255, 255, 255, 0.7)',
     borderBottomWidth: 1,
-    borderBottomColor: theme.palette.txtWithBg
+    borderBottomColor: theme.palette.txtWithBg,
   },
   inputIcon: {
-    position: "absolute",
+    position: 'absolute',
     top: 8,
-    left: 15
+    left: 15,
   },
   inputIconDate: {
-    position: "absolute",
+    position: 'absolute',
     top: 4,
-    left: 15
+    left: 15,
   },
   inputContainer: {
-    marginTop: 20
+    marginTop: 20,
   },
   btnSignup: {
-    width: "100%",
+    width: '100%',
     height: 45,
     borderRadius: 25,
     backgroundColor: theme.palette.secondary,
-    justifyContent: "center",
-    marginTop: 80
+    justifyContent: 'center',
+    marginTop: 80,
   },
   signup: {
-    color: "rgba(255, 255, 255, 0.7)",
+    color: 'rgba(255, 255, 255, 0.7)',
     fontSize: 20,
-    textAlign: "center"
+    textAlign: 'center',
   },
   sexo: {
     width: 150,
     color: theme.palette.txtWithBg,
     borderBottomColor: theme.palette.txtWithBg,
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
   },
   line: {
     borderWidth: 1,
     borderColor: theme.palette.secondary,
     marginRight: 200,
-    marginLeft: 20
+    marginLeft: 20,
   },
   errorMessage: {
     // height: 72,
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: 30
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 30,
   },
   error: {
-    color: "#E9446A",
+    color: '#E9446A',
     fontSize: 13,
-    fontWeight: "600",
-    textAlign: "center"
-  }
+    fontWeight: '600',
+    textAlign: 'center',
+  },
 });
 
 class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
-      email: "",
-      password: "",
-      sexo: "feminino",
-      data: new Date().toISOString().split("T")[0],
-      errorMessage: null
+      name: '',
+      email: '',
+      password: '',
+      sexo: 'feminino',
+      data: new Date().toISOString().split('T')[0],
+      errorMessage: null,
     };
   }
 
@@ -124,7 +125,7 @@ class SignUp extends Component {
         this.state.email,
         this.state.password
       );
-      await FFS.collection("users")
+      await FFS.collection('users')
         .doc(userCredentials.user.uid)
         .set({
           email: this.state.email,
@@ -132,12 +133,12 @@ class SignUp extends Component {
           first: this.state.name,
           sexo: this.state.sexo,
           data: this.state.data,
-          id: userCredentials.user.uid
+          id: userCredentials.user.uid,
         });
       return (
         userCredentials.user.updateProfile({
-          displayName: this.state.name
-        }) && alert("acho que deu")
+          displayName: this.state.name,
+        }) && alert('acho que deu')
       );
     } catch (error) {
       console.log(error);
@@ -147,7 +148,7 @@ class SignUp extends Component {
   };
 
   setDate = newDate => {
-    this.setState({ data: newDate.toISOString().split("T")[0] });
+    this.setState({ data: newDate.toISOString().split('T')[0] });
   };
 
   render() {
@@ -174,15 +175,15 @@ class SignUp extends Component {
               <Text style={styles.frase}>Insira alguns dados abaixo:</Text>
               <View style={styles.inputContainer}>
                 <Icon
-                  name={"ios-person"}
+                  name={'ios-person'}
                   size={28}
                   color="#ffffff"
                   style={styles.inputIcon}
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder={"Nome Completo"}
-                  placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
+                  placeholder={'Nome Completo'}
+                  placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
                   underlineColorAndroid="transparent"
                   onChangeText={name => this.setState({ name })}
                   value={this.state.name}
@@ -190,15 +191,15 @@ class SignUp extends Component {
               </View>
               <View style={styles.inputContainer}>
                 <Icon
-                  name={"ios-person"}
+                  name={'ios-person'}
                   size={28}
                   color="#ffffff"
                   style={styles.inputIcon}
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder={"E-mail"}
-                  placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
+                  placeholder={'E-mail'}
+                  placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
                   underlineColorAndroid="transparent"
                   onChangeText={email => this.setState({ email })}
                   value={this.state.email}
@@ -206,16 +207,16 @@ class SignUp extends Component {
               </View>
               <View style={styles.inputContainer}>
                 <Icon
-                  name={"ios-lock"}
+                  name={'ios-lock'}
                   size={28}
                   color="#ffffff"
                   style={styles.inputIcon}
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder={"Senha"}
+                  placeholder={'Senha'}
                   secureTextEntry={true}
-                  placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
+                  placeholderTextColor={'rgba(255, 255, 255, 0.7)'}
                   underlineColorAndroid="transparent"
                   autoCapitalize="none"
                   onChangeText={password => this.setState({ password })}
@@ -224,11 +225,11 @@ class SignUp extends Component {
               </View>
               <View
                 style={{
-                  flexDirection: "row",
+                  flexDirection: 'row',
                   marginTop: 20,
-                  justifyContent: "space-between",
-                  borderBottomColor: "#fff",
-                  borderBottomWidth: 1
+                  justifyContent: 'space-between',
+                  borderBottomColor: '#fff',
+                  borderBottomWidth: 1,
                 }}
               >
                 <Picker
@@ -244,25 +245,25 @@ class SignUp extends Component {
               </View>
               <View
                 style={{
-                  flexDirection: "row",
+                  flexDirection: 'row',
                   marginTop: 20,
-                  justifyContent: "space-between",
-                  borderBottomColor: "#fff",
-                  borderBottomWidth: 1
+                  justifyContent: 'space-between',
+                  borderBottomColor: '#fff',
+                  borderBottomWidth: 1,
                 }}
               >
                 <DatePicker
                   defaultDate={new Date(1997, 4, 4)}
                   minimumDate={new Date(1900, 1, 1)}
                   maximumDate={new Date(2001, 1, 1)}
-                  locale={"en"}
+                  locale={'en'}
                   timeZoneOffsetInMinutes={undefined}
                   modalTransparent={false}
-                  animationType={"fade"}
-                  androidMode={"default"}
+                  animationType={'fade'}
+                  androidMode={'default'}
                   placeHolderText="Data de Nascimento"
-                  textStyle={{ color: "white" }}
-                  placeHolderTextStyle={{ color: "#d3d3d3" }}
+                  textStyle={{ color: 'white' }}
+                  placeHolderTextStyle={{ color: '#d3d3d3' }}
                   onDateChange={this.setDate}
                   disabled={false}
                 />
