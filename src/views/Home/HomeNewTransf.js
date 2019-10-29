@@ -1,9 +1,11 @@
-import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
 
+import { FA, FFS } from "../../Firebase";
+import Reactotron from "reactotron-react-native";
 // import { contas } from "./../../data";
 
-import MenuButtonBack from "./../../components/MenuButtonBack/MenuButtonBack";
+import MenuButtonBack from './../../components/MenuButtonBack/MenuButtonBack';
 import {
   Container,
   Form,
@@ -14,54 +16,57 @@ import {
   Picker,
   Button,
   Text,
-  DatePicker
-} from "native-base";
-import { theme } from "../../config/_theme";
+  DatePicker,
+} from 'native-base';
+import { theme } from '../../config/_theme';
 
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   allCont: {
-    backgroundColor: theme.palette.backgroundMain
+    backgroundColor: theme.palette.backgroundMain,
   },
   text: {
     fontSize: 30,
-    color: theme.palette.txtPrimary
+    color: theme.palette.txtPrimary,
   },
   header: {
     height: 100,
-    width: "100%",
-    backgroundColor: "#8f34eb",
-    justifyContent: "center",
-    alignItems: "center",
+    width: '100%',
+    backgroundColor: '#8f34eb',
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 0,
     paddingLeft: 10,
     marginTop: 0,
     marginLeft: 0,
     paddingTop: 2,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(0, 0, 0, 0.5)"
+    borderBottomColor: 'rgba(0, 0, 0, 0.5)',
   },
   description: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 0,
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
     paddingTop: 2,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(0, 0, 0, 0.5)"
-  }
+    borderBottomColor: 'rgba(0, 0, 0, 0.5)',
+  },
 });
 
 class HomeNewTransf extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selected: undefined,
-      selected2: undefined,
-      chosenDate: new Date()
+      selected: "",
+      selected2: "",
+      contas: [],
+      date: new Date(),
+      desc: "",
+      money: ""
     };
     this.onValueChange = this.onValueChange.bind(this);
     this.onValueChange2 = this.onValueChange2.bind(this);
@@ -80,14 +85,112 @@ class HomeNewTransf extends Component {
     this.setState({ [event.target.selected2]: event.target.value });
   }
 
+  componentDidMount() {
+    this.getInfo();
+  }
+
+  getInfo = async () => {
+    const user = await FA.currentUser;
+    let temp = [];
+    let resp = await FFS.collection("user_conta")
+      .doc(user.uid)
+      .collection("contas")
+      .get();
+    Reactotron.log('FFS GET PORRA');
+    if (!resp.empty) {
+      resp.forEach(r => {
+        temp.push(r.data());
+      });
+      this.setState({ contas: temp });
+    }
+  };
+
+  simpleMov = async () => {
+    try {
+      const user = await FA.currentUser;
+
+      let con = JSON.parse(this.state.selected2);
+      let conR = JSON.parse(this.state.selected);
+
+      let c = await FFS.collection('user_conta')
+        .doc(user.uid)
+        .collection('contas')
+        .doc(con.id);
+
+      let cr = await FFS.collection('user_conta')
+        .doc(user.uid)
+        .collection('contas')
+        .doc(conR.id);
+
+      let ref = await FFS.collection('user_movimentacao')
+        .doc(user.uid)
+        .collection('movimentacoes')
+        .doc();
+
+      await ref.set({
+        id: ref.id,
+        descricao: this.state.desc,
+        balance: Math.abs(this.state.money),
+        conta: con.nome,
+        categoria: 'Transferencia',
+        data: this.state.date.toISOString().split("T")[0],
+        tipo: 'receita',
+      });
+
+      let ref2 = await FFS.collection('user_movimentacao')
+        .doc(user.uid)
+        .collection('movimentacoes')
+        .doc();
+
+      await ref2.set({
+        id: ref2.id,
+        descricao: this.state.desc,
+        balance: -Math.abs(this.state.money),
+        conta: conR.nome,
+        categoria: 'Transferencia',
+        data: this.state.date.toISOString().split("T")[0],
+        tipo: 'despesa',
+      });
+
+      Reactotron.log('FAQUICARAI');
+
+      return FFS.runTransaction(async transaction => {
+        try {
+          // This code may get re-run multiple times if there are conflicts.
+          const sfDoc = await transaction.get(c);
+          if (!sfDoc.exists) {
+            Reactotron.log('DEU RUIM');
+
+            throw new Error('Document does not exist!');
+          }
+          var newBal = parseFloat(sfDoc.data().balance);
+          newBal += parseFloat(this.state.money);
+
+          const sfDoc1 = await transaction.get(cr);
+          if (!sfDoc1.exists) {
+            Reactotron.log('DEU RUIM');
+            throw new Error('Document does not exist!');
+          }
+          var newBal1 = parseFloat(sfDoc1.data().balance);
+          newBal1 -= parseFloat(this.state.money);
+
+          await transaction.update(c, { balance: newBal });
+          await transaction.update(cr, { balance: newBal1 });
+        } catch (err) {
+          Reactotron.log('DEU RUIM');
+          console.log('Transaction failed');
+        }
+        this.props.navigation.navigate('Extract');
+      });
+    } catch (err) {
+      Reactotron.log(err);
+    }
+  };
+
   render() {
     return (
       <Container>
-        <MenuButtonBack
-          view="Transferência"
-          navigation={this.props.navigation}
-          screen="HomeNewTransf"
-        />
+        <MenuButtonBack view="Receita" navigation={this.props.navigation} />
         <Content style={styles.allCont}>
           {/* <View style={styles.header}>
             <Text>dwqdqwdqwd</Text>
@@ -99,6 +202,10 @@ class HomeNewTransf extends Component {
                 placeholder="R$"
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
                 style={{ color: "#fff", fontSize: 44, paddingLeft: 10 }}
+                value={this.state.money}
+                onChangeText={money => {
+                  this.setState({ money });
+                }}
               />
             </Item>
             <Item stackedLabel style={styles.description}>
@@ -116,6 +223,10 @@ class HomeNewTransf extends Component {
                   fontSize: 24,
                   paddingLeft: 5
                 }}
+                value={this.state.desc}
+                onChangeText={desc => {
+                  this.setState({ desc });
+                }}
               />
             </Item>
             <Item picker stackedLabel style={styles.description}>
@@ -126,7 +237,7 @@ class HomeNewTransf extends Component {
                   color: "rgba(0, 0, 0, 0.5)"
                 }}
               >
-                Categoria
+                Conta para remover
               </Label>
               <Picker
                 mode="dropdown"
@@ -135,22 +246,18 @@ class HomeNewTransf extends Component {
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.selected}
-                onValueChange={this.onValueChange}
+                onValueChange={ev => {
+                  this.setState({ selected: ev });
+                }}
               >
-                <Picker.Item label="Sem Categoria" value="" />
-                <Picker.Item label="Alimentação" value="alimentacao" />
-                <Picker.Item label="Roupas" value="roupas" />
-                <Picker.Item label="Animal de Estimação" value="animal" />
-                <Picker.Item label="Casa" value="casa" />
-                <Picker.Item label="Educação" value="educacao" />
-                <Picker.Item label="Gastos Pessoais" value="pessoal" />
-                <Picker.Item label="Impostos" value="impostos" />
-                <Picker.Item label="Lazer" value="lazer" />
-                <Picker.Item label="Saúde" value="saude" />
-                <Picker.Item label="Receita" value="receita" />
-                <Picker.Item label="Seguros" value="seguros" />
-                <Picker.Item label="Transporte" value="transportes" />
-                <Picker.Item label="Outros" value="outros" />
+                <Picker.Item disabled label="Escolha uma conta" value={null} />
+                {this.state.contas.map((c, i) => (
+                  <Picker.Item
+                    key={i}
+                    label={c.nome}
+                    value={JSON.stringify({ id: c.id, nome: c.nome })}
+                  />
+                ))}
               </Picker>
             </Item>
             <Item picker stackedLabel style={styles.description}>
@@ -161,7 +268,7 @@ class HomeNewTransf extends Component {
                   color: "rgba(0, 0, 0, 0.5)"
                 }}
               >
-                Conta
+                Conta para adicionar
               </Label>
               <Picker
                 mode="dropdown"
@@ -170,17 +277,18 @@ class HomeNewTransf extends Component {
                 placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.selected2}
-                onValueChange={this.onValueChange2}
+                onValueChange={ev => {
+                  this.setState({ selected2: ev });
+                }}
               >
-                <Picker.Item label="Nenhum" value="" />
-                {/* {contas.map(conta => {
-                  <Picker.Item label={conta.nome} value={conta.sigla} />;
-                })} */}
-                <Picker.Item label="Banco do Brasil" value="BB" />
-                <Picker.Item label="Itau" value="I" />
-                <Picker.Item label="Carteira" value="Ca" />
-                <Picker.Item label="Caixa" value="Cx" />
-                <Picker.Item label="Cofre" value="Co" />
+                <Picker.Item disabled label="Escolha uma conta" value={null} />
+                {this.state.contas.map((c, i) => (
+                  <Picker.Item
+                    key={i}
+                    label={c.nome}
+                    value={JSON.stringify({ id: c.id, nome: c.nome })}
+                  />
+                ))}
               </Picker>
             </Item>
             <Item picker stackedLabel style={styles.description}>
@@ -208,9 +316,7 @@ class HomeNewTransf extends Component {
                 onDateChange={this.setDate}
                 disabled={false}
               />
-              <Text>
-                Data: {this.state.chosenDate.toString().substr(4, 12)}
-              </Text>
+              <Text>Data: {this.state.date.toString().substr(4, 12)}</Text>
             </Item>
           </Form>
         </Content>
@@ -218,6 +324,7 @@ class HomeNewTransf extends Component {
           transparent
           light
           style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}
+          onPress={this.simpleMov}
         >
           <Text>SALVAR</Text>
         </Button>

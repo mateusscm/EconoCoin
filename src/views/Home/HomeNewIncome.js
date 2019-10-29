@@ -125,10 +125,10 @@ class HomeNewIncome extends Component {
       id: ref.id,
       descricao: this.state.desc,
       balance: this.state.money,
-      conta_id: this.state.selected2,
-      categoria_id: this.state.selected,
+      conta: this.state.selected2,
+      categoria: this.state.selected,
       data: this.state.date.toISOString().split('T')[0],
-      type: 'receita', //MUDAR "despesa"
+      tipo: 'receita', //MUDAR "despesa"
     });
 
     if (c.exists) {
@@ -225,7 +225,7 @@ class HomeNewIncome extends Component {
                   value={null}
                 />
                 {this.state.categorias.map((c, i) => (
-                  <Picker.Item key={i} label={c.value} value={c.id} />
+                  <Picker.Item key={i} label={c.value} value={c.value} />
                 ))}
               </Picker>
             </Item>
@@ -252,7 +252,7 @@ class HomeNewIncome extends Component {
               >
                 <Picker.Item disabled label="Escolha uma conta" value={null} />
                 {this.state.contas.map((c, i) => (
-                  <Picker.Item key={i} label={c.nome} value={c.id} />
+                  <Picker.Item key={i} label={c.nome} value={c.nome} />
                 ))}
               </Picker>
             </Item>

@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
 import {
   ListItem,
   Body,
@@ -7,8 +7,8 @@ import {
   Right,
   Thumbnail,
   Left,
-  Container
-} from "native-base";
+  Container,
+} from 'native-base';
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -25,10 +25,10 @@ class ContentExtract extends Component {
       <>
         <Text
           style={{
-            textAlign: "center",
-            color: "#cdcdcd",
+            textAlign: 'center',
+            color: '#cdcdcd',
             fontSize: 12,
-            paddingTop: 5
+            paddingTop: 5,
           }}
         >
           -{this.props.info.data}-
@@ -39,7 +39,8 @@ class ContentExtract extends Component {
           </Left> */}
           <Body>
             <Text>{this.props.info.descricao}</Text>
-            <Text note>{this.props.info.categoria_id}</Text>
+            <Text note>{this.props.info.categoria}</Text>
+            <Text note>{this.props.info.conta}</Text>
           </Body>
           <Right>
             <Text>R${this.props.info.balance}</Text>
