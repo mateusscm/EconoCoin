@@ -13,9 +13,10 @@ import Reactotron from "reactotron-react-native";
 const styles = StyleSheet.create({
   allCont: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: theme.palette.backgroundMain
+    // justifyContent: "center",
+    // alignItems: "center",
+    backgroundColor: theme.palette.backgroundMain,
+    paddingHorizontal: 10
   },
   mainTitle: {
     paddingTop: 10,
@@ -64,14 +65,14 @@ class Extract extends Component {
     return (
       <Container>
         <MenuButton view="Extrato" navigation={this.props.navigation} />
-        <ScrollView style={{ width: "100%" }}>
-          <View style={styles.allCont}>
+        <ScrollView style={styles.allCont}>
+          {/* <View style={styles.allCont}> */}
             <ExtractSummary
               view="Extract"
               infos={this.state.infos}
               total={this.state.total}
             />
-          </View>
+          {/* </View> */}
         </ScrollView>
       </Container>
     );

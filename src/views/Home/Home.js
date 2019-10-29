@@ -16,9 +16,9 @@ import Reactotron from "reactotron-react-native";
 const styles = StyleSheet.create({
   allCont: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
+    // justifyContent: "center",
+    // alignItems: "center",
+    paddingHorizontal: 10,
     backgroundColor: theme.palette.backgroundMain
   },
   opacity: {
@@ -86,19 +86,21 @@ class Home extends Component {
     return (
       <Container>
         <MenuButton view="Visão Geral" navigation={this.props.navigation} />
-        <ScrollView style={{ width: "100%" }}>
+        <ScrollView style={styles.allCont}>
           {/* <View style={this.state.active ? styles.opacity : null} /> */}
-          <View style={styles.allCont}>
-            <PreviewBalance view="Home" navigation={this.props.navigation} />
-            <ExtractSummary
-              view="Home"
-              navigation={this.props.navigation}
-              infos={this.state.infos}
-              total={this.state.total}
-            />
-          </View>
+          {/* <View style={styles.allCont}> */}
+          <PreviewBalance view="Home" navigation={this.props.navigation} />
+          <ExtractSummary
+            view="Home"
+            navigation={this.props.navigation}
+            infos={this.state.infos}
+            total={this.state.total}
+          />
+          {/* </View> */}
         </ScrollView>
+        {/* <View style={{height: 100}}> */}
         <FloatingButton view="Home" navigation={this.props.navigation} />
+        {/* </View> */}
       </Container>
     );
   }
