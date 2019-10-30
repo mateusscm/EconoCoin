@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet } from "react-native";
-
+import { NavigationActions } from "react-navigation";
 // import { contas } from "./../../data";
 
 import MenuButtonBack from "./../../components/MenuButtonBack/MenuButtonBack";
@@ -17,7 +17,7 @@ import {
   DatePicker
 } from "native-base";
 import { FA, FFS } from "../../Firebase";
-import Reactotron from 'reactotron-react-native';
+import Reactotron from "reactotron-react-native";
 import { theme } from "../../config/_theme";
 
 // const { width: WIDTH } = Dimensions.get("window");
@@ -85,7 +85,7 @@ class HomeNewExpense extends Component {
       .doc(user.uid)
       .collection("contas")
       .get();
-    Reactotron.log('FFS GET PORRA');
+    Reactotron.log("FFS GET PORRA");
     if (!resp.empty) {
       resp.forEach(r => {
         temp.push(r.data());
@@ -109,16 +109,16 @@ class HomeNewExpense extends Component {
   simpleMov = async () => {
     const user = await FA.currentUser;
 
-    let c = await FFS.collection('user_conta')
+    let c = await FFS.collection("user_conta")
       .doc(user.uid)
-      .collection('contas')
+      .collection("contas")
       .doc(this.state.selected2)
       .get();
     Reactotron.log("FFS GET PORRA");
 
-    let ref = await FFS.collection('user_movimentacao')
+    let ref = await FFS.collection("user_movimentacao")
       .doc(user.uid)
-      .collection('movimentacoes')
+      .collection("movimentacoes")
       .doc();
 
     await ref.set({
@@ -127,21 +127,21 @@ class HomeNewExpense extends Component {
       balance: -Math.abs(this.state.money),
       conta: this.state.selected2,
       categoria: this.state.selected,
-      data: this.state.date.toISOString().split('T')[0],
-      tipo: 'despesa', //MUDAR "despesa"
+      data: this.state.date.toISOString().split("T")[0],
+      tipo: "despesa" //MUDAR "despesa"
     });
 
     if (c.exists) {
       var newBal = parseFloat(c.data().balance);
 
       newBal -= parseFloat(this.state.money); //mudar para -=
-      await FFS.collection('user_conta')
+      await FFS.collection("user_conta")
         .doc(user.uid)
-        .collection('contas')
+        .collection("contas")
         .doc(this.state.selected2)
         .update({ balance: newBal });
     }
-    this.props.navigation.navigate('Extract');
+    this.props.navigation.navigate("Extract");
   };
 
   setDate(newDate) {
@@ -160,17 +160,23 @@ class HomeNewExpense extends Component {
     return (
       <Container>
         <MenuButtonBack view="Receita" navigation={this.props.navigation} />
+        {/* <NavigationEvents
+          onWillFocus={() => {
+            console.log("onWillFocus");
+            this.getInfo();
+          }}
+        /> */}
         <Content style={styles.allCont}>
           {/* <View style={styles.header}>
             <Text>dwqdqwdqwd</Text>
           </View> */}
           <Form>
             <Item stackedLabel underline style={styles.header}>
-              <Label style={{ color: '#fff', fontSize: 16 }}>Valor</Label>
+              <Label style={{ color: "#fff", fontSize: 16 }}>Valor</Label>
               <Input
                 placeholder="R$"
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                style={{ color: '#fff', fontSize: 44, paddingLeft: 10 }}
+                style={{ color: "#fff", fontSize: 44, paddingLeft: 10 }}
                 value={this.state.money}
                 onChangeText={money => {
                   this.setState({ money });
@@ -182,7 +188,7 @@ class HomeNewExpense extends Component {
                 style={{
                   fontSize: 18,
                   paddingLeft: 0,
-                  color: 'rgba(0, 0, 0, 0.5)',
+                  color: "rgba(0, 0, 0, 0.5)"
                 }}
               >
                 Breve descrição
@@ -190,7 +196,7 @@ class HomeNewExpense extends Component {
               <Input
                 style={{
                   fontSize: 24,
-                  paddingLeft: 5,
+                  paddingLeft: 5
                 }}
                 value={this.state.desc}
                 onChangeText={desc => {
@@ -203,16 +209,16 @@ class HomeNewExpense extends Component {
                 style={{
                   fontSize: 18,
                   paddingLeft: 0,
-                  color: 'rgba(0, 0, 0, 0.5)',
+                  color: "rgba(0, 0, 0, 0.5)"
                 }}
               >
                 Categoria
               </Label>
               <Picker
                 mode="dropdown"
-                style={{ width: '100%', paddingLeft: 0 }}
+                style={{ width: "100%", paddingLeft: 0 }}
                 placeholder="Select your SIM"
-                placeholderStyle={{ color: '#bfc6ea' }}
+                placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.selected}
                 onValueChange={ev => {
@@ -234,16 +240,16 @@ class HomeNewExpense extends Component {
                 style={{
                   fontSize: 18,
                   paddingLeft: 0,
-                  color: 'rgba(0, 0, 0, 0.5)',
+                  color: "rgba(0, 0, 0, 0.5)"
                 }}
               >
                 Conta
               </Label>
               <Picker
                 mode="dropdown"
-                style={{ width: '100%', paddingLeft: 0 }}
+                style={{ width: "100%", paddingLeft: 0 }}
                 placeholder="Select your SIM"
-                placeholderStyle={{ color: '#bfc6ea' }}
+                placeholderStyle={{ color: "#bfc6ea" }}
                 placeholderIconColor="#007aff"
                 selectedValue={this.state.selected2}
                 onValueChange={ev => {
@@ -261,7 +267,7 @@ class HomeNewExpense extends Component {
                 style={{
                   fontSize: 18,
                   paddingLeft: 0,
-                  color: 'rgba(0, 0, 0, 0.5)',
+                  color: "rgba(0, 0, 0, 0.5)"
                 }}
               >
                 Data
@@ -270,14 +276,14 @@ class HomeNewExpense extends Component {
                 defaultDate={new Date(2018, 4, 4)}
                 minimumDate={new Date(2018, 1, 1)}
                 maximumDate={new Date(2018, 12, 31)}
-                locale={'pt'}
+                locale={"pt"}
                 timeZoneOffsetInMinutes={undefined}
                 modalTransparent={false}
-                animationType={'fade'}
-                androidMode={'default'}
+                animationType={"fade"}
+                androidMode={"default"}
                 placeHolderText="Selecione a data"
-                textStyle={{ color: 'black' }}
-                placeHolderTextStyle={{ color: '#d3d3d3' }}
+                textStyle={{ color: "black" }}
+                placeHolderTextStyle={{ color: "#d3d3d3" }}
                 onDateChange={this.setDate}
                 disabled={false}
               />
@@ -288,7 +294,7 @@ class HomeNewExpense extends Component {
         <Button
           transparent
           light
-          style={{ position: 'absolute', zIndex: 10, right: 5, top: 7 }}
+          style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}
           onPress={this.simpleMov}
         >
           <Text>SALVAR</Text>

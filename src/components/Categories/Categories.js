@@ -11,7 +11,8 @@ import Reactotron from "reactotron-react-native";
 
 const styles = StyleSheet.create({
   content: {
-    flex: 2
+    flex: 2,
+    paddingBottom: 50
   },
   mainTitle: {
     paddingTop: 10,

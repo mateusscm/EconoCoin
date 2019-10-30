@@ -83,7 +83,7 @@ class InsideCardAccounts extends Component {
               }}
             >
               <View style={{ width: 150 }}>
-                <Text style={{ fontSize: 20 }}>{this.props.conta.value}</Text>
+                <Text style={{ fontSize: 20 }}>{this.props.conta.nome}</Text>
                 <Text note>R${this.props.conta.balance}</Text>
               </View>
             </Body>

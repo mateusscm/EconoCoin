@@ -1,14 +1,7 @@
-import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
-import {
-  ListItem,
-  Body,
-  Text,
-  Right,
-  Thumbnail,
-  Left,
-  Container,
-} from 'native-base';
+import React, { Component } from "react";
+import { StyleSheet } from "react-native";
+import { ListItem, Body, Text, Right, Thumbnail, Left } from "native-base";
+import logo from "./../../assets/img/logo.png";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -25,18 +18,18 @@ class ContentExtract extends Component {
       <>
         <Text
           style={{
-            textAlign: 'center',
-            color: '#cdcdcd',
+            textAlign: "center",
+            color: "#cdcdcd",
             fontSize: 12,
-            paddingTop: 5,
+            paddingTop: 5
           }}
         >
           -{this.props.info.data}-
         </Text>
         <ListItem avatar>
-          {/* <Left>
-            <Thumbnail source={this.props.info.img} />
-          </Left> */}
+          <Left>
+            <Thumbnail source={logo} />
+          </Left>
           <Body>
             <Text>{this.props.info.descricao}</Text>
             <Text note>{this.props.info.categoria}</Text>

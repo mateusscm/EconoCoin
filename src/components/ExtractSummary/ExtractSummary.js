@@ -7,8 +7,7 @@ import ContentExtract from "./ContentExtract";
 
 const styles = StyleSheet.create({
   content: {
-    width: "100%",
-
+    width: "100%"
   },
   align: {
     justifyContent: "center",
@@ -46,9 +45,9 @@ class ExtractSummary extends Component {
         {this.props.view === "Home" ? (
           <Text style={styles.mainTitle}>RESUMO DE EXTRATO</Text>
         ) : (
-            <Text style={styles.mainTitle}>EXTRATO COMPLETO</Text>
-          )}
-        <Card style={{ zIndex: 0 }}>
+          <Text style={styles.mainTitle}>EXTRATO COMPLETO</Text>
+        )}
+        <Card style={{ zIndex: 0, marginBottom: 20 }}>
           {this.props.infos.map((info, i) => {
             return <ContentExtract info={info} key={i} />;
           })}

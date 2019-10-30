@@ -9,7 +9,8 @@ import Reactotron from "reactotron-react-native";
 
 const styles = StyleSheet.create({
   content: {
-    width: "100%"
+    width: "100%",
+    paddingBottom: 50
   },
   align: {
     justifyContent: "center",
@@ -55,7 +56,7 @@ class Accounts extends Component {
       .doc(user.uid)
       .collection("contas")
       .get();
-    Reactotron.log('FFS GET PORRA Conta');
+    Reactotron.log("FFS GET PORRA Conta");
     if (!resp.empty) {
       let temp = [];
       resp.forEach(r => {
