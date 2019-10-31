@@ -168,6 +168,9 @@ class Login extends Component {
             />
             <TextInput
               style={styles.input}
+              autoCompleteType="email"
+              autoCapitalize="none"
+              keyboardType="email-address"
               placeholder={"E-mail"}
               placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
               underlineColorAndroid="transparent"

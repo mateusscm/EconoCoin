@@ -58,7 +58,7 @@ class AccountBalance extends Component {
   render() {
     return (
       <React.Fragment>
-        <Button
+        {/* <Button
           style={{
             position: "absolute",
             right: 10,
@@ -75,7 +75,7 @@ class AccountBalance extends Component {
           onPress={() => alert("add")}
         >
           <Text style={styles.fontColor}>+</Text>
-        </Button>
+        </Button> */}
         <MenuButton
           view="Contas e Categorias"
           navigation={this.props.navigation}
@@ -84,8 +84,8 @@ class AccountBalance extends Component {
           <Tab heading="Contas">
             <ScrollView style={styles.allCont}>
               {/* <View style={styles.allCont}> */}
-                <PreviewBalance navigation={this.props.navigation} />
-                <Accounts contas={contas} />
+              <PreviewBalance navigation={this.props.navigation} />
+              <Accounts contas={contas} />
               {/* </View> */}
             </ScrollView>
             <AddAccount view="Conta" navigation={this.props.navigation} />
@@ -93,10 +93,7 @@ class AccountBalance extends Component {
           <Tab heading="Categorias">
             <ScrollView style={styles.allCont}>
               {/* <View style={styles.allCont}> */}
-                <Categories
-                  ref={this.child}
-                  navigation={this.props.navigation}
-                />
+              <Categories ref={this.child} navigation={this.props.navigation} />
               {/* </View> */}
             </ScrollView>
             <FloatingButton

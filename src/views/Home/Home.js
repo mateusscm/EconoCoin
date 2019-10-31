@@ -89,7 +89,16 @@ class Home extends Component {
         <ScrollView style={styles.allCont}>
           {/* <View style={this.state.active ? styles.opacity : null} /> */}
           {/* <View style={styles.allCont}> */}
-          <PreviewBalance view="Home" navigation={this.props.navigation} />
+          <View>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              <PreviewBalance view="Home" navigation={this.props.navigation} />
+              <PreviewBalance view="Home" navigation={this.props.navigation} />
+              <PreviewBalance view="Home" navigation={this.props.navigation} />
+            </ScrollView>
+          </View>
           <ExtractSummary
             view="Home"
             navigation={this.props.navigation}

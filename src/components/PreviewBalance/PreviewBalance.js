@@ -22,7 +22,8 @@ import {
 
 const styles = StyleSheet.create({
   content: {
-    width: "100%"
+    width: 390,
+    marginRight: 60
   },
   align: {
     justifyContent: "center",

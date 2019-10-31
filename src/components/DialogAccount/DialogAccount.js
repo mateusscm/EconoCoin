@@ -97,6 +97,7 @@ class DialogAccount extends Component {
               </Label>
               <Input
                 placeholder="R$"
+                keyboardType={"numeric"}
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
                 style={{ color: "#fff", fontSize: 44, paddingLeft: 10 }}
                 value={this.state.balance}
@@ -137,6 +138,8 @@ class DialogAccount extends Component {
                 Sigla da Conta (Ex: "BB")
               </Label>
               <Input
+                maxLength={2}
+                autoCapitalize="words"
                 style={{
                   fontSize: 24,
                   paddingLeft: 5

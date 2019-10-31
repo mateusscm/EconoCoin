@@ -159,7 +159,7 @@ class HomeNewExpense extends Component {
   render() {
     return (
       <Container>
-        <MenuButtonBack view="Receita" navigation={this.props.navigation} />
+        <MenuButtonBack view="Despesa" navigation={this.props.navigation} />
         {/* <NavigationEvents
           onWillFocus={() => {
             console.log("onWillFocus");
@@ -175,6 +175,7 @@ class HomeNewExpense extends Component {
               <Label style={{ color: "#fff", fontSize: 16 }}>Valor</Label>
               <Input
                 placeholder="R$"
+                keyboardType={"numeric"}
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
                 style={{ color: "#fff", fontSize: 44, paddingLeft: 10 }}
                 value={this.state.money}

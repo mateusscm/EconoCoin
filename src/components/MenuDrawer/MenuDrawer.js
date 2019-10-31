@@ -89,12 +89,12 @@ export default class MenuDrawer extends React.Component {
               "MaterialIcons",
               "account-balance-wallet"
             )}
-            {this.navLink(
+            {/* {this.navLink(
               "Settings",
               "Preferências",
               "MaterialIcons",
               "settings"
-            )}
+            )} */}
           </View>
         </ScrollView>
         <TouchableOpacity onPress={this.logout} style={styles.btnLogout}>

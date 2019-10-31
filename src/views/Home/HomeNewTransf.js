@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { Component } from "react";
+import { StyleSheet } from "react-native";
 
 import { FA, FFS } from "../../Firebase";
 import Reactotron from "reactotron-react-native";
 // import { contas } from "./../../data";
 
-import MenuButtonBack from './../../components/MenuButtonBack/MenuButtonBack';
+import MenuButtonBack from "./../../components/MenuButtonBack/MenuButtonBack";
 import {
   Container,
   Form,
@@ -16,45 +16,45 @@ import {
   Picker,
   Button,
   Text,
-  DatePicker,
-} from 'native-base';
-import { theme } from '../../config/_theme';
+  DatePicker
+} from "native-base";
+import { theme } from "../../config/_theme";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   allCont: {
-    backgroundColor: theme.palette.backgroundMain,
+    backgroundColor: theme.palette.backgroundMain
   },
   text: {
     fontSize: 30,
-    color: theme.palette.txtPrimary,
+    color: theme.palette.txtPrimary
   },
   header: {
     height: 100,
-    width: '100%',
-    backgroundColor: '#8f34eb',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: "100%",
+    backgroundColor: "#8f34eb",
+    justifyContent: "center",
+    alignItems: "center",
     zIndex: 0,
     paddingLeft: 10,
     marginTop: 0,
     marginLeft: 0,
     paddingTop: 2,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.5)',
+    borderBottomColor: "rgba(0, 0, 0, 0.5)"
   },
   description: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     zIndex: 0,
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
     paddingTop: 2,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 0, 0, 0.5)',
-  },
+    borderBottomColor: "rgba(0, 0, 0, 0.5)"
+  }
 });
 
 class HomeNewTransf extends Component {
@@ -96,7 +96,7 @@ class HomeNewTransf extends Component {
       .doc(user.uid)
       .collection("contas")
       .get();
-    Reactotron.log('FFS GET PORRA');
+    Reactotron.log("FFS GET PORRA");
     if (!resp.empty) {
       resp.forEach(r => {
         temp.push(r.data());
@@ -112,19 +112,19 @@ class HomeNewTransf extends Component {
       let con = JSON.parse(this.state.selected2);
       let conR = JSON.parse(this.state.selected);
 
-      let c = await FFS.collection('user_conta')
+      let c = await FFS.collection("user_conta")
         .doc(user.uid)
-        .collection('contas')
+        .collection("contas")
         .doc(con.id);
 
-      let cr = await FFS.collection('user_conta')
+      let cr = await FFS.collection("user_conta")
         .doc(user.uid)
-        .collection('contas')
+        .collection("contas")
         .doc(conR.id);
 
-      let ref = await FFS.collection('user_movimentacao')
+      let ref = await FFS.collection("user_movimentacao")
         .doc(user.uid)
-        .collection('movimentacoes')
+        .collection("movimentacoes")
         .doc();
 
       await ref.set({
@@ -132,14 +132,14 @@ class HomeNewTransf extends Component {
         descricao: this.state.desc,
         balance: Math.abs(this.state.money),
         conta: con.nome,
-        categoria: 'Transferencia',
+        categoria: "Transferencia",
         data: this.state.date.toISOString().split("T")[0],
-        tipo: 'receita',
+        tipo: "receita"
       });
 
-      let ref2 = await FFS.collection('user_movimentacao')
+      let ref2 = await FFS.collection("user_movimentacao")
         .doc(user.uid)
-        .collection('movimentacoes')
+        .collection("movimentacoes")
         .doc();
 
       await ref2.set({
@@ -147,29 +147,29 @@ class HomeNewTransf extends Component {
         descricao: this.state.desc,
         balance: -Math.abs(this.state.money),
         conta: conR.nome,
-        categoria: 'Transferencia',
+        categoria: "Transferencia",
         data: this.state.date.toISOString().split("T")[0],
-        tipo: 'despesa',
+        tipo: "despesa"
       });
 
-      Reactotron.log('FAQUICARAI');
+      Reactotron.log("FAQUICARAI");
 
       return FFS.runTransaction(async transaction => {
         try {
           // This code may get re-run multiple times if there are conflicts.
           const sfDoc = await transaction.get(c);
           if (!sfDoc.exists) {
-            Reactotron.log('DEU RUIM');
+            Reactotron.log("DEU RUIM");
 
-            throw new Error('Document does not exist!');
+            throw new Error("Document does not exist!");
           }
           var newBal = parseFloat(sfDoc.data().balance);
           newBal += parseFloat(this.state.money);
 
           const sfDoc1 = await transaction.get(cr);
           if (!sfDoc1.exists) {
-            Reactotron.log('DEU RUIM');
-            throw new Error('Document does not exist!');
+            Reactotron.log("DEU RUIM");
+            throw new Error("Document does not exist!");
           }
           var newBal1 = parseFloat(sfDoc1.data().balance);
           newBal1 -= parseFloat(this.state.money);
@@ -177,10 +177,10 @@ class HomeNewTransf extends Component {
           await transaction.update(c, { balance: newBal });
           await transaction.update(cr, { balance: newBal1 });
         } catch (err) {
-          Reactotron.log('DEU RUIM');
-          console.log('Transaction failed');
+          Reactotron.log("DEU RUIM");
+          console.log("Transaction failed");
         }
-        this.props.navigation.navigate('Extract');
+        this.props.navigation.navigate("Extract");
       });
     } catch (err) {
       Reactotron.log(err);
@@ -190,7 +190,10 @@ class HomeNewTransf extends Component {
   render() {
     return (
       <Container>
-        <MenuButtonBack view="Receita" navigation={this.props.navigation} />
+        <MenuButtonBack
+          view="Transferência"
+          navigation={this.props.navigation}
+        />
         <Content style={styles.allCont}>
           {/* <View style={styles.header}>
             <Text>dwqdqwdqwd</Text>
@@ -201,6 +204,7 @@ class HomeNewTransf extends Component {
               <Input
                 placeholder="R$"
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
+                keyboardType={"numeric"}
                 style={{ color: "#fff", fontSize: 44, paddingLeft: 10 }}
                 value={this.state.money}
                 onChangeText={money => {

@@ -40,7 +40,11 @@ const HomeStack = createStackNavigator(
     HomeNewIncome: HomeNewIncome,
     HomeNewTransf: HomeNewTransf,
     DialogCategorie: DialogCategorie,
-    DialogAccount: DialogAccount
+    DialogAccount: DialogAccount,
+    AccountBalance: AccountBalance,
+    Settings: Settings,
+    Profile: Profile,
+    Extract: Extract
   },
   {
     headerMode: "none",
@@ -53,18 +57,10 @@ const HomeStack = createStackNavigator(
 const DrawerNavigator = createDrawerNavigator(
   {
     Home: HomeStack,
-    AccountBalance: {
-      screen: AccountBalance
-    },
-    Settings: {
-      screen: Settings
-    },
-    Profile: {
-      screen: Profile
-    },
-    Extract: {
-      screen: Extract
-    }
+    AccountBalance: HomeStack,
+    Settings: HomeStack,
+    Profile: HomeStack,
+    Extract: HomeStack
   },
   DrawerConfig
 );

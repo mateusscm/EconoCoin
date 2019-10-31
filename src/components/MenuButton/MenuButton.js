@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, StatusBar } from "react-native";
+import { StyleSheet, StatusBar, TouchableHighlight } from "react-native";
 import { Icon, Header, Left, Body, Right, Button, Title } from "native-base";
 import { theme } from "../../config/_theme";
 
@@ -37,6 +37,7 @@ class MenuButton extends Component {
             <Button
               transparent
               onPress={() => this.props.navigation.toggleDrawer()}
+              style={{ paddingHorizontal: 20 }}
             >
               <Icon type="Ionicons" name="md-menu" style={styles.icon} />
             </Button>
