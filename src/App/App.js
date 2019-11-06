@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { View, StyleSheet, StatusBar } from "react-native";
-import Reactotron from 'reactotron-react-native';
+import { View, StyleSheet, StatusBar, YellowBox } from "react-native";
+import Reactotron from "reactotron-react-native";
+import _ from "lodash";
 
 // import store from "./../utils/store";
 // import { Provider } from "react-redux";
@@ -20,9 +21,17 @@ import DrawerNavigator from "./../navigation/DrawerNavigator";
 
 // firebase.initializeApp(firebaseConfig);
 
+YellowBox.ignoreWarnings(["Setting a timer"]);
+const _console = _.clone(console);
+console.warn = message => {
+  if (message.indexOf("Setting a timer") <= -1) {
+    _console.warn(message);
+  }
+};
+
 export default class App extends Component {
   render() {
-    Reactotron.log("hello FUCKERS");;
+    Reactotron.log("hello FUCKERS");
     return (
       // <Provider store={store}>
       <View style={styles.container}>

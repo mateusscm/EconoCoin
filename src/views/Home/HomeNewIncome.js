@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 import { FA, FFS } from "../../Firebase";
 import Reactotron from "reactotron-react-native";
 
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#14c6cc",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     zIndex: 0,
     marginTop: 0,
     marginLeft: 0,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
   description: {
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     zIndex: 0,
     marginTop: 20,
     marginLeft: 10,
@@ -167,11 +167,16 @@ class HomeNewIncome extends Component {
           <Form>
             <Item stackedLabel underline style={styles.header}>
               <Label style={{ color: "#fff", fontSize: 16 }}>Valor</Label>
-              <Input
+              <TextInput
                 placeholder="R$"
                 keyboardType={"numeric"}
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                style={{ color: "#fff", fontSize: 44, paddingLeft: 10 }}
+                style={{
+                  color: "#fff",
+                  fontSize: 44,
+                  paddingLeft: 10,
+                  width: "100%"
+                }}
                 value={this.state.money}
                 onChangeText={money => {
                   this.setState({ money });
@@ -188,10 +193,11 @@ class HomeNewIncome extends Component {
               >
                 Breve descrição
               </Label>
-              <Input
+              <TextInput
                 style={{
                   fontSize: 24,
-                  paddingLeft: 5
+                  paddingLeft: 5,
+                  width: "100%"
                 }}
                 value={this.state.desc}
                 onChangeText={desc => {
@@ -268,21 +274,22 @@ class HomeNewIncome extends Component {
                 Data
               </Label>
               <DatePicker
-                defaultDate={new Date(2018, 4, 4)}
-                minimumDate={new Date(2018, 1, 1)}
-                maximumDate={new Date(2018, 12, 31)}
+                // defaultDate={new Date(2018, 4, 4)}
+                // minimumDate={new Date(2018, 1, 1)}
+                // maximumDate={new Date(2018, 12, 31)}
                 locale={"pt"}
                 timeZoneOffsetInMinutes={undefined}
                 modalTransparent={false}
                 animationType={"fade"}
                 androidMode={"default"}
-                placeHolderText="Selecione a data"
+                placeHolderText={`Data: ${this.state.date
+                  .toString()
+                  .substr(4, 12)}`}
                 textStyle={{ color: "black" }}
-                placeHolderTextStyle={{ color: "#d3d3d3" }}
+                placeHolderTextStyle={{ color: "#000" }}
                 onDateChange={this.setDate}
                 disabled={false}
               />
-              <Text>Data: {this.state.date.toString().substr(4, 12)}</Text>
             </Item>
           </Form>
         </Content>

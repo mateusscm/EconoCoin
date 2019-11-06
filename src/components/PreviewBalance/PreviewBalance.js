@@ -7,15 +7,15 @@ import {
   Body,
   Text,
   Right,
-  Thumbnail,
-  Icon,
-  Button
+  Thumbnail
+  // Icon,
+  // Button
 } from "native-base";
-import { theme } from "../../config/_theme";
-import {
-  TouchableOpacity,
-  TouchableHighlight
-} from "react-native-gesture-handler";
+// import { theme } from "../../config/_theme";
+// import {
+//   TouchableOpacity,
+//   TouchableHighlight
+// } from "react-native-gesture-handler";
 // import logo from "./../../assets/img/logo.png";
 
 // const { width: WIDTH } = Dimensions.get("window");
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   align: {
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "flex-start"
   },
   title: {
     fontSize: 40,
@@ -45,45 +45,82 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingBottom: 5,
     fontWeight: "700",
-    color: "#6e6e6e"
+    color: "#6e6e6e",
+    textTransform: "uppercase"
   }
 });
 
-class PreviewBalance extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+const PreviewBalance = props => {
+  let [info, setInfo] = React.useState({});
 
-  render() {
-    return (
-      <View style={styles.content}>
-        <Text style={styles.mainTitle}>SALDO TOTAL DE CONTAS</Text>
-        <Card style={{ zIndex: 0 }}>
-          <CardItem header>
-            <Body style={styles.align}>
-              <Text style={styles.title}>R$540,20</Text>
-              <Text style={styles.subtext}>Atualização: 06/09/2019</Text>
-            </Body>
-            <Right>
-              <Thumbnail source={require("./../../assets/img/logo.png")} />
-            </Right>
+  React.useEffect(() => {
+    if (props.info) setInfo(props.info);
+  }, [props]);
+
+  return (
+    <View style={styles.content}>
+      <Text style={styles.mainTitle}>{info.title}</Text>
+      <Card style={{ zIndex: 0 }}>
+        <CardItem header>
+          <Body style={styles.align}>
+            <Text style={styles.title}>{info.qtd}</Text>
+            {/* <Text style={styles.subtext}>Atualização: 06/09/2019</Text> */}
+          </Body>
+          <Right>
+            <Thumbnail source={require("./../../assets/img/logo.png")} />
+          </Right>
+        </CardItem>
+        {props.view === "Home" ? (
+          <CardItem
+            style={[styles.align, styles.border]}
+            footer
+            bordered
+            button
+            onPress={() => props.navigation.navigate("AccountBalance")}
+          >
+            <Text>Conferir Contas</Text>
           </CardItem>
-          {this.props.view === "Home" ? (
-            <CardItem
-              style={[styles.align, styles.border]}
-              footer
-              bordered
-              button
-              onPress={() => this.props.navigation.navigate("AccountBalance")}
-            >
-              <Text>Conferir Contas</Text>
-            </CardItem>
-          ) : null}
-        </Card>
-      </View>
-    );
-  }
-}
+        ) : null}
+      </Card>
+    </View>
+  );
+};
+
+// class PreviewBalance extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {};
+//   }
+
+//   render() {
+//     return (
+//       <View style={styles.content}>
+//         <Text style={styles.mainTitle}>{info.title}</Text>
+//         <Card style={{ zIndex: 0 }}>
+//           <CardItem header>
+//             <Body style={styles.align}>
+//               <Text style={styles.title}>{info.qtd}</Text>
+//               <Text style={styles.subtext}>Atualização: 06/09/2019</Text>
+//             </Body>
+//             <Right>
+//               <Thumbnail source={require("./../../assets/img/logo.png")} />
+//             </Right>
+//           </CardItem>
+//           {this.props.view === "Home" ? (
+//             <CardItem
+//               style={[styles.align, styles.border]}
+//               footer
+//               bordered
+//               button
+//               onPress={() => this.props.navigation.navigate("AccountBalance")}
+//             >
+//               <Text>Conferir Contas</Text>
+//             </CardItem>
+//           ) : null}
+//         </Card>
+//       </View>
+//     );
+//   }
+// }
 
 export default PreviewBalance;
