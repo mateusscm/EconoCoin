@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, RefreshControl } from "react-native";
 import PreviewBalance from "./../../components/PreviewBalance/PreviewBalance";
 import MenuButton from "./../../components/MenuButton/MenuButton";
 import { Button, Tab, Tabs } from "native-base";
@@ -36,7 +36,8 @@ class AccountBalance extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dialogVisible: false
+      dialogVisible: false,
+      refreshing: false
     };
     this.child = React.createRef();
   }
@@ -86,15 +87,14 @@ class AccountBalance extends Component {
             activeTabStyle={{ backgroundColor: theme.palette.secondary }}
             heading="Contas"
           >
-            <ScrollView style={styles.allCont}>
-              {/* <View style={styles.allCont}> */}
-              {/* <PreviewBalance
+            {/* <View style={styles.allCont}> */}
+            {/* <PreviewBalance
                 info={this.props.navigation.getParam("info")}
                 navigation={this.props.navigation}
               /> */}
-              <Accounts contas={contas} />
-              {/* </View> */}
-            </ScrollView>
+            <Accounts contas={contas} />
+            {/* </View> */}
+
             <AddAccount view="Conta" navigation={this.props.navigation} />
           </Tab>
           <Tab
@@ -102,11 +102,7 @@ class AccountBalance extends Component {
             activeTabStyle={{ backgroundColor: theme.palette.secondary }}
             heading="Categorias"
           >
-            <ScrollView style={styles.allCont}>
-              {/* <View style={styles.allCont}> */}
-              <Categories ref={this.child} navigation={this.props.navigation} />
-              {/* </View> */}
-            </ScrollView>
+            <Categories ref={this.child} navigation={this.props.navigation} />
             <FloatingButton
               view="Categoria"
               navigation={this.props.navigation}

@@ -1,13 +1,21 @@
 import React, { Component } from "react";
-import { StyleSheet, Alert } from "react-native";
+import { StyleSheet, Alert, RefreshControl, ScrollView } from "react-native";
 import { Content, Text, Spinner } from "native-base";
 import InsideCardAccount from "./InsideCardAccount";
 import { FA, FFS } from "../../Firebase";
 import Reactotron from "reactotron-react-native";
+import { theme } from "../../config/_theme";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
+  allCont: {
+    flex: 1,
+    // justifyContent: "center",
+    // alignItems: "center",
+    paddingHorizontal: 10,
+    backgroundColor: theme.palette.backgroundMain
+  },
   content: {
     width: "100%",
     paddingBottom: 50
@@ -41,12 +49,20 @@ class Accounts extends Component {
     super(props);
     this.state = {
       contas: [],
-      loading: false
+      loading: false,
+      refreshing: false
     };
   }
 
   componentDidMount() {
     this.getContas();
+  }
+
+  _onRefresh() {
+    this.setState({ refreshing: true });
+    this.getContas().then(() => {
+      this.setState({ refreshing: false });
+    });
   }
 
   getContas = async () => {
@@ -101,24 +117,34 @@ class Accounts extends Component {
 
   render() {
     return (
-      <Content style={styles.content}>
-        <Text style={styles.mainTitle}>CONTAS EXISTENTES</Text>
-        {!this.state.loading ? null : <Spinner color="green" />}
-        {this.state.contas.map((conta, i) => {
-          return (
-            <InsideCardAccount
-              conta={conta}
-              key={i}
-              onDelete={e => {
-                this.onDelete(e);
-              }}
-            />
-          );
-        })}
-        {/* {this.props.infos.map((info, i) => {
+      <ScrollView
+        style={styles.allCont}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}
+          />
+        }
+      >
+        <Content style={styles.content}>
+          <Text style={styles.mainTitle}>CONTAS EXISTENTES</Text>
+          {!this.state.loading ? null : <Spinner color="green" />}
+          {this.state.contas.map((conta, i) => {
+            return (
+              <InsideCardAccount
+                conta={conta}
+                key={i}
+                onDelete={e => {
+                  this.onDelete(e);
+                }}
+              />
+            );
+          })}
+          {/* {this.props.infos.map((info, i) => {
             return <InsideCardAccount info={info} key={i} />;
           })} */}
-      </Content>
+        </Content>
+      </ScrollView>
     );
   }
 }

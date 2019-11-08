@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, ScrollView, TouchableHighlight } from "react-native";
+import { StyleSheet, ScrollView, RefreshControl } from "react-native";
 import { Container, View, Spinner, Text } from "native-base";
 import FloatingButton from "./../../components/FloatingButton/FloatingButton";
 
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
 
 function Home(props) {
   let [_ref, setRef] = React.useState({ empty: true });
+  let [refreshing, setRefreshing] = React.useState(false);
   let [infos, setInfos] = React.useState([]);
   let [total, setTotal] = React.useState(0);
   let [loading, setLoading] = React.useState(false);
@@ -87,117 +88,130 @@ function Home(props) {
     }
   ]);
 
-  React.useEffect(() => {
-    async function getD() {
-      setLoading(true);
-      const user = await FA.currentUser;
-      let fin = new Date(
-        new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
-          .toISOString()
-          .split("T")[0]
-      );
-      let ini = new Date(
-        new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-          .toISOString()
-          .split("T")[0]
-      );
+  async function getD() {
+    setLoading(true);
+    const user = await FA.currentUser;
+    let fin = new Date(
+      new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
+        .toISOString()
+        .split("T")[0]
+    );
+    let ini = new Date(
+      new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+        .toISOString()
+        .split("T")[0]
+    );
 
-      ini.setDate(ini.getDate() - 2);
-      fin.setDate(fin.getDate() - 1);
+    ini.setDate(ini.getDate() - 2);
+    fin.setDate(fin.getDate() - 1);
 
-      let ref = await FFS.collection("user_movimentacao")
-        .doc(user.uid)
-        .collection("movimentacoes")
-        .where("data", ">", ini.toISOString().split("T")[0])
-        .where("data", "<", fin.toISOString().split("T")[0])
-        .orderBy("data", "desc")
-        .get();
-      setRef(ref);
-      let cont = await FFS.collection("user_conta")
-        .doc(user.uid)
-        .collection("contas")
-        .get();
-      let rec = 0;
-      let desp = 0;
-      let sal = 0;
-      if (!cont.empty) {
-        cont.docs.forEach(doc => {
-          sal += parseFloat(doc.data().balance);
-        });
-      }
+    let ref = await FFS.collection("user_movimentacao")
+      .doc(user.uid)
+      .collection("movimentacoes")
+      .where("data", ">", ini.toISOString().split("T")[0])
+      .where("data", "<", fin.toISOString().split("T")[0])
+      .orderBy("data", "desc")
+      .get();
+    setRef(ref);
+    let cont = await FFS.collection("user_conta")
+      .doc(user.uid)
+      .collection("contas")
+      .get();
+    let rec = 0;
+    let desp = 0;
+    let sal = 0;
+    if (!cont.empty) {
+      cont.docs.forEach(doc => {
+        sal += parseFloat(doc.data().balance);
+      });
+    }
 
-      if (!ref.empty) {
-        ref.docs.forEach(doc => {
-          let data = doc.data();
-          if (data.tipo === "receita") {
-            rec += parseFloat(data.balance);
-          } else if (data.tipo === "despesa") {
-            desp += parseFloat(data.balance);
-          }
-        });
-      }
-      let inf = [
-        {
-          title: "Saldo em conta",
-          qtd: "",
-          icon: "money-bill-wave"
-        },
-        {
-          title: "Receitas do mês",
-          qtd: "",
-          icon: "calendar-plus"
-        },
-        {
-          title: "Despesas do mês",
-          qtd: "",
-          icon: "calendar-minus"
-        },
-        {
-          title: "Balanço do mês",
-          qtd: "",
-          icon: "calendar-check"
+    if (!ref.empty) {
+      ref.docs.forEach(doc => {
+        let data = doc.data();
+        if (data.tipo === "receita") {
+          rec += parseFloat(data.balance);
+        } else if (data.tipo === "despesa") {
+          desp += parseFloat(data.balance);
         }
-      ];
-      inf[0].qtd = "R$ " + sal;
-      inf[1].qtd = "R$ " + rec;
-      inf[2].qtd = "R$ " + desp;
-      inf[3].qtd = "R$ " + (rec + desp);
-      setInfo(inf);
-      setLoading(false);
+      });
     }
-    getD();
-
-    async function getInfo() {
-      const user = await FA.currentUser;
-      let temp = [];
-      let resp = await FFS.collection("user_movimentacao")
-        .doc(user.uid)
-        .collection("movimentacoes")
-        .limit(3)
-        .get();
-      Reactotron.log("FFS GET PORRA");
-
-      if (!resp.empty) {
-        resp.forEach(r => {
-          temp.push(r.data());
-        });
+    let inf = [
+      {
+        title: "Saldo em conta",
+        qtd: "",
+        icon: "money-bill-wave"
+      },
+      {
+        title: "Receitas do mês",
+        qtd: "",
+        icon: "calendar-plus"
+      },
+      {
+        title: "Despesas do mês",
+        qtd: "",
+        icon: "calendar-minus"
+      },
+      {
+        title: "Balanço do mês",
+        qtd: "",
+        icon: "calendar-check"
       }
-      const newTotal = temp.reduce(
-        (totalValue, inf) => totalValue + parseFloat(inf.balance),
-        0
-      );
-      setInfos(temp);
-      setTotal(newTotal);
+    ];
+    inf[0].qtd = "R$ " + sal;
+    inf[1].qtd = "R$ " + rec;
+    inf[2].qtd = "R$ " + desp;
+    inf[3].qtd = "R$ " + (rec + desp);
+    setInfo(inf);
+    setLoading(false);
+  }
+
+  async function getInfo() {
+    const user = await FA.currentUser;
+    let temp = [];
+    let resp = await FFS.collection("user_movimentacao")
+      .doc(user.uid)
+      .collection("movimentacoes")
+      .limit(3)
+      .get();
+    Reactotron.log("FFS GET PORRA");
+
+    if (!resp.empty) {
+      resp.forEach(r => {
+        temp.push(r.data());
+      });
     }
+    const newTotal = temp.reduce(
+      (totalValue, inf) => totalValue + parseFloat(inf.balance),
+      0
+    );
+    setInfos(temp);
+    setTotal(newTotal);
+  }
+
+  React.useEffect(() => {
+    getD();
     getInfo();
   }, []);
+
+  function _onRefresh() {
+    setRefreshing(true);
+    getD().then(() => {
+      setRefreshing(false);
+    });
+  }
 
   return (
     <Container>
       <MenuButton view="Visão Geral" navigation={props.navigation} />
       {!loading ? (
         <>
-          <ScrollView style={styles.allCont}>
+          <ScrollView
+            style={styles.allCont}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
+            }
+          >
             {/* <View style={this.state.active ? styles.opacity : null} /> */}
             {/* <View style={styles.allCont}> */}
             <View>

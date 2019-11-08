@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, RefreshControl } from "react-native";
 import ExtractSummary from "./../../components/ExtractSummary/ExtractSummary";
 import MenuButton from "./../../components/MenuButton/MenuButton";
 import { Container, View, Spinner } from "native-base";
@@ -41,11 +41,19 @@ class Extract extends Component {
     this.state = {
       total: 0,
       infos: [],
-      loading: false
+      loading: false,
+      refreshing: false
     };
   }
   componentDidMount() {
     this.getInfo();
+  }
+
+  _onRefresh() {
+    this.setState({ refreshing: true });
+    this.getInfo().then(() => {
+      this.setState({ refreshing: false });
+    });
   }
 
   getInfo = async () => {
@@ -77,7 +85,15 @@ class Extract extends Component {
         <MenuButton view="Extrato" navigation={this.props.navigation} />
         {!this.state.loading ? (
           <>
-            <ScrollView style={styles.allCont}>
+            <ScrollView
+              style={styles.allCont}
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.refreshing}
+                  onRefresh={this._onRefresh.bind(this)}
+                />
+              }
+            >
               {/* <View style={styles.allCont}> */}
               <ExtractSummary
                 view="Extract"

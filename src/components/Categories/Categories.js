@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Alert } from "react-native";
+import { StyleSheet, Alert, ScrollView, RefreshControl } from "react-native";
 import { Content, Text, Spinner, Toast } from "native-base";
 import { theme } from "../../config/_theme";
 import FloatingButton from "../FloatingButton/FloatingButton";
@@ -10,6 +10,13 @@ import Reactotron from "reactotron-react-native";
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
+  allCont: {
+    flex: 1,
+    // justifyContent: "center",
+    // alignItems: "center",
+    paddingHorizontal: 10,
+    backgroundColor: theme.palette.backgroundMain
+  },
   content: {
     flex: 2,
     paddingBottom: 50
@@ -28,12 +35,20 @@ class Categories extends Component {
     super(props);
     this.state = {
       categories: [],
-      loading: false
+      loading: false,
+      refreshing: false
     };
   }
 
   componentDidMount() {
     this.getCat();
+  }
+
+  _onRefresh() {
+    this.setState({ refreshing: true });
+    this.getCat().then(() => {
+      this.setState({ refreshing: false });
+    });
   }
 
   getCat = async () => {
@@ -93,26 +108,36 @@ class Categories extends Component {
 
   render() {
     return (
-      <Content style={styles.content}>
-        <Text style={styles.mainTitle}>CATEGORIAS EXISTENTES</Text>
-        {/* <InsideCardAccount />; */}
-        {!this.state.loading ? null : <Spinner color="green" />}
-        {this.state.categories.map((info, i) => {
-          return (
-            <ListCategories
-              navigation={this.props.navigation}
-              info={info}
-              key={i}
-              onDelete={e => {
-                this.onDelete(e);
-              }}
-            />
-          );
-        })}
-        {/* {this.props.infos.map((info, i) => {
-            return <InsideCardAccount info={info} key={i} />;
-          })} */}
-      </Content>
+      <ScrollView
+        style={styles.allCont}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}
+          />
+        }
+      >
+        <Content style={styles.content}>
+          <Text style={styles.mainTitle}>CATEGORIAS EXISTENTES</Text>
+          {/* <InsideCardAccount />; */}
+          {!this.state.loading ? null : <Spinner color="green" />}
+          {this.state.categories.map((info, i) => {
+            return (
+              <ListCategories
+                navigation={this.props.navigation}
+                info={info}
+                key={i}
+                onDelete={e => {
+                  this.onDelete(e);
+                }}
+              />
+            );
+          })}
+          {/* {this.props.infos.map((info, i) => {
+              return <InsideCardAccount info={info} key={i} />;
+            })} */}
+        </Content>
+      </ScrollView>
     );
   }
 }
