@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { Text, StyleSheet } from 'react-native';
-import ExtractSummary from './../../components/ExtractSummary/ExtractSummary';
-import MenuButton from './../../components/MenuButton/MenuButton';
-import { Container, Content, View } from 'native-base';
-import { theme } from '../../config/_theme';
-import { ScrollView } from 'react-native-gesture-handler';
-import { FA, FFS } from '../../Firebase';
-import Reactotron from 'reactotron-react-native';
+import React, { Component } from "react";
+import { StyleSheet } from "react-native";
+import ExtractSummary from "./../../components/ExtractSummary/ExtractSummary";
+import MenuButton from "./../../components/MenuButton/MenuButton";
+import { Container, View, Spinner } from "native-base";
+import { theme } from "../../config/_theme";
+import { ScrollView } from "react-native-gesture-handler";
+import { FA, FFS } from "../../Firebase";
+import Reactotron from "reactotron-react-native";
+import FloatingButton from "./../../components/FloatingButton/FloatingButton";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -16,16 +17,22 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // alignItems: "center",
     backgroundColor: theme.palette.backgroundMain,
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   mainTitle: {
     paddingTop: 10,
     paddingHorizontal: 18,
     paddingBottom: 5,
-    fontWeight: '700',
-    color: '#6e6e6e',
-    fontSize: 16,
+    fontWeight: "700",
+    color: "#6e6e6e",
+    fontSize: 16
   },
+  spinner: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: theme.palette.backgroundMain,
+    alignItems: "center"
+  }
 });
 
 class Extract extends Component {
@@ -34,6 +41,7 @@ class Extract extends Component {
     this.state = {
       total: 0,
       infos: [],
+      loading: false
     };
   }
   componentDidMount() {
@@ -41,12 +49,13 @@ class Extract extends Component {
   }
 
   getInfo = async () => {
+    this.setState({ loading: true });
     const user = await FA.currentUser;
     let temp = [];
-    let resp = await FFS.collection('user_movimentacao')
+    let resp = await FFS.collection("user_movimentacao")
       .doc(user.uid)
-      .collection('movimentacoes')
-      .orderBy('data', 'desc')
+      .collection("movimentacoes")
+      .orderBy("data", "desc")
       .get();
     Reactotron.log("FFS GET PORRA");
 
@@ -59,22 +68,30 @@ class Extract extends Component {
       (totalValue, inf) => totalValue + parseFloat(inf.balance),
       0
     );
-    this.setState({ total: newTotal, infos: temp });
+    this.setState({ total: newTotal, infos: temp, loading: false });
   };
 
   render() {
     return (
       <Container>
         <MenuButton view="Extrato" navigation={this.props.navigation} />
-        <ScrollView style={styles.allCont}>
-          {/* <View style={styles.allCont}> */}
-          <ExtractSummary
-            view="Extract"
-            infos={this.state.infos}
-            total={this.state.total}
-          />
-          {/* </View> */}
-        </ScrollView>
+        {!this.state.loading ? (
+          <>
+            <ScrollView style={styles.allCont}>
+              {/* <View style={styles.allCont}> */}
+              <ExtractSummary
+                view="Extract"
+                infos={this.state.infos}
+                total={this.state.total}
+              />
+              {/* </View> */}
+              <View style={{ marginBottom: 70 }} />
+            </ScrollView>
+            <FloatingButton view="Extract" navigation={this.props.navigation} />
+          </>
+        ) : (
+          <Spinner style={styles.spinner} color="green" />
+        )}
       </Container>
     );
   }

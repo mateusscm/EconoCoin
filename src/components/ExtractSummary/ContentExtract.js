@@ -5,7 +5,18 @@ import logo from "./../../assets/img/logo.png";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  price: {
+    fontWeight: "bold",
+    fontSize: 25,
+    color: "green"
+  },
+  priceNeg: {
+    fontWeight: "bold",
+    fontSize: 25,
+    color: "red"
+  }
+});
 
 class ContentExtract extends Component {
   constructor(props) {
@@ -19,9 +30,10 @@ class ContentExtract extends Component {
         <Text
           style={{
             textAlign: "center",
-            color: "#cdcdcd",
+            color: "#919191",
             fontSize: 12,
-            paddingTop: 5
+            paddingTop: 5,
+            fontWeight: "bold"
           }}
         >
           -{this.props.info.data}-
@@ -31,12 +43,20 @@ class ContentExtract extends Component {
             <Thumbnail source={logo} />
           </Left>
           <Body>
-            <Text>{this.props.info.descricao}</Text>
+            <Text style={{ fontWeight: "bold" }}>
+              {this.props.info.descricao}
+            </Text>
             <Text note>{this.props.info.categoria}</Text>
             <Text note>{this.props.info.conta}</Text>
           </Body>
           <Right>
-            <Text>R${this.props.info.balance}</Text>
+            <Text
+              style={
+                this.props.info.balance >= 0 ? styles.price : styles.priceNeg
+              }
+            >
+              R${this.props.info.balance}
+            </Text>
           </Right>
         </ListItem>
         {/* <CardItem header>

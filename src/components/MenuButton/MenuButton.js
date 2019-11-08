@@ -43,7 +43,7 @@ class MenuButton extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>{this.props.view}</Title>
+            <Title style={{ fontWeight: "bold" }}>{this.props.view}</Title>
           </Body>
           <Right />
         </Header>

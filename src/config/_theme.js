@@ -1,14 +1,15 @@
 export const theme = {
   palette: {
-    primary: "#3c7d2c",
-    secondary: "#59BF3F",
-    backgroundMain: "#ededed",
+    primary: "#010038",
+    secondary: "#293a80",
+    backgroundMain: "#d6d6d6",
     textSideMenu: "#757575",
     bgTxtSideMenu: "#FFF",
     fontColorIcon: "#FFF",
     txtWithBg: "#FFF",
     txtPrimary: "#000",
-    txtSecondary: "#404040"
+    txtSecondary: "#404040",
+    button: "#f39422"
   }
 };
 

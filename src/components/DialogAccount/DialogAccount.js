@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 
 // import { contas } from "./../../data";
 
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "#4ecc54",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     zIndex: 0,
     paddingLeft: 10,
     marginTop: 0,
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   description: {
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     zIndex: 0,
     marginTop: 20,
     marginLeft: 10,
@@ -76,7 +76,7 @@ class DialogAccount extends Component {
       ref.set({
         id: ref.id,
         balance: this.state.balance,
-        value: this.state.conta,
+        nome: this.state.conta,
         sigla: this.state.sigla
       });
       this.props.navigation.goBack();
@@ -95,11 +95,16 @@ class DialogAccount extends Component {
               <Label style={{ color: "#fff", fontSize: 16 }}>
                 Valor Inicial
               </Label>
-              <Input
+              <TextInput
                 placeholder="R$"
                 keyboardType={"numeric"}
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                style={{ color: "#fff", fontSize: 44, paddingLeft: 10 }}
+                style={{
+                  color: "#fff",
+                  fontSize: 44,
+                  paddingLeft: 10,
+                  width: "100%"
+                }}
                 value={this.state.balance}
                 onChangeText={balance => {
                   this.setState({ balance });
@@ -116,10 +121,11 @@ class DialogAccount extends Component {
               >
                 Nome da Conta
               </Label>
-              <Input
+              <TextInput
                 style={{
                   fontSize: 24,
-                  paddingLeft: 5
+                  paddingLeft: 5,
+                  width: "100%"
                 }}
                 value={this.state.conta}
                 onChangeText={conta => {
@@ -137,12 +143,13 @@ class DialogAccount extends Component {
               >
                 Sigla da Conta (Ex: "BB")
               </Label>
-              <Input
+              <TextInput
                 maxLength={2}
                 autoCapitalize="words"
                 style={{
                   fontSize: 24,
-                  paddingLeft: 5
+                  paddingLeft: 5,
+                  width: "100%"
                 }}
                 value={this.state.sigla}
                 onChangeText={sigla => {

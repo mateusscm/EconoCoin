@@ -10,7 +10,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingBottom: 5,
     fontWeight: "700",
-    color: "#6e6e6e"
+    fontSize: 16,
+    color: "#000"
   }
 });
 
@@ -44,7 +45,7 @@ class Charts extends Component {
           yAxisLabel={"$"}
           yAxisSuffix={"k"}
           chartConfig={{
-            backgroundColor: "#e26a00",
+            backgroundColor: "#fff",
             backgroundGradientFrom: "#fb8c00",
             backgroundGradientTo: "#ffa726",
             decimalPlaces: 2, // optional, defaults to 2dp

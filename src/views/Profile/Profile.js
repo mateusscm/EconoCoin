@@ -1,11 +1,19 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { Form, Item, Label, Input } from "native-base";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  ImageBackground,
+  TextInput
+} from "react-native";
+import { Form, Item, Label, Input, Button } from "native-base";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
 import { theme } from "../../config/_theme";
 import { FA } from "../../Firebase";
 import { ScrollView } from "react-native-gesture-handler";
+import bg from "./../../assets/img/bg.jpg";
 
 const styles = StyleSheet.create({
   allCont: {
@@ -58,7 +66,9 @@ const styles = StyleSheet.create({
     textAlign: "left"
   },
   data: {
-    flex: 1
+    flex: 1,
+    paddingVertical: 5,
+    paddingHorizontal: 10
   },
   description: {
     width: "100%",
@@ -75,6 +85,10 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center"
+  },
+  txtBtn: {
+    textTransform: "uppercase",
+    color: "white"
   }
 });
 
@@ -98,7 +112,11 @@ class Profile extends Component {
       <View style={styles.allCont}>
         <MenuButton view="Perfil" navigation={this.props.navigation} />
         <ScrollView style={styles.scroller}>
-          <View style={styles.header}>
+          <ImageBackground
+            source={bg}
+            imageStyle={{ opacity: 0.5 }}
+            style={styles.header}
+          >
             <View style={styles.profile}>
               <View style={styles.imgView}>
                 <Image
@@ -111,7 +129,7 @@ class Profile extends Component {
                 {/* <Text style={styles.subname}>Ver Perfil</Text> */}
               </View>
             </View>
-          </View>
+          </ImageBackground>
           <View style={styles.data}>
             <Form>
               <Item stackedLabel style={styles.description}>
@@ -124,12 +142,13 @@ class Profile extends Component {
                 >
                   Nome do usuário
                 </Label>
-                <Input
+                <TextInput
                   value={this.state.displayName}
                   style={{
                     fontSize: 18,
                     // paddingLeft: 5,
-                    paddingVertical: 5
+                    paddingVertical: 5,
+                    width: "100%"
                   }}
                 />
               </Item>
@@ -143,17 +162,20 @@ class Profile extends Component {
                 >
                   Email
                 </Label>
-                <Input
+                <TextInput
                   disabled
                   style={{
                     fontSize: 18,
                     // paddingLeft: 5,
-                    paddingVertical: 5
+                    paddingVertical: 5,
+                    width: "100%",
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#000"
                   }}
                   value={this.state.email}
                 />
               </Item>
-              <Item stackedLabel style={styles.description}>
+              {/* <Item stackedLabel style={styles.description}>
                 <Label
                   style={{
                     fontSize: 18,
@@ -163,11 +185,12 @@ class Profile extends Component {
                 >
                   Senha atual
                 </Label>
-                <Input
+                <TextInput
                   style={{
                     fontSize: 18,
                     // paddingLeft: 5,
-                    paddingVertical: 5
+                    paddingVertical: 5,
+                    width: "100%"
                   }}
                   secureTextEntry={true}
                   // value={this.state.email}
@@ -183,16 +206,26 @@ class Profile extends Component {
                 >
                   Nova Senha
                 </Label>
-                <Input
+                <TextInput
                   style={{
                     fontSize: 18,
                     // paddingLeft: 5,
-                    paddingVertical: 5
+                    paddingVertical: 5,
+                    width: "100%"
                   }}
                   secureTextEntry={true}
                   // value={this.state.email}
                 />
-              </Item>
+              </Item> */}
+              <Button
+                full
+                style={{
+                  backgroundColor: theme.palette.button,
+                  marginVertical: 20
+                }}
+              >
+                <Text style={styles.txtBtn}>Salvar</Text>
+              </Button>
             </Form>
           </View>
         </ScrollView>

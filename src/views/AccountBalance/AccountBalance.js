@@ -80,17 +80,28 @@ class AccountBalance extends Component {
           view="Contas e Categorias"
           navigation={this.props.navigation}
         />
-        <Tabs>
-          <Tab heading="Contas">
+        <Tabs tabS>
+          <Tab
+            tabStyle={{ backgroundColor: theme.palette.secondary }}
+            activeTabStyle={{ backgroundColor: theme.palette.secondary }}
+            heading="Contas"
+          >
             <ScrollView style={styles.allCont}>
               {/* <View style={styles.allCont}> */}
-              <PreviewBalance navigation={this.props.navigation} />
+              {/* <PreviewBalance
+                info={this.props.navigation.getParam("info")}
+                navigation={this.props.navigation}
+              /> */}
               <Accounts contas={contas} />
               {/* </View> */}
             </ScrollView>
             <AddAccount view="Conta" navigation={this.props.navigation} />
           </Tab>
-          <Tab heading="Categorias">
+          <Tab
+            tabStyle={{ backgroundColor: theme.palette.secondary }}
+            activeTabStyle={{ backgroundColor: theme.palette.secondary }}
+            heading="Categorias"
+          >
             <ScrollView style={styles.allCont}>
               {/* <View style={styles.allCont}> */}
               <Categories ref={this.child} navigation={this.props.navigation} />

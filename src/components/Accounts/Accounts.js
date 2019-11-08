@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Alert } from "react-native";
 import { Content, Text, Spinner } from "native-base";
 import InsideCardAccount from "./InsideCardAccount";
 import { FA, FFS } from "../../Firebase";
@@ -66,25 +66,37 @@ class Accounts extends Component {
     }
   };
 
-  onDelete = async info => {
-    try {
-      let user = await FA.currentUser;
-      await FFS.collection("user_conta")
-        .doc(user.uid)
-        .collection("contas")
-        .doc(info.id)
-        .delete();
-      let temp = this.state.contas;
-      temp.splice(
-        this.state.contas.findIndex(c => {
-          return c.id === info.id;
-        }),
-        1
-      );
-      this.setState({ contas: temp });
-    } catch (err) {
-      console.log(err);
-    }
+  onDelete = info => {
+    Alert.alert("Confirmando", "Tem certeza que deseja excluir esta Conta?", [
+      {
+        text: "NÃO",
+        // onPress: () => console.warn("NO Pressed"),
+        style: "cancel"
+      },
+      {
+        text: "SIM",
+        onPress: async () => {
+          try {
+            let user = await FA.currentUser;
+            await FFS.collection("user_conta")
+              .doc(user.uid)
+              .collection("contas")
+              .doc(info.id)
+              .delete();
+            let temp = this.state.contas;
+            temp.splice(
+              this.state.contas.findIndex(c => {
+                return c.id === info.id;
+              }),
+              1
+            );
+            this.setState({ contas: temp });
+          } catch (err) {
+            if (err) alert("Algo deu errado! Tente novamente mais tarde.");
+          }
+        }
+      }
+    ]);
   };
 
   render() {

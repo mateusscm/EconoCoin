@@ -23,6 +23,7 @@ import Extract from "../views/Extract/Extract";
 import MenuDrawer from "../components/MenuDrawer/MenuDrawer";
 import DialogCategorie from "../components/DialogCategorie/DialogCategorie";
 import DialogAccount from "../components/DialogAccount/DialogAccount";
+import Indicators from "../views/Indicators/Indicators";
 
 const WIDTH = Dimensions.get("window").width;
 
@@ -44,7 +45,8 @@ const HomeStack = createStackNavigator(
     AccountBalance: AccountBalance,
     Settings: Settings,
     Profile: Profile,
-    Extract: Extract
+    Extract: Extract,
+    Indicators: Indicators
   },
   {
     headerMode: "none",
@@ -60,7 +62,8 @@ const DrawerNavigator = createDrawerNavigator(
     AccountBalance: HomeStack,
     Settings: HomeStack,
     Profile: HomeStack,
-    Extract: HomeStack
+    Extract: HomeStack,
+    Indicators: HomeStack
   },
   DrawerConfig
 );

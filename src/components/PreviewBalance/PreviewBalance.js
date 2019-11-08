@@ -11,19 +11,16 @@ import {
   // Icon,
   // Button
 } from "native-base";
-// import { theme } from "../../config/_theme";
-// import {
-//   TouchableOpacity,
-//   TouchableHighlight
-// } from "react-native-gesture-handler";
-// import logo from "./../../assets/img/logo.png";
-
-// const { width: WIDTH } = Dimensions.get("window");
+import Icon from "react-native-vector-icons/FontAwesome5";
 
 const styles = StyleSheet.create({
-  content: {
-    width: 390,
-    marginRight: 60
+  contentHome: {
+    // width: 390,
+    width: 230,
+    marginRight: 10
+  },
+  contentAccount: {
+    width: "100%"
   },
   align: {
     justifyContent: "center",
@@ -31,7 +28,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 40,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    color: "green"
+    // paddingTop: 10
+  },
+  titleNeg: {
+    fontSize: 40,
+    fontWeight: "bold",
+    color: "red"
+    // paddingTop: 10
   },
   subtext: {
     color: "grey"
@@ -45,8 +50,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingBottom: 5,
     fontWeight: "700",
-    color: "#6e6e6e",
+    color: "#000",
     textTransform: "uppercase"
+  },
+  icon: {
+    position: "absolute",
+    right: 0,
+    top: "30%",
+    color: "rgba(0,0,0,0.2)"
   }
 });
 
@@ -58,69 +69,29 @@ const PreviewBalance = props => {
   }, [props]);
 
   return (
-    <View style={styles.content}>
+    <View
+      style={props.view === "Home" ? styles.contentHome : styles.contentAccount}
+    >
       <Text style={styles.mainTitle}>{info.title}</Text>
       <Card style={{ zIndex: 0 }}>
         <CardItem header>
           <Body style={styles.align}>
-            <Text style={styles.title}>{info.qtd}</Text>
+            <Text style={!info.qtd >= 0 ? styles.title : styles.titleNeg}>
+              {info.qtd}
+            </Text>
             {/* <Text style={styles.subtext}>Atualização: 06/09/2019</Text> */}
           </Body>
-          <Right>
-            <Thumbnail source={require("./../../assets/img/logo.png")} />
-          </Right>
+          {props.view === "Home" ? (
+            <Icon size={100} name={info.icon} style={styles.icon} />
+          ) : (
+            <Right>
+              <Thumbnail source={require("./../../assets/img/logo.png")} />
+            </Right>
+          )}
         </CardItem>
-        {props.view === "Home" ? (
-          <CardItem
-            style={[styles.align, styles.border]}
-            footer
-            bordered
-            button
-            onPress={() => props.navigation.navigate("AccountBalance")}
-          >
-            <Text>Conferir Contas</Text>
-          </CardItem>
-        ) : null}
       </Card>
     </View>
   );
 };
-
-// class PreviewBalance extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {};
-//   }
-
-//   render() {
-//     return (
-//       <View style={styles.content}>
-//         <Text style={styles.mainTitle}>{info.title}</Text>
-//         <Card style={{ zIndex: 0 }}>
-//           <CardItem header>
-//             <Body style={styles.align}>
-//               <Text style={styles.title}>{info.qtd}</Text>
-//               <Text style={styles.subtext}>Atualização: 06/09/2019</Text>
-//             </Body>
-//             <Right>
-//               <Thumbnail source={require("./../../assets/img/logo.png")} />
-//             </Right>
-//           </CardItem>
-//           {this.props.view === "Home" ? (
-//             <CardItem
-//               style={[styles.align, styles.border]}
-//               footer
-//               bordered
-//               button
-//               onPress={() => this.props.navigation.navigate("AccountBalance")}
-//             >
-//               <Text>Conferir Contas</Text>
-//             </CardItem>
-//           ) : null}
-//         </Card>
-//       </View>
-//     );
-//   }
-// }
 
 export default PreviewBalance;

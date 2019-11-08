@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
-import { Content, Text, Spinner } from "native-base";
+import { StyleSheet, Alert } from "react-native";
+import { Content, Text, Spinner, Toast } from "native-base";
 import { theme } from "../../config/_theme";
 import FloatingButton from "../FloatingButton/FloatingButton";
 import ListCategories from "./ListCategories";
@@ -54,25 +54,41 @@ class Categories extends Component {
     }
   };
 
-  onDelete = async info => {
-    try {
-      let user = await FA.currentUser;
-      await FFS.collection("user_categoria")
-        .doc(user.uid)
-        .collection("categorias")
-        .doc(info.id)
-        .delete();
-      let temp = this.state.categories;
-      temp.splice(
-        this.state.categories.findIndex(c => {
-          return c.id === info.id;
-        }),
-        1
-      );
-      this.setState({ categories: temp });
-    } catch (err) {
-      console.log(err);
-    }
+  onDelete = info => {
+    Alert.alert(
+      "Confirmando",
+      "Tem certeza que deseja excluir esta Categoria?",
+      [
+        {
+          text: "NÃO",
+          // onPress: () => console.warn("NO Pressed"),
+          style: "cancel"
+        },
+        {
+          text: "SIM",
+          onPress: async () => {
+            try {
+              let user = await FA.currentUser;
+              await FFS.collection("user_categoria")
+                .doc(user.uid)
+                .collection("categorias")
+                .doc(info.id)
+                .delete();
+              let temp = this.state.categories;
+              temp.splice(
+                this.state.categories.findIndex(c => {
+                  return c.id === info.id;
+                }),
+                1
+              );
+              this.setState({ categories: temp });
+            } catch (err) {
+              if (err) alert("Algo deu errado! Tente novamente mais tarde.");
+            }
+          }
+        }
+      ]
+    );
   };
 
   render() {

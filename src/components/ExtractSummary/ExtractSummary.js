@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingBottom: 5,
     fontWeight: "700",
-    color: "#6e6e6e"
+    color: "#000"
   }
 });
 
@@ -47,14 +47,14 @@ class ExtractSummary extends Component {
         ) : (
           <Text style={styles.mainTitle}>EXTRATO COMPLETO</Text>
         )}
-        <Card style={{ zIndex: 0, marginBottom: 20 }}>
+        <Card style={{ zIndex: 0 }}>
           {this.props.infos.map((info, i) => {
             return <ContentExtract info={info} key={i} />;
           })}
           <CardItem style={{ justifyContent: "flex-end" }}>
             <Text>Total: R${this.props.total}</Text>
           </CardItem>
-          {this.props.view === "Home" ? (
+          {/* {this.props.view === "Home" ? (
             <CardItem
               style={[styles.align, styles.border]}
               footer
@@ -64,7 +64,7 @@ class ExtractSummary extends Component {
             >
               <Text>Conferir Extrato Total</Text>
             </CardItem>
-          ) : null}
+          ) : null} */}
         </Card>
       </Content>
     );

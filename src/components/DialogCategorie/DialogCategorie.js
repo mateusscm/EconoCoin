@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, TextInput } from "react-native";
 
 // import { contas } from "./../../data";
 
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
   description: {
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     zIndex: 0,
     marginTop: 20,
     marginLeft: 10,
@@ -116,10 +116,11 @@ class DialogCategorie extends Component {
               >
                 {type !== "edit" ? "Nova" : "Editar"} Categoria
               </Label>
-              <Input
+              <TextInput
                 style={{
                   fontSize: 24,
-                  paddingLeft: 5
+                  paddingLeft: 5,
+                  width: "100%"
                 }}
                 value={this.state.categorie}
                 onChangeText={categorie => {

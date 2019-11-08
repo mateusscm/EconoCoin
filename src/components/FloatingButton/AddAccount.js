@@ -4,6 +4,7 @@ import { View, Button } from "native-base";
 // import logo from "./../../assets/img/logo.png";
 
 import Icon from "react-native-vector-icons/Ionicons";
+import { theme } from "../../config/_theme";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -28,11 +29,20 @@ class AddAccount extends Component {
           style={{
             height: 54,
             width: 54,
-            backgroundColor: "red",
+            backgroundColor: theme.palette.button,
             borderRadius: 27,
             display: "flex",
             alignItems: "center",
-            justifyContent: "center"
+            justifyContent: "center",
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 12
+            },
+            shadowOpacity: 0.58,
+            shadowRadius: 16.0,
+
+            elevation: 24
           }}
           onPress={() => this.props.navigation.navigate("DialogAccount")}
         >

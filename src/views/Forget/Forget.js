@@ -43,14 +43,17 @@ const styles = StyleSheet.create({
     height: 45,
     fontSize: 16,
     paddingLeft: 45,
-    color: "rgba(255, 255, 255, 0.7)",
+    color: "black",
     borderBottomWidth: 1,
-    borderBottomColor: theme.palette.txtWithBg
+    backgroundColor: "white",
+    borderBottomColor: theme.palette.txtPrimary,
+    borderRadius: 25
   },
   inputIcon: {
     position: "absolute",
     top: 8,
-    left: 15
+    left: 15,
+    color: "black"
   },
   inputContainer: {
     marginTop: 20
@@ -110,13 +113,16 @@ class Forget extends Component {
                 <Icon
                   name={"ios-person"}
                   size={28}
-                  color="#ffffff"
+                  color="#000"
                   style={styles.inputIcon}
                 />
                 <TextInput
                   style={styles.input}
                   placeholder={"E-mail"}
-                  placeholderTextColor={"rgba(255, 255, 255, 0.7)"}
+                  autoCompleteType="email"
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  placeholderTextColor={"rgba(0, 0, 0, 0.7)"}
                   underlineColorAndroid="transparent"
                 />
               </View>

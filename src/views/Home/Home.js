@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, ScrollView } from "react-native";
-import { Container, View } from "native-base";
+import { StyleSheet, ScrollView, TouchableHighlight } from "react-native";
+import { Container, View, Spinner, Text } from "native-base";
 import FloatingButton from "./../../components/FloatingButton/FloatingButton";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
@@ -10,6 +10,7 @@ import ExtractSummary from "../../components/ExtractSummary/ExtractSummary";
 import { FA, FFS } from "../../Firebase";
 import Reactotron from "reactotron-react-native";
 import Charts from "../../components/Charts/Charts";
+import { TouchableOpacity } from "react-native-gesture-handler";
 // import { infos } from "./../../data";
 
 // const { width: WIDTH } = Dimensions.get("window");
@@ -39,6 +40,26 @@ const styles = StyleSheet.create({
     borderColor: theme.palette.secondary,
     marginRight: 200,
     marginLeft: 20
+  },
+  spinner: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: theme.palette.backgroundMain
+  },
+  buttonConta: {
+    marginVertical: 10,
+    backgroundColor: "transparent",
+    flex: 1,
+    alignItems: "flex-end"
+  },
+  txtBtn: {
+    color: theme.palette.button,
+    fontWeight: "bold",
+    textDecorationLine: "underline"
+  },
+  margin: {
+    marginBottom: 70
   }
 });
 
@@ -46,6 +67,7 @@ function Home(props) {
   let [_ref, setRef] = React.useState({ empty: true });
   let [infos, setInfos] = React.useState([]);
   let [total, setTotal] = React.useState(0);
+  let [loading, setLoading] = React.useState(false);
   let [info, setInfo] = React.useState([
     {
       title: "Saldo",
@@ -67,6 +89,7 @@ function Home(props) {
 
   React.useEffect(() => {
     async function getD() {
+      setLoading(true);
       const user = await FA.currentUser;
       let fin = new Date(
         new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
@@ -116,19 +139,23 @@ function Home(props) {
       let inf = [
         {
           title: "Saldo em conta",
-          qtd: ""
+          qtd: "",
+          icon: "money-bill-wave"
         },
         {
           title: "Receitas do mês",
-          qtd: ""
+          qtd: "",
+          icon: "calendar-plus"
         },
         {
           title: "Despesas do mês",
-          qtd: ""
+          qtd: "",
+          icon: "calendar-minus"
         },
         {
           title: "Balanço do mês",
-          qtd: ""
+          qtd: "",
+          icon: "calendar-check"
         }
       ];
       inf[0].qtd = "R$ " + sal;
@@ -136,6 +163,7 @@ function Home(props) {
       inf[2].qtd = "R$ " + desp;
       inf[3].qtd = "R$ " + (rec + desp);
       setInfo(inf);
+      setLoading(false);
     }
     getD();
 
@@ -167,44 +195,69 @@ function Home(props) {
   return (
     <Container>
       <MenuButton view="Visão Geral" navigation={props.navigation} />
-      <ScrollView style={styles.allCont}>
-        {/* <View style={this.state.active ? styles.opacity : null} /> */}
-        {/* <View style={styles.allCont}> */}
-        <View>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <PreviewBalance
+      {!loading ? (
+        <>
+          <ScrollView style={styles.allCont}>
+            {/* <View style={this.state.active ? styles.opacity : null} /> */}
+            {/* <View style={styles.allCont}> */}
+            <View>
+              <ScrollView
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+              >
+                <PreviewBalance
+                  view="Home"
+                  navigation={props.navigation}
+                  info={info[0]}
+                />
+                <PreviewBalance
+                  view="Home"
+                  navigation={props.navigation}
+                  info={info[1]}
+                />
+                <PreviewBalance
+                  view="Home"
+                  navigation={props.navigation}
+                  info={info[2]}
+                />
+                <PreviewBalance
+                  view="Home"
+                  navigation={props.navigation}
+                  info={info[3]}
+                />
+              </ScrollView>
+            </View>
+            <TouchableOpacity
+              onPress={() =>
+                props.navigation.navigate("AccountBalance", { info: info[0] })
+              }
+              style={styles.buttonConta}
+            >
+              <Text style={styles.txtBtn}>Conferir Contas</Text>
+            </TouchableOpacity>
+            <Charts />
+            <ExtractSummary
               view="Home"
               navigation={props.navigation}
-              info={info[0]}
+              infos={infos}
+              total={total}
             />
-            <PreviewBalance
-              view="Home"
-              navigation={props.navigation}
-              info={info[1]}
-            />
-            <PreviewBalance
-              view="Home"
-              navigation={props.navigation}
-              info={info[2]}
-            />
-            <PreviewBalance
-              view="Home"
-              navigation={props.navigation}
-              info={info[3]}
-            />
+            <TouchableOpacity
+              onPress={() => props.navigation.navigate("Extract")}
+              style={styles.buttonConta}
+            >
+              <Text style={[styles.txtBtn, styles.margin]}>
+                Conferir Extrato Total
+              </Text>
+            </TouchableOpacity>
+            {/* </View> */}
           </ScrollView>
-        </View>
-        <Charts />
-        <ExtractSummary
-          view="Home"
-          navigation={props.navigation}
-          infos={infos}
-          total={total}
-        />
-        {/* </View> */}
-      </ScrollView>
-      {/* <View style={{height: 100}}> */}
-      <FloatingButton view="Home" navigation={props.navigation} />
+          {/* <View style={{height: 100}}> */}
+          <FloatingButton view="Home" navigation={props.navigation} />
+        </>
+      ) : (
+        <Spinner style={styles.spinner} color="green" />
+      )}
       {/* </View> */}
     </Container>
   );

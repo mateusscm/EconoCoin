@@ -7,12 +7,14 @@ import {
   Platform,
   Dimensions,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  ImageBackground
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import { Icon } from "native-base";
 import { theme } from "../../config/_theme";
 import { FA } from "../../Firebase";
+import bg from "./../../assets/img/bg.jpg";
 
 export default class MenuDrawer extends React.Component {
   constructor(props) {
@@ -57,23 +59,28 @@ export default class MenuDrawer extends React.Component {
       <View style={styles.container}>
         <ScrollView style={styles.scroller}>
           <TouchableOpacity
-            style={styles.topLinks}
             onPress={() => {
               this.props.navigation.navigate("Profile");
             }}
           >
-            <View style={styles.profile}>
-              <View style={styles.imgView}>
-                <Image
-                  style={styles.img}
-                  source={require("../../assets/img/logo.png")}
-                />
+            <ImageBackground
+              source={bg}
+              imageStyle={{ opacity: 0.5 }}
+              style={styles.topLinks}
+            >
+              <View style={styles.profile}>
+                <View style={styles.imgView}>
+                  <Image
+                    style={styles.img}
+                    source={require("../../assets/img/logo.png")}
+                  />
+                </View>
+                <View style={styles.profileText}>
+                  <Text style={styles.name}>{this.state.displayName}</Text>
+                  <Text style={styles.subname}>Ver Perfil</Text>
+                </View>
               </View>
-              <View style={styles.profileText}>
-                <Text style={styles.name}>{this.state.displayName}</Text>
-                <Text style={styles.subname}>Ver Perfil</Text>
-              </View>
-            </View>
+            </ImageBackground>
           </TouchableOpacity>
           <View style={styles.bottomLinks}>
             {this.navLink("Home", "Visão Geral", "MaterialIcons", "dashboard")}
@@ -89,12 +96,12 @@ export default class MenuDrawer extends React.Component {
               "MaterialIcons",
               "account-balance-wallet"
             )}
-            {/* {this.navLink(
-              "Settings",
-              "Preferências",
-              "MaterialIcons",
-              "settings"
-            )} */}
+            {this.navLink(
+              "Indicators",
+              "Indicadores",
+              "MaterialCommunityIcons",
+              "chart-areaspline"
+            )}
           </View>
         </ScrollView>
         <TouchableOpacity onPress={this.logout} style={styles.btnLogout}>
