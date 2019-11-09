@@ -9,7 +9,7 @@ import {
   TouchableOpacity
 } from "react-native";
 
-import bgImage from "./../../assets/img/background.jpg";
+import bgImage from "./../../assets/img/bg.jpg";
 import Icon from "react-native-vector-icons/Ionicons";
 import { theme } from "../../config/_theme";
 import { ScrollView } from "react-native-gesture-handler";
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     // alignItems: "center"
   },
   text: {
-    color: theme.palette.secondary,
+    color: "#59BF3F",
     fontSize: 25,
     fontWeight: "bold"
   },

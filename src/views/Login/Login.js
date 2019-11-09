@@ -7,11 +7,12 @@ import {
   Text,
   TextInput,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
-// import { Toast } from "native-base";
+import { Spinner } from "native-base";
 
-import bgImage from "./../../assets/img/background.jpg";
+import bgImage from "./../../assets/img/bg.jpg";
 import logo from "./../../assets/img/logo.png";
 
 import Icon from "react-native-vector-icons/Ionicons";
@@ -120,16 +121,36 @@ class Login extends Component {
       press: false,
       email: "",
       password: "",
-      errorMessage: null
+      errorMessage: null,
+      loading: false
     };
   }
 
   login = async () => {
     const { email, password } = this.state;
+    this.setState({ loading: true });
 
-    FA.signInWithEmailAndPassword(email, password)
-      .then(() => this.props.navigation.navigate("Home"))
-      .catch(error => this.setState({ errorMessage: error.message }));
+    await FA.signInWithEmailAndPassword(email, password)
+      .then(() => {
+        this.props.navigation.navigate("Home");
+        this.setState({ loading: false });
+      })
+      .catch(error => {
+        this.setState({ errorMessage: error.message, loading: false });
+        if (error.code === "auth/user-not-found") {
+          Alert.alert(
+            "Ops!",
+            "Usuário não encontrado. Aproveite e cadastre-se!"
+          );
+        } else if (error.code === "auth/wrong-password") {
+          Alert.alert(
+            "Quase lá!",
+            "E-mail ou senha incorretos! Verifique e tente novamente!"
+          );
+        } else {
+          Alert.alert("Ué!", "Algo de errado não está certo! ;P");
+        }
+      });
   };
 
   showPass = () => {
@@ -153,11 +174,11 @@ class Login extends Component {
             <Text style={styles.logoText}>Bem-vindo!</Text>
           </View>
 
-          <View style={styles.errorMessage}>
+          {/* <View style={styles.errorMessage}>
             {this.state.errorMessage && (
               <Text style={styles.error}>{this.state.errorMessage}</Text>
             )}
-          </View>
+          </View> */}
 
           <View style={styles.inputContainer}>
             <Icon
@@ -210,7 +231,11 @@ class Login extends Component {
           </View>
 
           <TouchableOpacity style={styles.btnLogin} onPress={this.login}>
-            <Text style={styles.text}>Login</Text>
+            {this.state.loading ? (
+              <Spinner style={styles.spinner} color="green" />
+            ) : (
+              <Text style={styles.text}>Login</Text>
+            )}
           </TouchableOpacity>
 
           <View style={styles.containerActions}>

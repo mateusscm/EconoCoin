@@ -9,7 +9,7 @@ import PreviewBalance from "../../components/PreviewBalance/PreviewBalance";
 import ExtractSummary from "../../components/ExtractSummary/ExtractSummary";
 import { FA, FFS } from "../../Firebase";
 import Reactotron from "reactotron-react-native";
-import Charts from "../../components/Charts/Charts";
+// import Charts from "../../components/Charts/Charts";
 import { TouchableOpacity } from "react-native-gesture-handler";
 // import { infos } from "./../../data";
 
@@ -249,7 +249,7 @@ function Home(props) {
             >
               <Text style={styles.txtBtn}>Conferir Contas</Text>
             </TouchableOpacity>
-            <Charts />
+            {/* <Charts /> */}
             <ExtractSummary
               view="Home"
               navigation={props.navigation}

@@ -9,7 +9,7 @@ import {
   Picker
 } from "react-native";
 import { DatePicker, Item, Label } from "native-base";
-import bgImage from "./../../assets/img/background.jpg";
+import bgImage from "./../../assets/img/bg.jpg";
 import Icon from "react-native-vector-icons/Ionicons";
 import { theme } from "../../config/_theme";
 import { ScrollView } from "react-native-gesture-handler";
