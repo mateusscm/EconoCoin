@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet } from "react-native";
 
-import MenuButton from './../../components/MenuButton/MenuButton';
-import { Container, Button } from 'native-base';
-import { theme } from '../../config/_theme';
-import ChartHeader from '../../components/ChartHeader/ChartHeader';
-import { ScrollView } from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Dimensions } from 'react-native';
-import { LineChart, PieChart } from 'react-native-chart-kit';
-import { FFS, FA } from "../../Firebase";
-import Reactotron from "reactotron-react-native";
-import palette from "google-palette";
+import MenuButton from "./../../components/MenuButton/MenuButton";
+import { Container, Button } from "native-base";
+import { theme } from "../../config/_theme";
+import ChartHeader from "../../components/ChartHeader/ChartHeader";
+import { ScrollView } from "react-native-gesture-handler";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Dimensions } from "react-native";
+import { LineChart, PieChart } from "react-native-chart-kit";
+import { FFS, FA } from '../../Firebase';
+import Reactotron from 'reactotron-react-native';
+import palette from 'google-palette';
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -21,16 +21,16 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // alignItems: "center",
     paddingHorizontal: 10,
-    backgroundColor: theme.palette.backgroundMain,
+    backgroundColor: theme.palette.backgroundMain
   },
   text: {
     fontSize: 30,
-    color: theme.palette.txtPrimary,
-  }
+    color: theme.palette.txtPrimary
+  },
 });
 const Indicators = props => {
-  const [data_final, setData_final] = useState('');
-  const [data_inicial, setData_inicial] = useState('');
+  const [data_final, setData_final] = useState("");
+  const [data_inicial, setData_inicial] = useState("");
   const [dataPie, setDataPie] = useState([]);
   const [dataLine, setDataLine] = useState([]);
   const [trigger, setTrigger] = useState(false);
@@ -43,97 +43,99 @@ const Indicators = props => {
     setData_final(
       new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
         .toISOString()
-        .split('T')[0]
+        .split("T")[0]
     );
     setData_inicial(
       new Date(new Date().getFullYear(), new Date().getMonth(), 1)
         .toISOString()
-        .split('T')[0]
+        .split("T")[0]
     );
   }, []);
 
-  // const getG = async () => {
-  //   function year(date) {
-  //     return (
-  //       Math.ceil(new Date(date).getTime() / 86400000) -
-  //       Math.floor(
-  //         new Date().setFullYear(new Date().getFullYear(), 0, 1) / 86400000
-  //       )
-  //     );
-  //   }
-  //   const user = await get("user");
-  //   let kpinfo = {};
-  //   let movimentacoes = [];
-  //   const ref = await FFS.collection("user_movimentacao")
-  //     .doc(user.uid)
-  //     .collection("movimentacoes")
-  //     .get();
-  //   if (!ref.empty)
-  //     ref.forEach(doc => {
-  //       movimentacoes.push(doc.data());
-  //     });
+  const getC = async () => {
+    function year(date) {
+      return (
+        Math.ceil(new Date(date).getTime() / 86400000) -
+        Math.floor(
+          new Date().setFullYear(new Date().getFullYear(), 0, 1) / 86400000
+        )
+      );
+    }
+    const user = FA.currentUser;
+    let kpinfo = {};
+    let movimentacoes = [];
+    const ref = await FFS.collection("user_movimentacao")
+      .doc(user.uid)
+      .collection("movimentacoes")
+      .get();
+    if (!ref.empty) {
+      ref.forEach(doc => {
+        movimentacoes.push(doc.data());
+      });
+    }
 
-  //   for (let i = 0; i < movimentacoes.length; i++) {
-  //     try {
-  //       const obj = movimentacoes[i];
-  //       let graphs = ["Categoria", "Conta", "Tipo"];
-  //       // eslint-disable-next-line
-  //           graphs.forEach(g => {
-  //         if (kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]]) {
-  //           if (
-  //             kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
-  //               obj[g.toLowerCase()]
-  //             ]
-  //           ) {
-  //             kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
-  //               obj[g.toLowerCase()]
-  //             ].forEach((item, index) => {
-  //               if (index === 0 || index < year(obj.data)) return;
-  //               kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
-  //                 obj[g.toLowerCase()]
-  //               ][index] += parseFloat(obj.balance);
-  //             });
-  //           } else {
-  //             kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
-  //               obj[g.toLowerCase()]
-  //             ] = Array(366)
-  //               .fill(0, 0, year(obj.data))
-  //               .fill(parseFloat(obj.balance), year(obj.data));
-  //           }
-  //         } else {
-  //           kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]] = {};
-  //           kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
-  //             obj[g.toLowerCase()]
-  //           ] = Array(366)
-  //             .fill(0, 0, year(obj.data))
-  //             .fill(parseFloat(obj.balance), year(obj.data));
-  //         }
-  //       });
-  //     } catch (err) {
-  //       console.log("Err");
-  //     }
-  //   }
-  //   const docRef = await FFS.collection("user_kpi")
-  //     .doc(user.uid)
-  //     .collection("kpis");
-  //   Object.keys(kpinfo).forEach(async kpi => {
-  //     await docRef.doc(kpi).set(kpinfo[kpi]);
-  //   });
-  //   console.log("Graficos gerados");
-  //   setTrigger(!trigger);
-  // };
+    for (let i = 0; i < movimentacoes.length; i++) {
+      try {
+        const obj = movimentacoes[i];
+        let graphs = ["Categoria", "Conta", "Tipo"];
+        // eslint-disable-next-line
+            graphs.forEach(g => {
+          if (kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]]) {
+            if (
+              kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
+                obj[g.toLowerCase()]
+              ]
+            ) {
+              kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
+                obj[g.toLowerCase()]
+              ].forEach((item, index) => {
+                if (index === 0 || index < year(obj.data)) {
+                  kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
+                    obj[g.toLowerCase()]
+                  ][index] += parseFloat(obj.balance);
+                }
+              });
+            } else {
+              kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
+                obj[g.toLowerCase()]
+              ] = Array(366)
+                .fill(0, 0, year(obj.data))
+                .fill(parseFloat(obj.balance), year(obj.data));
+            }
+          } else {
+            kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]] = {};
+            kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
+              obj[g.toLowerCase()]
+            ] = Array(366)
+              .fill(0, 0, year(obj.data))
+              .fill(parseFloat(obj.balance), year(obj.data));
+          }
+        });
+      } catch (err) {
+        console.log("Err");
+      }
+    }
+    const docRef = await FFS.collection("user_kpi")
+      .doc(user.uid)
+      .collection("kpis");
+    Object.keys(kpinfo).forEach(async kpi => {
+      await docRef.doc(kpi).set(kpinfo[kpi]);
+    });
+    console.log("Graficos gerados");
+    setTrigger(!trigger);
+  };
 
   React.useEffect(() => {
     async function getGraph() {
       let graph = {
         pie: [],
-        pie2: [],
+        pie2: []
       };
 
       const user = await FA.currentUser;
-      const ref = await FFS.collection('user_kpi')
+      const ref = await FFS.collection("user_kpi")
         .doc(user.uid)
-        .collection('kpis')
+        .collection("kpis")
         .get();
 
       let kpinfo = {};
@@ -169,7 +171,7 @@ const Indicators = props => {
           ) * 86400000
         )
           .toISOString()
-          .split('T')[0];
+          .split("T")[0];
       };
 
       if (!ref.empty) {
@@ -178,25 +180,25 @@ const Indicators = props => {
         });
         Object.keys(kpinfo).forEach(kpi => {
           if (
-            kpi.split('_')[0] === 'categoria' &&
-            (kpi.split('_')[1] === data_inicial.split('-')[0] ||
-              kpi.split('_')[1] === data_final.split('-')[0])
-          ) {
-            Object.keys(kpinfo[kpi]).forEach(k => {
-              count_categoria = {
-                ...count_categoria,
-                [k]: getNumber(kpinfo[kpi][k]),
-              };
-            });
-          } else if (
-            kpi.split("_")[0] === "tipo" &&
+            kpi.split("_")[0] === "categoria" &&
             (kpi.split("_")[1] === data_inicial.split("-")[0] ||
               kpi.split("_")[1] === data_final.split("-")[0])
           ) {
             Object.keys(kpinfo[kpi]).forEach(k => {
+              count_categoria = {
+                ...count_categoria,
+                [k]: getNumber(kpinfo[kpi][k])
+              };
+            });
+          } else if (
+            kpi.split('_')[0] === 'tipo' &&
+            (kpi.split('_')[1] === data_inicial.split('-')[0] ||
+              kpi.split('_')[1] === data_final.split('-')[0])
+          ) {
+            Object.keys(kpinfo[kpi]).forEach(k => {
               count_tipo = {
                 ...count_tipo,
-                [k]: getNumber(kpinfo[kpi][k]),
+                [k]: getNumber(kpinfo[kpi][k])
               };
             });
           }
@@ -205,18 +207,18 @@ const Indicators = props => {
           graph.pie.push({
             name: a,
             population: count_categoria[a],
-            color: "#" + palette('tol-dv', 15)[i],
-            legendFontColor: "#7F7F7F",
-            legendFontSize: 15,
+            color: '#' + palette("tol-dv", 15)[i],
+            legendFontColor: '#7F7F7F',
+            legendFontSize: 15
           });
         });
         Object.keys(count_tipo).forEach((a, i) => {
           graph.pie2.push({
             name: a,
             population: count_tipo[a],
-            color: "#" + palette('tol-dv', 15)[i],
-            legendFontColor: "#7F7F7F",
-            legendFontSize: 15,
+            color: '#' + palette("tol-dv", 15)[i],
+            legendFontColor: '#7F7F7F',
+            legendFontSize: 15
           });
         });
       }
@@ -227,7 +229,7 @@ const Indicators = props => {
     // eslint-disable-next-line
   }, [data_inicial, data_final, trigger]);
 
-  const screenWidth = Dimensions.get('window').width - 20;
+  const screenWidth = Dimensions.get("window").width - 20;
   return (
     <Container>
       <MenuButton view="Indicadores" navigation={props.navigation} />
@@ -238,20 +240,20 @@ const Indicators = props => {
           width={screenWidth}
           height={220}
           chartConfig={{
-            backgroundGradientFrom: '#1E2923',
+            backgroundGradientFrom: "#1E2923",
             backgroundGradientFromOpacity: 0,
-            backgroundGradientTo: '#08130D',
+            backgroundGradientTo: "#08130D",
             backgroundGradientToOpacity: 0.5,
             color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
             strokeWidth: 3, // optional, default 3
-            barPercentage: 0.5,
+            barPercentage: 0.5
           }}
           accessor="population"
           backgroundColor="#fff"
           absolute={true}
           style={{
             marginVertical: 4,
-            borderRadius: 16,
+            borderRadius: 16
           }}
         />
         <PieChart
@@ -259,20 +261,20 @@ const Indicators = props => {
           width={screenWidth}
           height={220}
           chartConfig={{
-            backgroundGradientFrom: '#1E2923',
+            backgroundGradientFrom: "#1E2923",
             backgroundGradientFromOpacity: 0,
-            backgroundGradientTo: '#08130D',
+            backgroundGradientTo: "#08130D",
             backgroundGradientToOpacity: 0.5,
             color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
             strokeWidth: 3, // optional, default 3
-            barPercentage: 0.5,
+            barPercentage: 0.5
           }}
           accessor="population"
           backgroundColor="#fff"
           absolute={true}
           style={{
             marginVertical: 4,
-            borderRadius: 16,
+            borderRadius: 16
           }}
         />
       </ScrollView>
@@ -282,23 +284,23 @@ const Indicators = props => {
           width: 54,
           backgroundColor: theme.palette.button,
           borderRadius: 27,
-          position: 'absolute',
+          position: "absolute",
           bottom: 25,
           right: 20,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          shadowColor: '#000',
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          shadowColor: "#000",
           shadowOffset: {
             width: 0,
-            height: 12,
+            height: 12
           },
           shadowOpacity: 0.58,
           shadowRadius: 16.0,
 
-          elevation: 24,
+          elevation: 24
         }}
-        // onPress={() => this.props.navigation.navigate("DialogAccount")}
+        onPress={getC}
       >
         <Icon name="reload" size={24} color="#FFF" />
       </Button>
