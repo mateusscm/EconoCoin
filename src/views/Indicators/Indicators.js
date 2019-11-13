@@ -8,7 +8,7 @@ import ChartHeader from "../../components/ChartHeader/ChartHeader";
 import { ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Dimensions } from "react-native";
-import { LineChart, PieChart } from "react-native-chart-kit";
+import { LineChart, PieChart, BarChart } from "react-native-chart-kit";
 import { FFS, FA } from '../../Firebase';
 import Reactotron from 'reactotron-react-native';
 import palette from 'google-palette';
@@ -30,9 +30,11 @@ const styles = StyleSheet.create({
 });
 const Indicators = props => {
   const [data_final, setData_final] = useState("");
+  const [data_, setData_] = useState("");
   const [data_inicial, setData_inicial] = useState("");
   const [dataPie, setDataPie] = useState([]);
-  const [dataLine, setDataLine] = useState([]);
+  const [dataPie2, setDataPie2] = useState([]);
+  const [dataLine, setDataLine] = useState(null);
   const [trigger, setTrigger] = useState(false);
   const [trigger1, setTrigger1] = useState(false);
 
@@ -40,6 +42,7 @@ const Indicators = props => {
   // const [loading, setLoading] = useState(false);
 
   React.useEffect(() => {
+    setData_(new Date().toISOString().split("T")[0]);
     setData_final(
       new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
         .toISOString()
@@ -131,6 +134,14 @@ const Indicators = props => {
         pie: [],
         pie2: []
       };
+      let line = {
+        labels: [],
+        datasets: [
+          {
+            data: []
+          }
+        ]
+      };
 
       const user = await FA.currentUser;
       const ref = await FFS.collection("user_kpi")
@@ -202,6 +213,36 @@ const Indicators = props => {
               };
             });
           }
+          if (
+            kpi.split("_")[0] === "tipo" &&
+            (kpi.split("_")[1] === data_inicial.split("-")[0] ||
+              kpi.split("_")[1] === data_final.split("-")[0])
+          ) {
+            const idx =
+              Math.ceil(new Date(data_).getTime() / 86400000) -
+              Math.floor(
+                new Date().setFullYear(new Date().getFullYear(), 0, 1) /
+                  86400000
+              );
+
+            for (let i = idx - 3; i <= idx; i++) {
+              line.labels.push(idxToDate(i));
+            }
+
+            let temp = [];
+            kpinfo[kpi].receita.forEach((info, i) => {
+              if (i >= idx - 3 && i <= idx) {
+                temp.push(
+                  kpinfo[kpi].receita[i] -
+                    kpinfo[kpi].receita[i - 1] +
+                    kpinfo[kpi].despesa[i] -
+                    kpinfo[kpi].despesa[i - 1]
+                );
+              }
+            });
+            Reactotron.log(temp);
+            line.datasets[0].data = temp;
+          }
         });
         Object.keys(count_categoria).forEach((a, i) => {
           graph.pie.push({
@@ -222,7 +263,13 @@ const Indicators = props => {
           });
         });
       }
-      setDataLine(graph.pie2);
+      // setDataLine(line);
+      Reactotron.log(JSON.stringify(line));
+      setDataLine(line);
+      //   labels: ["2019-11-10", "2019-11-11", "2019-11-12", "2019-11-13"],
+      //   datasets: [{ data: [36, 0, 190, 0] }]
+      // });
+      setDataPie2(graph.pie2);
       setDataPie(graph.pie);
     }
     getGraph();
@@ -235,8 +282,35 @@ const Indicators = props => {
       <MenuButton view="Indicadores" navigation={props.navigation} />
       <ScrollView style={styles.allCont}>
         <ChartHeader />
+        {dataLine ? (
+          <BarChart
+            data={dataLine}
+            width={screenWidth}
+            height={220}
+            chartConfig={{
+              backgroundColor: '#e26a00',
+              backgroundGradientFrom: '#fb8c00',
+              backgroundGradientTo: '#ffa726',
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16,
+              },
+              propsForDots: {
+                r: '6',
+                strokeWidth: '2',
+                stroke: '#ffa726',
+              },
+            }}
+            style={{
+              marginVertical: 4,
+              borderRadius: 16,
+            }}
+          />
+        ) : null}
         <PieChart
-          data={dataLine}
+          data={dataPie2}
           width={screenWidth}
           height={220}
           chartConfig={{
