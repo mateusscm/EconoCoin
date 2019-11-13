@@ -1,6 +1,6 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import { Item, Label, DatePicker } from "native-base";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Item, Label, DatePicker } from 'native-base';
 
 const styles = StyleSheet.create({
   mainTitle: {
@@ -8,18 +8,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingBottom: 5,
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between"
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   description: {
-    justifyContent: "center",
-    alignItems: "flex-start",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
     width: 150,
     marginHorizontal: 10,
     zIndex: 0,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(0, 0, 0, 0.5)"
-  }
+    borderBottomColor: 'rgba(0, 0, 0, 0.5)',
+  },
 });
 
 export default function ChartHeader(props) {
@@ -30,7 +30,7 @@ export default function ChartHeader(props) {
           style={{
             fontSize: 14,
             paddingLeft: 0,
-            color: "rgba(0, 0, 0, 0.5)"
+            color: 'rgba(0, 0, 0, 0.5)',
           }}
         >
           Data Inicial
@@ -39,14 +39,15 @@ export default function ChartHeader(props) {
           // defaultDate={new Date(2018, 4, 4)}
           // minimumDate={new Date(2018, 1, 1)}
           // maximumDate={new Date(2018, 12, 31)}
-          locale={"pt"}
+          locale={'pt'}
           timeZoneOffsetInMinutes={undefined}
           modalTransparent={false}
-          animationType={"fade"}
-          androidMode={"default"}
-          placeHolderText={`Data: `}
-          textStyle={{ color: "black" }}
-          placeHolderTextStyle={{ color: "#000" }}
+          animationType={'fade'}
+          androidMode={'default'}
+          placeHolderText={'Data: '}
+          textStyle={{ color: 'black' }}
+          placeHolderTextStyle={{ color: '#000' }}
+          value={props.data_inicial}
           // onDateChange={this.setDate}
           disabled={false}
         />
@@ -56,7 +57,7 @@ export default function ChartHeader(props) {
           style={{
             fontSize: 14,
             paddingLeft: 0,
-            color: "rgba(0, 0, 0, 0.5)"
+            color: 'rgba(0, 0, 0, 0.5)',
           }}
         >
           Data Final
@@ -65,14 +66,14 @@ export default function ChartHeader(props) {
           // defaultDate={new Date(2018, 4, 4)}
           // minimumDate={new Date(2018, 1, 1)}
           // maximumDate={new Date(2018, 12, 31)}
-          locale={"pt"}
+          locale={'pt'}
           timeZoneOffsetInMinutes={undefined}
           modalTransparent={false}
-          animationType={"fade"}
-          androidMode={"default"}
-          placeHolderText={`Data: `}
-          textStyle={{ color: "black" }}
-          placeHolderTextStyle={{ color: "#000" }}
+          animationType={'fade'}
+          androidMode={'default'}
+          placeHolderText={'Data: '}
+          textStyle={{ color: 'black' }}
+          placeHolderTextStyle={{ color: '#000' }}
           onDateChange={this.setDate}
           disabled={false}
         />
