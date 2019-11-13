@@ -10,6 +10,8 @@ import {
   TouchableOpacity,
   Alert
 } from "react-native";
+import { connect } from "react-redux";
+
 import { Spinner } from "native-base";
 
 import bgImage from "./../../assets/img/bg.jpg";
@@ -132,6 +134,7 @@ class Login extends Component {
 
     await FA.signInWithEmailAndPassword(email, password)
       .then(() => {
+        this.props.getInfo();
         this.props.navigation.navigate("Home");
         this.setState({ loading: false });
       })
@@ -257,4 +260,14 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const login = () => ({ type: "LOGIN" });
+const get_info_ = () => ({ type: "GET_INFO" });
+
+const mapDispatchToProps = dispatch => {
+  return {
+    login: () => dispatch(login()),
+    get_info: () => dispatch(get_info_())
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Login);

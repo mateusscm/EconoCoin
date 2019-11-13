@@ -3,8 +3,8 @@ import { View, StyleSheet, StatusBar, YellowBox } from "react-native";
 import Reactotron from "reactotron-react-native";
 import _ from "lodash";
 
-// import store from "./../utils/store";
-// import { Provider } from "react-redux";
+import store from "../Store/";
+import { Provider } from "react-redux";
 // import * as firebase from "firebase";
 
 import DrawerNavigator from "./../navigation/DrawerNavigator";
@@ -33,12 +33,12 @@ export default class App extends Component {
   render() {
     Reactotron.log("hello FUCKERS");
     return (
-      // <Provider store={store}>
-      <View style={styles.container}>
-        <StatusBar backgroundColor="black" barStyle="light-content" />
-        <DrawerNavigator />
-      </View>
-      // </Provider>
+      <Provider store={store}>
+        <View style={styles.container}>
+          <StatusBar backgroundColor="black" barStyle="light-content" />
+          <DrawerNavigator />
+        </View>
+      </Provider>
     );
   }
 }

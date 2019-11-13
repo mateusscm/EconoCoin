@@ -8,6 +8,7 @@ import { theme } from "../../config/_theme";
 import PreviewBalance from "../../components/PreviewBalance/PreviewBalance";
 import ExtractSummary from "../../components/ExtractSummary/ExtractSummary";
 import { FA, FFS } from "../../Firebase";
+import { connect, useDispatch } from "react-redux";
 import Reactotron from "reactotron-react-native";
 // import Charts from "../../components/Charts/Charts";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -191,6 +192,7 @@ function Home(props) {
   }
 
   React.useEffect(() => {
+    alert(props.info);
     getD();
     getInfo();
   }, []);
@@ -356,4 +358,9 @@ function Home(props) {
 //   }
 // }
 
-export default Home;
+//export default Home;
+const mapStateToProps = store => ({
+  info: store.info.info
+});
+
+export default connect(mapStateToProps)(Home);
