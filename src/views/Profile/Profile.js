@@ -5,13 +5,14 @@ import {
   StyleSheet,
   Image,
   ImageBackground,
-  TextInput
+  TextInput,
+  Alert
 } from "react-native";
-import { Form, Item, Label, Input, Button } from "native-base";
+import { Form, Item, Label, Input, Button, Spinner } from "native-base";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
 import { theme } from "../../config/_theme";
-import { FA } from "../../Firebase";
+import { FA, FFS } from "../../Firebase";
 import { ScrollView } from "react-native-gesture-handler";
 import bg from "./../../assets/img/bg.jpg";
 
@@ -92,90 +93,113 @@ const styles = StyleSheet.create({
   }
 });
 
-class Profile extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: "",
-      displayName: ""
+const Profile = props => {
+  const [first, setFirst] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [id, setUsrId] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    const getUser = async () => {
+      const usr = await FA.currentUser;
+      const ref = await FFS.collection("users")
+        .doc(usr.uid)
+        .get();
+      if (ref.exists) {
+        const u = ref.data();
+        setEmail(u.email);
+        setFirst(u.first);
+        setUsrId(u.id);
+      }
     };
-  }
+    getUser();
+  }, []);
 
-  componentDidMount() {
-    const { email, displayName } = FA.currentUser;
+  const handleChange = async () => {
+    setLoading(true);
+    await FFS.collection("users")
+      .doc(id)
+      .update({ email, first });
+    setLoading(false);
+    Alert.alert("Sucesso!", `Alterações feitas, ${first}`);
+  };
 
-    this.setState({ email, displayName });
-  }
-
-  render() {
-    return (
-      <View style={styles.allCont}>
-        <MenuButton view="Perfil" navigation={this.props.navigation} />
-        <ScrollView style={styles.scroller}>
-          <ImageBackground
-            source={bg}
-            imageStyle={{ opacity: 0.5 }}
-            style={styles.header}
-          >
-            <View style={styles.profile}>
-              <View style={styles.imgView}>
-                <Image
-                  style={styles.img}
-                  source={require("../../assets/img/logo.png")}
-                />
-              </View>
-              <View style={styles.profileText}>
-                <Text style={styles.name}>{this.state.displayName}</Text>
-                {/* <Text style={styles.subname}>Ver Perfil</Text> */}
-              </View>
+  return (
+    <View style={styles.allCont}>
+      <MenuButton view="Perfil" navigation={props.navigation} />
+      <ScrollView style={styles.scroller}>
+        <ImageBackground
+          source={bg}
+          imageStyle={{ opacity: 0.5 }}
+          style={styles.header}
+        >
+          <View style={styles.profile}>
+            <View style={styles.imgView}>
+              <Image
+                style={styles.img}
+                source={require("../../assets/img/logo.png")}
+              />
             </View>
-          </ImageBackground>
-          <View style={styles.data}>
-            <Form>
-              <Item stackedLabel style={styles.description}>
-                <Label
-                  style={{
-                    fontSize: 18,
-                    paddingLeft: 0,
-                    color: "rgba(0, 0, 0, 0.5)"
-                  }}
-                >
-                  Nome do usuário
-                </Label>
-                <TextInput
-                  value={this.state.displayName}
-                  style={{
-                    fontSize: 18,
-                    // paddingLeft: 5,
-                    paddingVertical: 5,
-                    width: "100%"
-                  }}
-                />
-              </Item>
-              <Item stackedLabel style={styles.description}>
-                <Label
-                  style={{
-                    fontSize: 18,
-                    paddingLeft: 0,
-                    color: "rgba(0, 0, 0, 0.5)"
-                  }}
-                >
-                  Email
-                </Label>
-                <TextInput
-                  disabled
-                  style={{
-                    fontSize: 18,
-                    // paddingLeft: 5,
-                    paddingVertical: 5,
-                    width: "100%",
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#000"
-                  }}
-                  value={this.state.email}
-                />
-              </Item>
-              {/* <Item stackedLabel style={styles.description}>
+            <View style={styles.profileText}>
+              <Text style={styles.name}>{first}</Text>
+              {/* <Text style={styles.subname}>Ver Perfil</Text> */}
+            </View>
+          </View>
+        </ImageBackground>
+        <View style={styles.data}>
+          <Form>
+            <Item stackedLabel style={styles.description}>
+              <Label
+                style={{
+                  fontSize: 18,
+                  paddingLeft: 0,
+                  color: "rgba(0, 0, 0, 0.5)"
+                }}
+              >
+                Nome do usuário
+              </Label>
+              <TextInput
+                value={first}
+                style={{
+                  fontSize: 18,
+                  // paddingLeft: 5,
+                  paddingVertical: 5,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#000"
+                }}
+                onChangeText={first => {
+                  setFirst(first);
+                }}
+              />
+            </Item>
+            <Item stackedLabel style={styles.description}>
+              <Label
+                style={{
+                  fontSize: 18,
+                  paddingLeft: 0,
+                  color: "rgba(0, 0, 0, 0.5)"
+                }}
+              >
+                Email
+              </Label>
+              <TextInput
+                editable={false}
+                style={{
+                  fontSize: 18,
+                  // paddingLeft: 5,
+                  paddingVertical: 5,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#000"
+                }}
+                value={email}
+                onChangeText={email => {
+                  setEmail({ email });
+                }}
+              />
+            </Item>
+            {/* <Item stackedLabel style={styles.description}>
                 <Label
                   style={{
                     fontSize: 18,
@@ -217,26 +241,179 @@ class Profile extends Component {
                   // value={this.state.email}
                 />
               </Item> */}
-              <Button
-                full
-                style={{
-                  backgroundColor: theme.palette.button,
-                  marginVertical: 20
-                }}
-              >
+            <Button
+              full
+              style={{
+                backgroundColor: theme.palette.button,
+                marginVertical: 20
+              }}
+              onPress={handleChange}
+            >
+              {loading ? (
+                <Spinner style={styles.spinner} color="green" />
+              ) : (
                 <Text style={styles.txtBtn}>Salvar</Text>
-              </Button>
-            </Form>
-          </View>
-        </ScrollView>
-        {/* <View style={styles.save}>
+              )}
+            </Button>
+          </Form>
+        </View>
+      </ScrollView>
+      {/* <View style={styles.save}>
             <TouchableOpacity onPress={this.logout} style={styles.btnLogout}>
               <Text style={{ color: "#fff" }}>Sair</Text>
             </TouchableOpacity>
           </View> */}
-      </View>
-    );
-  }
-}
+    </View>
+  );
+};
+
+// class Profile extends Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       email: "",
+//       displayName: ""
+//     };
+//   }
+
+//   componentDidMount() {
+//     const { email, displayName } = FA.currentUser;
+
+//     this.setState({ email, displayName });
+//   }
+
+//   render() {
+//     return (
+//       <View style={styles.allCont}>
+//         <MenuButton view="Perfil" navigation={this.props.navigation} />
+//         <ScrollView style={styles.scroller}>
+//           <ImageBackground
+//             source={bg}
+//             imageStyle={{ opacity: 0.5 }}
+//             style={styles.header}
+//           >
+//             <View style={styles.profile}>
+//               <View style={styles.imgView}>
+//                 <Image
+//                   style={styles.img}
+//                   source={require("../../assets/img/logo.png")}
+//                 />
+//               </View>
+//               <View style={styles.profileText}>
+//                 <Text style={styles.name}>{this.state.displayName}</Text>
+//                 {/* <Text style={styles.subname}>Ver Perfil</Text> */}
+//               </View>
+//             </View>
+//           </ImageBackground>
+//           <View style={styles.data}>
+//             <Form>
+//               <Item stackedLabel style={styles.description}>
+//                 <Label
+//                   style={{
+//                     fontSize: 18,
+//                     paddingLeft: 0,
+//                     color: "rgba(0, 0, 0, 0.5)"
+//                   }}
+//                 >
+//                   Nome do usuário
+//                 </Label>
+//                 <TextInput
+//                   value={this.state.displayName}
+//                   style={{
+//                     fontSize: 18,
+//                     // paddingLeft: 5,
+//                     paddingVertical: 5,
+//                     width: "100%",
+//                     borderBottomWidth: 1,
+//                     borderBottomColor: "#000"
+//                   }}
+//                 />
+//               </Item>
+//               <Item stackedLabel style={styles.description}>
+//                 <Label
+//                   style={{
+//                     fontSize: 18,
+//                     paddingLeft: 0,
+//                     color: "rgba(0, 0, 0, 0.5)"
+//                   }}
+//                 >
+//                   Email
+//                 </Label>
+//                 <TextInput
+//                   disabled
+//                   style={{
+//                     fontSize: 18,
+//                     // paddingLeft: 5,
+//                     paddingVertical: 5,
+//                     width: "100%",
+//                     borderBottomWidth: 1,
+//                     borderBottomColor: "#000"
+//                   }}
+//                   value={this.state.email}
+//                 />
+//               </Item>
+//               {/* <Item stackedLabel style={styles.description}>
+//                 <Label
+//                   style={{
+//                     fontSize: 18,
+//                     paddingLeft: 0,
+//                     color: "rgba(0, 0, 0, 0.5)"
+//                   }}
+//                 >
+//                   Senha atual
+//                 </Label>
+//                 <TextInput
+//                   style={{
+//                     fontSize: 18,
+//                     // paddingLeft: 5,
+//                     paddingVertical: 5,
+//                     width: "100%"
+//                   }}
+//                   secureTextEntry={true}
+//                   // value={this.state.email}
+//                 />
+//               </Item>
+//               <Item stackedLabel style={styles.description}>
+//                 <Label
+//                   style={{
+//                     fontSize: 18,
+//                     paddingLeft: 0,
+//                     color: "rgba(0, 0, 0, 0.5)"
+//                   }}
+//                 >
+//                   Nova Senha
+//                 </Label>
+//                 <TextInput
+//                   style={{
+//                     fontSize: 18,
+//                     // paddingLeft: 5,
+//                     paddingVertical: 5,
+//                     width: "100%"
+//                   }}
+//                   secureTextEntry={true}
+//                   // value={this.state.email}
+//                 />
+//               </Item> */}
+//               <Button
+//                 full
+//                 style={{
+//                   backgroundColor: theme.palette.button,
+//                   marginVertical: 20
+//                 }}
+//               >
+//                 <Text style={styles.txtBtn}>Salvar</Text>
+//               </Button>
+//             </Form>
+//           </View>
+//         </ScrollView>
+//         {/* <View style={styles.save}>
+//             <TouchableOpacity onPress={this.logout} style={styles.btnLogout}>
+//               <Text style={{ color: "#fff" }}>Sair</Text>
+//             </TouchableOpacity>
+//           </View> */}
+//       </View>
+//     );
+//   }
+// }
 
 export default Profile;

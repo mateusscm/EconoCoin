@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
-import { Container, Button } from "native-base";
+import { Container, Button, Text, Spinner } from "native-base";
 import { theme } from "../../config/_theme";
 import ChartHeader from "../../components/ChartHeader/ChartHeader";
 import { ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Dimensions } from "react-native";
 import { LineChart, PieChart, BarChart } from "react-native-chart-kit";
-import { FFS, FA } from '../../Firebase';
-import Reactotron from 'reactotron-react-native';
-import palette from 'google-palette';
+import { FFS, FA } from "../../Firebase";
+import Reactotron from "reactotron-react-native";
+import palette from "google-palette";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -27,6 +27,19 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: theme.palette.txtPrimary
   },
+  mainTitle: {
+    paddingTop: 10,
+    paddingHorizontal: 18,
+    paddingBottom: 5,
+    fontWeight: "700",
+    color: "#6e6e6e"
+  },
+  spinner: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: theme.palette.backgroundMain
+  }
 });
 const Indicators = props => {
   const [data_final, setData_final] = useState("");
@@ -37,6 +50,7 @@ const Indicators = props => {
   const [dataLine, setDataLine] = useState(null);
   const [trigger, setTrigger] = useState(false);
   const [trigger1, setTrigger1] = useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   // const [chart, setChart] = useState(null);
   // const [loading, setLoading] = useState(false);
@@ -82,7 +96,7 @@ const Indicators = props => {
         const obj = movimentacoes[i];
         let graphs = ["Categoria", "Conta", "Tipo"];
         // eslint-disable-next-line
-            graphs.forEach(g => {
+        graphs.forEach(g => {
           if (kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]]) {
             if (
               kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
@@ -93,7 +107,7 @@ const Indicators = props => {
                 obj[g.toLowerCase()]
               ].forEach((item, index) => {
                 if (index === 0 || index < year(obj.data)) {
-                  kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
+                  kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
                     obj[g.toLowerCase()]
                   ][index] += parseFloat(obj.balance);
                 }
@@ -129,6 +143,7 @@ const Indicators = props => {
   };
 
   React.useEffect(() => {
+    setLoading(true);
     async function getGraph() {
       let graph = {
         pie: [],
@@ -202,9 +217,9 @@ const Indicators = props => {
               };
             });
           } else if (
-            kpi.split('_')[0] === 'tipo' &&
-            (kpi.split('_')[1] === data_inicial.split('-')[0] ||
-              kpi.split('_')[1] === data_final.split('-')[0])
+            kpi.split("_")[0] === "tipo" &&
+            (kpi.split("_")[1] === data_inicial.split("-")[0] ||
+              kpi.split("_")[1] === data_final.split("-")[0])
           ) {
             Object.keys(kpinfo[kpi]).forEach(k => {
               count_tipo = {
@@ -248,8 +263,8 @@ const Indicators = props => {
           graph.pie.push({
             name: a,
             population: count_categoria[a],
-            color: '#' + palette("tol-dv", 15)[i],
-            legendFontColor: '#7F7F7F',
+            color: "#" + palette("tol-dv", 15)[i],
+            legendFontColor: "#7F7F7F",
             legendFontSize: 15
           });
         });
@@ -257,22 +272,23 @@ const Indicators = props => {
           graph.pie2.push({
             name: a,
             population: count_tipo[a],
-            color: '#' + palette("tol-dv", 15)[i],
-            legendFontColor: '#7F7F7F',
+            color: "#" + palette("tol-dv", 15)[i],
+            legendFontColor: "#7F7F7F",
             legendFontSize: 15
           });
         });
       }
-      // setDataLine(line);
-      Reactotron.log(JSON.stringify(line));
       setDataLine(line);
+      Reactotron.log(JSON.stringify(line));
+      // setDataLine({
       //   labels: ["2019-11-10", "2019-11-11", "2019-11-12", "2019-11-13"],
-      //   datasets: [{ data: [36, 0, 190, 0] }]
+      //   datasets: [{ data: [36, -25, 190, 0] }]
       // });
       setDataPie2(graph.pie2);
       setDataPie(graph.pie);
     }
     getGraph();
+    setLoading(false);
     // eslint-disable-next-line
   }, [data_inicial, data_final, trigger]);
 
@@ -280,78 +296,87 @@ const Indicators = props => {
   return (
     <Container>
       <MenuButton view="Indicadores" navigation={props.navigation} />
-      <ScrollView style={styles.allCont}>
-        <ChartHeader />
-        {dataLine ? (
-          <BarChart
-            data={dataLine}
-            width={screenWidth}
-            height={220}
-            chartConfig={{
-              backgroundColor: '#e26a00',
-              backgroundGradientFrom: '#fb8c00',
-              backgroundGradientTo: '#ffa726',
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
-                borderRadius: 16,
-              },
-              propsForDots: {
-                r: '6',
-                strokeWidth: '2',
-                stroke: '#ffa726',
-              },
-            }}
-            style={{
-              marginVertical: 4,
-              borderRadius: 16,
-            }}
-          />
-        ) : null}
-        <PieChart
-          data={dataPie2}
-          width={screenWidth}
-          height={220}
-          chartConfig={{
-            backgroundGradientFrom: "#1E2923",
-            backgroundGradientFromOpacity: 0,
-            backgroundGradientTo: "#08130D",
-            backgroundGradientToOpacity: 0.5,
-            color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-            strokeWidth: 3, // optional, default 3
-            barPercentage: 0.5
-          }}
-          accessor="population"
-          backgroundColor="#fff"
-          absolute={true}
-          style={{
-            marginVertical: 4,
-            borderRadius: 16
-          }}
-        />
-        <PieChart
-          data={dataPie}
-          width={screenWidth}
-          height={220}
-          chartConfig={{
-            backgroundGradientFrom: "#1E2923",
-            backgroundGradientFromOpacity: 0,
-            backgroundGradientTo: "#08130D",
-            backgroundGradientToOpacity: 0.5,
-            color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-            strokeWidth: 3, // optional, default 3
-            barPercentage: 0.5
-          }}
-          accessor="population"
-          backgroundColor="#fff"
-          absolute={true}
-          style={{
-            marginVertical: 4,
-            borderRadius: 16
-          }}
-        />
-      </ScrollView>
+      {!loading ? (
+        <>
+          <ScrollView style={styles.allCont}>
+            <ChartHeader />
+            <Text style={styles.mainTitle}>DESPESA E RECEITA TOTAIS</Text>
+            <PieChart
+              data={dataPie2}
+              width={screenWidth}
+              height={220}
+              chartConfig={{
+                backgroundGradientFrom: "#1E2923",
+                backgroundGradientFromOpacity: 0,
+                backgroundGradientTo: "#08130D",
+                backgroundGradientToOpacity: 0.5,
+                color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+                strokeWidth: 3, // optional, default 3
+                barPercentage: 0.5
+              }}
+              accessor="population"
+              backgroundColor="#fff"
+              absolute={true}
+              style={{
+                marginVertical: 4,
+                borderRadius: 16
+              }}
+            />
+            <Text style={styles.mainTitle}>GASTOS POR CATEGORIA</Text>
+            <PieChart
+              data={dataPie}
+              width={screenWidth}
+              height={220}
+              chartConfig={{
+                backgroundGradientFrom: "#1E2923",
+                backgroundGradientFromOpacity: 0,
+                backgroundGradientTo: "#08130D",
+                backgroundGradientToOpacity: 0.5,
+                color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+                strokeWidth: 3, // optional, default 3
+                barPercentage: 0.5
+              }}
+              accessor="population"
+              backgroundColor="#fff"
+              absolute={true}
+              style={{
+                marginVertical: 4,
+                borderRadius: 16
+              }}
+            />
+            <Text style={styles.mainTitle}>GASTOS DOS ÚLTIMOS 4 DIAS</Text>
+            {dataLine < 2 ? null : (
+              <BarChart
+                data={dataLine}
+                width={screenWidth}
+                height={220}
+                chartConfig={{
+                  // backgroundColor: "#ffffff",
+                  backgroundGradientFrom: "#ffffff",
+                  backgroundGradientTo: "#d3d3d3",
+                  // decimalPlaces: 2, // optional, defaults to 2dp
+                  color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                  style: {
+                    borderRadius: 16
+                  },
+                  propsForDots: {
+                    r: "6",
+                    strokeWidth: "2",
+                    stroke: "#ffa726"
+                  }
+                }}
+                style={{
+                  marginVertical: 4,
+                  borderRadius: 16
+                }}
+              />
+            )}
+          </ScrollView>
+        </>
+      ) : (
+        <Spinner style={styles.spinner} color="green" />
+      )}
       <Button
         style={{
           height: 54,
