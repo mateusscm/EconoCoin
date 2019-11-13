@@ -344,7 +344,9 @@ const Indicators = props => {
                 borderRadius: 16
               }}
             />
-            <Text style={styles.mainTitle}>GASTOS DOS ÚLTIMOS 4 DIAS</Text>
+            <Text style={styles.mainTitle}>
+              MOVIMENTAÇÕES DOS ÚLTIMOS 4 DIAS
+            </Text>
             {dataLine < 2 ? null : (
               <BarChart
                 data={dataLine}

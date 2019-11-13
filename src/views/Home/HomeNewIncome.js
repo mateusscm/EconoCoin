@@ -114,9 +114,9 @@ class HomeNewIncome extends Component {
       .collection("contas")
       .doc(this.state.selected2)
       .get();
-    Reactotron.log("FFS GET PORRA");
+    alert(this.state.selected2);
 
-    let ref = await FFS.collection("user_movimentacao")
+    let ref = FFS.collection("user_movimentacao")
       .doc(user.uid)
       .collection("movimentacoes")
       .doc();
@@ -259,7 +259,7 @@ class HomeNewIncome extends Component {
               >
                 <Picker.Item disabled label="Escolha uma conta" value={null} />
                 {this.state.contas.map((c, i) => (
-                  <Picker.Item key={i} label={c.nome} value={c.nome} />
+                  <Picker.Item key={i} label={c.nome} value={c.id} />
                 ))}
               </Picker>
             </Item>

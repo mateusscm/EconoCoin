@@ -265,7 +265,7 @@ class HomeNewExpense extends Component {
               >
                 <Picker.Item disabled label="Escolha uma conta" value={null} />
                 {this.state.contas.map((c, i) => (
-                  <Picker.Item key={i} label={c.nome} value={c.nome} />
+                  <Picker.Item key={i} label={c.nome} value={c.id} />
                 ))}
               </Picker>
             </Item>
