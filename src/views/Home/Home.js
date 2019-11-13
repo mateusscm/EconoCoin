@@ -172,6 +172,7 @@ function Home(props) {
     let resp = await FFS.collection("user_movimentacao")
       .doc(user.uid)
       .collection("movimentacoes")
+      .orderBy("data", "desc")
       .limit(3)
       .get();
     Reactotron.log("FFS GET PORRA");
@@ -197,6 +198,9 @@ function Home(props) {
   function _onRefresh() {
     setRefreshing(true);
     getD().then(() => {
+      setRefreshing(false);
+    });
+    getInfo().then(() => {
       setRefreshing(false);
     });
   }

@@ -43,7 +43,7 @@ class ExtractSummary extends Component {
     return (
       <Content style={styles.content}>
         {this.props.view === "Home" ? (
-          <Text style={styles.mainTitle}>RESUMO DE EXTRATO</Text>
+          <Text style={styles.mainTitle}>ÚLTIMAS 3 MOVIMENTAÇÕES</Text>
         ) : (
           <Text style={styles.mainTitle}>EXTRATO COMPLETO</Text>
         )}

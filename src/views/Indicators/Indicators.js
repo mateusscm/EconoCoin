@@ -143,8 +143,8 @@ const Indicators = props => {
   };
 
   React.useEffect(() => {
-    setLoading(true);
     async function getGraph() {
+      setLoading(true);
       let graph = {
         pie: [],
         pie2: []
@@ -286,9 +286,9 @@ const Indicators = props => {
       // });
       setDataPie2(graph.pie2);
       setDataPie(graph.pie);
+      setLoading(false);
     }
     getGraph();
-    setLoading(false);
     // eslint-disable-next-line
   }, [data_inicial, data_final, trigger]);
 

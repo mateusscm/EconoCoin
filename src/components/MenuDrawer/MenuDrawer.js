@@ -8,7 +8,8 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
+  RefreshControl
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import { Icon } from "native-base";
@@ -20,22 +21,31 @@ const MenuDrawer = props => {
   const [first, setFirst] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [id, setUsrId] = React.useState("");
+  let [refreshing, setRefreshing] = React.useState(false);
+
+  const getUser = async () => {
+    const usr = await FA.currentUser;
+    const ref = await FFS.collection("users")
+      .doc(usr.uid)
+      .get();
+    if (ref.exists) {
+      const u = ref.data();
+      setEmail(u.email);
+      setFirst(u.first);
+      setUsrId(u.id);
+    }
+  };
 
   React.useEffect(() => {
-    const getUser = async () => {
-      const usr = await FA.currentUser;
-      const ref = await FFS.collection("users")
-        .doc(usr.uid)
-        .get();
-      if (ref.exists) {
-        const u = ref.data();
-        setEmail(u.email);
-        setFirst(u.first);
-        setUsrId(u.id);
-      }
-    };
     getUser();
   }, []);
+
+  function _onRefresh() {
+    setRefreshing(true);
+    getUser().then(() => {
+      setRefreshing(false);
+    });
+  }
 
   const navLink = (nav, text, typeIcon, icon) => {
     return (
@@ -62,7 +72,12 @@ const MenuDrawer = props => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scroller}>
+      <ScrollView
+        style={styles.scroller}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
+        }
+      >
         <TouchableOpacity
           onPress={() => {
             props.navigation.navigate("Profile");
