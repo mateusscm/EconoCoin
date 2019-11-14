@@ -34,12 +34,13 @@ export const get_info = () => {
       if (!ref.empty) {
         ref.docs.forEach(doc => {
           let data = doc.data();
-          if (data.categoria !== "Transferencia")
-            if (data.tipo === "receita") {
+          if (data.categoria !== "Transferencia") {
+            if (data.tipo === 'receita') {
               rec += parseFloat(data.balance);
-            } else if (data.tipo === "despesa") {
+            } else if (data.tipo === 'despesa') {
               desp += parseFloat(data.balance);
             }
+          }
         });
       }
       let inf = [
