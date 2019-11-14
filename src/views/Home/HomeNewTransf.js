@@ -1,5 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import { StyleSheet, TextInput } from "react-native";
+import { connect, useDispatch } from "react-redux";
+import { get_info } from '../../Store/Action/info';
 
 import { FA, FFS } from "../../Firebase";
 import Reactotron from "reactotron-react-native";
@@ -56,40 +58,26 @@ const styles = StyleSheet.create({
     borderBottomColor: "rgba(0, 0, 0, 0.5)"
   }
 });
+function HomeNewTransf(props) {
+  const [selected, setSelected] = React.useState(null);
+  const [selected2, setSelected2] = React.useState(null);
+  const [contas, setContas] = React.useState([]);
+  const [categorias, setCategorias] = React.useState([]);
+  const [desc, setDesc] = React.useState('');
+  const [money, setMoney] = React.useState('');
+  const [date, setDate] = React.useState(new Date());
 
-class HomeNewTransf extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selected: "",
-      selected2: "",
-      contas: [],
-      date: new Date(),
-      desc: "",
-      money: ""
-    };
-    this.onValueChange = this.onValueChange.bind(this);
-    this.onValueChange2 = this.onValueChange2.bind(this);
-    this.setDate = this.setDate.bind(this);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    getInfo();
+  }, []);
+
+  function setDate_(newDate) {
+    setDate(newDate);
   }
 
-  setDate(newDate) {
-    this.setState({ chosenDate: newDate });
-  }
-
-  onValueChange(event) {
-    this.setState({ [event.target.selected]: event.target.value });
-  }
-
-  onValueChange2(event) {
-    this.setState({ [event.target.selected2]: event.target.value });
-  }
-
-  componentDidMount() {
-    this.getInfo();
-  }
-
-  getInfo = async () => {
+  const getInfo = async () => {
     const user = await FA.currentUser;
     let temp = [];
     let resp = await FFS.collection("user_conta")
@@ -101,16 +89,16 @@ class HomeNewTransf extends Component {
       resp.forEach(r => {
         temp.push(r.data());
       });
-      this.setState({ contas: temp });
+      setContas(temp);
     }
   };
 
-  simpleMov = async () => {
+  const simpleMov = async () => {
     try {
       const user = await FA.currentUser;
 
-      let con = JSON.parse(this.state.selected2);
-      let conR = JSON.parse(this.state.selected);
+      let con = JSON.parse(selected2);
+      let conR = JSON.parse(selected);
 
       let c = await FFS.collection("user_conta")
         .doc(user.uid)
@@ -129,11 +117,11 @@ class HomeNewTransf extends Component {
 
       await ref.set({
         id: ref.id,
-        descricao: this.state.desc,
-        balance: Math.abs(this.state.money),
+        descricao: desc,
+        balance: Math.abs(money),
         conta: con.nome,
         categoria: "Transferencia",
-        data: this.state.date.toISOString().split("T")[0],
+        data: date.toISOString().split("T")[0],
         tipo: "receita"
       });
 
@@ -144,11 +132,11 @@ class HomeNewTransf extends Component {
 
       await ref2.set({
         id: ref2.id,
-        descricao: this.state.desc,
-        balance: -Math.abs(this.state.money),
+        descricao: desc,
+        balance: -Math.abs(money),
         conta: conR.nome,
         categoria: "Transferencia",
-        data: this.state.date.toISOString().split("T")[0],
+        data: date.toISOString().split("T")[0],
         tipo: "despesa"
       });
 
@@ -164,7 +152,7 @@ class HomeNewTransf extends Component {
             throw new Error("Document does not exist!");
           }
           var newBal = parseFloat(sfDoc.data().balance);
-          newBal += parseFloat(this.state.money);
+          newBal += parseFloat(money);
 
           const sfDoc1 = await transaction.get(cr);
           if (!sfDoc1.exists) {
@@ -172,7 +160,7 @@ class HomeNewTransf extends Component {
             throw new Error("Document does not exist!");
           }
           var newBal1 = parseFloat(sfDoc1.data().balance);
-          newBal1 -= parseFloat(this.state.money);
+          newBal1 -= parseFloat(money);
 
           await transaction.update(c, { balance: newBal });
           await transaction.update(cr, { balance: newBal1 });
@@ -180,168 +168,162 @@ class HomeNewTransf extends Component {
           Reactotron.log("DEU RUIM");
           console.log("Transaction failed");
         }
-        this.props.navigation.navigate("Extract");
+        await dispatch(get_info());
+        props.navigation.navigate("Extract");
       });
     } catch (err) {
       Reactotron.log(err);
     }
   };
 
-  render() {
-    return (
-      <Container>
-        <MenuButtonBack
-          view="Transferência"
-          navigation={this.props.navigation}
-        />
-        <Content style={styles.allCont}>
-          {/* <View style={styles.header}>
+  return (
+    <Container>
+      <MenuButtonBack view="Transferência" navigation={props.navigation} />
+      <Content style={styles.allCont}>
+        {/* <View style={styles.header}>
             <Text>dwqdqwdqwd</Text>
           </View> */}
-          <Form>
-            <Item stackedLabel underline style={styles.header}>
-              <Label style={{ color: "#fff", fontSize: 16 }}>Valor</Label>
-              <TextInput
-                placeholder="R$"
-                placeholderTextColor="rgba(255, 255, 255, 0.7)"
-                keyboardType={"numeric"}
-                style={{
-                  color: "#fff",
-                  fontSize: 44,
-                  paddingLeft: 10,
-                  width: "100%"
-                }}
-                value={this.state.money}
-                onChangeText={money => {
-                  this.setState({ money });
-                }}
-              />
-            </Item>
-            <Item stackedLabel style={styles.description}>
-              <Label
-                style={{
-                  fontSize: 18,
-                  paddingLeft: 0,
-                  color: "rgba(0, 0, 0, 0.5)"
-                }}
-              >
-                Breve descrição
-              </Label>
-              <TextInput
-                style={{
-                  fontSize: 24,
-                  paddingLeft: 5,
-                  width: "100%"
-                }}
-                value={this.state.desc}
-                onChangeText={desc => {
-                  this.setState({ desc });
-                }}
-              />
-            </Item>
-            <Item picker stackedLabel style={styles.description}>
-              <Label
-                style={{
-                  fontSize: 18,
-                  paddingLeft: 0,
-                  color: "rgba(0, 0, 0, 0.5)"
-                }}
-              >
-                Conta para remover
-              </Label>
-              <Picker
-                mode="dropdown"
-                style={{ width: "100%", paddingLeft: 0 }}
-                placeholder="Select your SIM"
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
-                selectedValue={this.state.selected}
-                onValueChange={ev => {
-                  this.setState({ selected: ev });
-                }}
-              >
-                <Picker.Item disabled label="Escolha uma conta" value={null} />
-                {this.state.contas.map((c, i) => (
-                  <Picker.Item
-                    key={i}
-                    label={c.nome}
-                    value={JSON.stringify({ id: c.id, nome: c.nome })}
-                  />
-                ))}
-              </Picker>
-            </Item>
-            <Item picker stackedLabel style={styles.description}>
-              <Label
-                style={{
-                  fontSize: 18,
-                  paddingLeft: 0,
-                  color: "rgba(0, 0, 0, 0.5)"
-                }}
-              >
-                Conta para adicionar
-              </Label>
-              <Picker
-                mode="dropdown"
-                style={{ width: "100%", paddingLeft: 0 }}
-                placeholder="Select your SIM"
-                placeholderStyle={{ color: "#bfc6ea" }}
-                placeholderIconColor="#007aff"
-                selectedValue={this.state.selected2}
-                onValueChange={ev => {
-                  this.setState({ selected2: ev });
-                }}
-              >
-                <Picker.Item disabled label="Escolha uma conta" value={null} />
-                {this.state.contas.map((c, i) => (
-                  <Picker.Item
-                    key={i}
-                    label={c.nome}
-                    value={JSON.stringify({ id: c.id, nome: c.nome })}
-                  />
-                ))}
-              </Picker>
-            </Item>
-            <Item picker stackedLabel style={styles.description}>
-              <Label
-                style={{
-                  fontSize: 18,
-                  paddingLeft: 0,
-                  color: "rgba(0, 0, 0, 0.5)"
-                }}
-              >
-                Data
-              </Label>
-              <DatePicker
-                // defaultDate={new Date(2018, 4, 4)}
-                // minimumDate={new Date(2018, 1, 1)}
-                // maximumDate={new Date(2018, 12, 31)}
-                locale={"pt"}
-                timeZoneOffsetInMinutes={undefined}
-                modalTransparent={false}
-                animationType={"fade"}
-                androidMode={"default"}
-                placeHolderText={`Data: ${this.state.date
-                  .toString()
-                  .substr(4, 12)}`}
-                textStyle={{ color: "black" }}
-                placeHolderTextStyle={{ color: "#000" }}
-                onDateChange={this.setDate}
-                disabled={false}
-              />
-            </Item>
-          </Form>
-        </Content>
-        <Button
-          transparent
-          light
-          style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}
-          onPress={this.simpleMov}
-        >
-          <Text>SALVAR</Text>
-        </Button>
-      </Container>
-    );
-  }
+        <Form>
+          <Item stackedLabel underline style={styles.header}>
+            <Label style={{ color: "#fff", fontSize: 16 }}>Valor</Label>
+            <TextInput
+              placeholder="R$"
+              placeholderTextColor="rgba(255, 255, 255, 0.7)"
+              keyboardType={"numeric"}
+              style={{
+                color: "#fff",
+                fontSize: 44,
+                paddingLeft: 10,
+                width: "100%"
+              }}
+              value={money}
+              onChangeText={money => {
+                setMoney(money);
+              }}
+            />
+          </Item>
+          <Item stackedLabel style={styles.description}>
+            <Label
+              style={{
+                fontSize: 18,
+                paddingLeft: 0,
+                color: "rgba(0, 0, 0, 0.5)"
+              }}
+            >
+              Breve descrição
+            </Label>
+            <TextInput
+              style={{
+                fontSize: 24,
+                paddingLeft: 5,
+                width: "100%"
+              }}
+              value={desc}
+              onChangeText={desc => {
+                setDesc(desc);
+              }}
+            />
+          </Item>
+          <Item picker stackedLabel style={styles.description}>
+            <Label
+              style={{
+                fontSize: 18,
+                paddingLeft: 0,
+                color: "rgba(0, 0, 0, 0.5)"
+              }}
+            >
+              Conta para remover
+            </Label>
+            <Picker
+              mode="dropdown"
+              style={{ width: "100%", paddingLeft: 0 }}
+              placeholder="Select your SIM"
+              placeholderStyle={{ color: "#bfc6ea" }}
+              placeholderIconColor="#007aff"
+              selectedValue={selected}
+              onValueChange={ev => {
+                setSelected(ev);
+              }}
+            >
+              <Picker.Item disabled label="Escolha uma conta" value={null} />
+              {contas.map((c, i) => (
+                <Picker.Item
+                  key={i}
+                  label={c.nome}
+                  value={JSON.stringify({ id: c.id, nome: c.nome })}
+                />
+              ))}
+            </Picker>
+          </Item>
+          <Item picker stackedLabel style={styles.description}>
+            <Label
+              style={{
+                fontSize: 18,
+                paddingLeft: 0,
+                color: "rgba(0, 0, 0, 0.5)"
+              }}
+            >
+              Conta para adicionar
+            </Label>
+            <Picker
+              mode="dropdown"
+              style={{ width: "100%", paddingLeft: 0 }}
+              placeholder="Select your SIM"
+              placeholderStyle={{ color: "#bfc6ea" }}
+              placeholderIconColor="#007aff"
+              selectedValue={selected2}
+              onValueChange={ev => {
+                setSelected2(ev);
+              }}
+            >
+              <Picker.Item disabled label="Escolha uma conta" value={null} />
+              {contas.map((c, i) => (
+                <Picker.Item
+                  key={i}
+                  label={c.nome}
+                  value={JSON.stringify({ id: c.id, nome: c.nome })}
+                />
+              ))}
+            </Picker>
+          </Item>
+          <Item picker stackedLabel style={styles.description}>
+            <Label
+              style={{
+                fontSize: 18,
+                paddingLeft: 0,
+                color: "rgba(0, 0, 0, 0.5)"
+              }}
+            >
+              Data
+            </Label>
+            <DatePicker
+              // defaultDate={new Date(2018, 4, 4)}
+              // minimumDate={new Date(2018, 1, 1)}
+              // maximumDate={new Date(2018, 12, 31)}
+              locale={"pt"}
+              timeZoneOffsetInMinutes={undefined}
+              modalTransparent={false}
+              animationType={"fade"}
+              androidMode={"default"}
+              placeHolderText={`Data: ${date.toString().substr(4, 12)}`}
+              textStyle={{ color: "black" }}
+              placeHolderTextStyle={{ color: "#000" }}
+              onDateChange={setDate_}
+              disabled={false}
+            />
+          </Item>
+        </Form>
+      </Content>
+      <Button
+        transparent
+        light
+        style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}
+        onPress={simpleMov}
+      >
+        <Text>SALVAR</Text>
+      </Button>
+    </Container>
+  );
 }
 
-export default HomeNewTransf;
+export default connect()(HomeNewTransf);
