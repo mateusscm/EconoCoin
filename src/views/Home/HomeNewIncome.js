@@ -106,10 +106,12 @@ function HomeNewIncome(props) {
   const simpleMov = async () => {
     const user = await FA.currentUser;
 
+    let con = JSON.parse(selected2);
+
     let c = await FFS.collection('user_conta')
       .doc(user.uid)
       .collection('contas')
-      .doc(selected2)
+      .doc(con.id)
       .get();
 
     let ref = FFS.collection('user_movimentacao')
@@ -121,7 +123,7 @@ function HomeNewIncome(props) {
       id: ref.id,
       descricao: desc,
       balance: money,
-      conta: selected2,
+      conta: con.nome,
       categoria: selected,
       data: date.toISOString().split('T')[0],
       tipo: 'receita', //MUDAR "despesa"
@@ -134,7 +136,7 @@ function HomeNewIncome(props) {
       await FFS.collection('user_conta')
         .doc(user.uid)
         .collection('contas')
-        .doc(selected2)
+        .doc(con.id)
         .update({ balance: newBal });
     }
     await dispatch(get_info());
@@ -254,7 +256,11 @@ function HomeNewIncome(props) {
             >
               <Picker.Item disabled label="Escolha uma conta" value={null} />
               {contas.map((c, i) => (
-                <Picker.Item key={i} label={c.nome} value={c.id} />
+                <Picker.Item
+                  key={i}
+                  label={c.nome}
+                  value={JSON.stringify({ id: c.id, nome: c.nome })}
+                />
               ))}
             </Picker>
           </Item>
