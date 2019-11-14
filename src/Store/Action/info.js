@@ -45,26 +45,30 @@ export const get_info = () => {
       let inf = [
         {
           title: "Saldo em conta",
-          qtd: ""
+          qtd: "",
+          icon: "money-bill-wave"
         },
         {
           title: "Receitas do mês",
-          qtd: ""
+          qtd: "",
+          icon: "calendar-plus"
         },
         {
           title: "Despesas do mês",
-          qtd: ""
+          qtd: "",
+          icon: "calendar-minus"
         },
         {
           title: "Balanço do mês",
-          qtd: ""
+          qtd: "",
+          icon: "calendar-check"
         }
       ];
       inf[0].qtd = "R$ " + sal;
       inf[1].qtd = "R$ " + rec;
       inf[2].qtd = "R$ " + desp;
       inf[3].qtd = "R$ " + (rec + desp);
-      let _ref = await filterRef(ref);
+      let _ref = await filterRef();
       let info = { info: inf, conta: tempc, ref: _ref };
       // debugger;
       dispatch({ type: "GET_INFO", payload: info });
@@ -99,32 +103,27 @@ const _getDates = () => {
   return [ini, fin];
 };
 
-const filterRef = async ref => {
-  if (!ref.empty) {
-    const new_columns = Object.keys(ref.docs[0].data()).filter(k => {
-      if (k !== "id") return k;
-      return false;
+const filterRef = async () => {
+  const user = FA.currentUser;
+  let temp = [];
+  let resp = await FFS.collection("user_movimentacao")
+    .doc(user.uid)
+    .collection("movimentacoes")
+    .orderBy("data", "desc")
+    .limit(3)
+    .get();
+
+  if (!resp.empty) {
+    resp.forEach(r => {
+      temp.push(r.data());
     });
-    const new_colmap = {};
-    new_columns.forEach((v, k) => {
-      new_columns[k] = v.toUpperCase();
-      new_colmap[v.toUpperCase()] = k;
-    });
-    const new_data = ref.docs.map(doc => {
-      const d = doc.data();
-      let row = new Array(new_columns.length).fill(null);
-      Object.keys(d).forEach(k => {
-        let ki = k.toUpperCase();
-        if (new_columns.includes(ki)) {
-          if (ki === "BALANCE") row[new_colmap[ki]] = "R$ " + d[k];
-          else row[new_colmap[ki]] = d[k];
-        }
-      });
-      return row;
-    });
-    return {
-      columns: new_columns,
-      data: new_data
-    };
   }
+  const newTotal = temp.reduce(
+    (totalValue, inf) => totalValue + parseFloat(inf.balance),
+    0
+  );
+  return {
+    infos: temp,
+    newTotal
+  };
 };

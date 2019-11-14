@@ -3,8 +3,9 @@ import { View, StyleSheet, StatusBar, YellowBox } from "react-native";
 import Reactotron from "reactotron-react-native";
 import _ from "lodash";
 
-import store from "../Store/";
+import { store, persistor } from "../Store/";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/lib/integration/react";
 // import * as firebase from "firebase";
 
 import DrawerNavigator from "./../navigation/DrawerNavigator";
@@ -34,10 +35,12 @@ export default class App extends Component {
     Reactotron.log("hello FUCKERS");
     return (
       <Provider store={store}>
-        <View style={styles.container}>
-          <StatusBar backgroundColor="black" barStyle="light-content" />
-          <DrawerNavigator />
-        </View>
+        <PersistGate loading={null} persistor={persistor}>
+          <View style={styles.container}>
+            <StatusBar backgroundColor="black" barStyle="light-content" />
+            <DrawerNavigator />
+          </View>
+        </PersistGate>
       </Provider>
     );
   }

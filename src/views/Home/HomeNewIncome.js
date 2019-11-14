@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet, TextInput } from "react-native";
 import { FA, FFS } from "../../Firebase";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+
 import Reactotron from "reactotron-react-native";
 
 // import { contas } from "./../../data";
@@ -114,7 +117,6 @@ class HomeNewIncome extends Component {
       .collection("contas")
       .doc(this.state.selected2)
       .get();
-    alert(this.state.selected2);
 
     let ref = FFS.collection("user_movimentacao")
       .doc(user.uid)
@@ -141,6 +143,8 @@ class HomeNewIncome extends Component {
         .doc(this.state.selected2)
         .update({ balance: newBal });
     }
+    alert(JSON.stringify(this.props));
+    this.props.get_info();
     this.props.navigation.navigate("Extract");
   };
 
@@ -306,4 +310,10 @@ class HomeNewIncome extends Component {
   }
 }
 
-export default HomeNewIncome;
+const get_info = () => ({ type: "GET_INFO" });
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ get_info }, dispatch);
+};
+
+export default connect(null, mapDispatchToProps)(HomeNewIncome);

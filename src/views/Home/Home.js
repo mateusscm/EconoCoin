@@ -8,8 +8,9 @@ import { theme } from "../../config/_theme";
 import PreviewBalance from "../../components/PreviewBalance/PreviewBalance";
 import ExtractSummary from "../../components/ExtractSummary/ExtractSummary";
 import { FA, FFS } from "../../Firebase";
-import { connect, useDispatch } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import Reactotron from "reactotron-react-native";
+import { get_info } from "../../Store/Action/info";
 // import Charts from "../../components/Charts/Charts";
 import { TouchableOpacity } from "react-native-gesture-handler";
 // import { infos } from "./../../data";
@@ -65,6 +66,8 @@ const styles = StyleSheet.create({
 });
 
 function Home(props) {
+  const dispatch = useDispatch();
+  const info_r = useSelector(state => state.info.information);
   let [_ref, setRef] = React.useState({ empty: true });
   let [refreshing, setRefreshing] = React.useState(false);
   let [infos, setInfos] = React.useState([]);
@@ -91,118 +94,29 @@ function Home(props) {
 
   async function getD() {
     setLoading(true);
-    const user = await FA.currentUser;
-    let fin = new Date(
-      new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
-        .toISOString()
-        .split("T")[0]
-    );
-    let ini = new Date(
-      new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-        .toISOString()
-        .split("T")[0]
-    );
-
-    ini.setDate(ini.getDate() - 2);
-    fin.setDate(fin.getDate() - 1);
-
-    let ref = await FFS.collection("user_movimentacao")
-      .doc(user.uid)
-      .collection("movimentacoes")
-      .where("data", ">", ini.toISOString().split("T")[0])
-      .where("data", "<", fin.toISOString().split("T")[0])
-      .orderBy("data", "desc")
-      .get();
-    setRef(ref);
-    let cont = await FFS.collection("user_conta")
-      .doc(user.uid)
-      .collection("contas")
-      .get();
-    let rec = 0;
-    let desp = 0;
-    let sal = 0;
-    if (!cont.empty) {
-      cont.docs.forEach(doc => {
-        sal += parseFloat(doc.data().balance);
-      });
+    setInfo(info_r.info);
+    if (info_r && info_r.ref) {
+      setInfos(info_r.ref.infos);
+      setTotal(info_r.ref.newTotal);
     }
-
-    if (!ref.empty) {
-      ref.docs.forEach(doc => {
-        let data = doc.data();
-        if (data.tipo === "receita") {
-          rec += parseFloat(data.balance);
-        } else if (data.tipo === "despesa") {
-          desp += parseFloat(data.balance);
-        }
-      });
-    }
-    let inf = [
-      {
-        title: "Saldo em conta",
-        qtd: "",
-        icon: "money-bill-wave"
-      },
-      {
-        title: "Receitas do mês",
-        qtd: "",
-        icon: "calendar-plus"
-      },
-      {
-        title: "Despesas do mês",
-        qtd: "",
-        icon: "calendar-minus"
-      },
-      {
-        title: "Balanço do mês",
-        qtd: "",
-        icon: "calendar-check"
-      }
-    ];
-    inf[0].qtd = "R$ " + sal;
-    inf[1].qtd = "R$ " + rec;
-    inf[2].qtd = "R$ " + desp;
-    inf[3].qtd = "R$ " + (rec + desp);
-    setInfo(inf);
     setLoading(false);
   }
 
-  async function getInfo() {
-    const user = await FA.currentUser;
-    let temp = [];
-    let resp = await FFS.collection("user_movimentacao")
-      .doc(user.uid)
-      .collection("movimentacoes")
-      .orderBy("data", "desc")
-      .limit(3)
-      .get();
-    Reactotron.log("FFS GET PORRA");
-
-    if (!resp.empty) {
-      resp.forEach(r => {
-        temp.push(r.data());
-      });
-    }
-    const newTotal = temp.reduce(
-      (totalValue, inf) => totalValue + parseFloat(inf.balance),
-      0
-    );
-    setInfos(temp);
-    setTotal(newTotal);
-  }
-
   React.useEffect(() => {
-    alert(props.info);
+    dispatch(get_info());
     getD();
-    getInfo();
   }, []);
+
+  // React.useEffect(() => {
+  //   getD();
+  // }, [info_r]);
 
   function _onRefresh() {
     setRefreshing(true);
-    getD().then(() => {
+    dispatch(get_info()).then(() => {
       setRefreshing(false);
     });
-    getInfo().then(() => {
+    getD().then(() => {
       setRefreshing(false);
     });
   }
@@ -283,82 +197,6 @@ function Home(props) {
   );
 }
 
-// class Home extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       total: 0,
-//       active: false,
-//       infos: []
-//     };
-//     this.toggleBtn = this.toggleBtn.bind(this);
-//   }
-
-//   componentDidMount() {
-//     this.getInfo();
-//   }
-
-//   getInfo = async () => {
-//     const user = await FA.currentUser;
-//     let temp = [];
-//     let resp = await FFS.collection("user_movimentacao")
-//       .doc(user.uid)
-//       .collection("movimentacoes")
-//       .limit(3)
-//       .get();
-//     Reactotron.log("FFS GET PORRA");
-
-//     if (!resp.empty) {
-//       resp.forEach(r => {
-//         temp.push(r.data());
-//       });
-//     }
-//     const newTotal = temp.reduce(
-//       (totalValue, inf) => totalValue + parseFloat(inf.balance),
-//       0
-//     );
-//     this.setState({ total: newTotal, infos: temp });
-//   };
-
-//   toggleBtn() {
-//     this.setState({ active: !this.state.active });
-//   }
-
-//   render() {
-//     return (
-//       <Container>
-//         <MenuButton view="Visão Geral" navigation={this.props.navigation} />
-//         <ScrollView style={styles.allCont}>
-//           {/* <View style={this.state.active ? styles.opacity : null} /> */}
-//           {/* <View style={styles.allCont}> */}
-//           <View>
-//             <ScrollView
-//               horizontal={true}
-//               showsHorizontalScrollIndicator={false}
-//             >
-//               <PreviewBalance view="Home" navigation={this.props.navigation} />
-//               <PreviewBalance view="Home" navigation={this.props.navigation} />
-//               <PreviewBalance view="Home" navigation={this.props.navigation} />
-//             </ScrollView>
-//           </View>
-//           <Charts />
-//           <ExtractSummary
-//             view="Home"
-//             navigation={this.props.navigation}
-//             infos={this.state.infos}
-//             total={this.state.total}
-//           />
-//           {/* </View> */}
-//         </ScrollView>
-//         {/* <View style={{height: 100}}> */}
-//         <FloatingButton view="Home" navigation={this.props.navigation} />
-//         {/* </View> */}
-//       </Container>
-//     );
-//   }
-// }
-
-//export default Home;
 const mapStateToProps = store => ({
   info: store.info.info
 });

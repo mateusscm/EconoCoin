@@ -134,9 +134,9 @@ class Login extends Component {
 
     await FA.signInWithEmailAndPassword(email, password)
       .then(() => {
-        this.props.getInfo();
         this.props.navigation.navigate("Home");
         this.setState({ loading: false });
+        this.props.get_info();
       })
       .catch(error => {
         this.setState({ errorMessage: error.message, loading: false });
