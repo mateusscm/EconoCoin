@@ -1,4 +1,4 @@
-package com.econocoin;
+package com.kazu;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

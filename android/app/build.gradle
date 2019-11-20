@@ -130,7 +130,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.econocoin"
+        applicationId "com.kazu"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
