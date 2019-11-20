@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'EconoCoin' do
-  # Pods for EconoCoin
+target 'Kazu' do
+  # Pods for Kazu
   pod 'React', :path => '../node_modules/react-native/'
   pod 'React-Core', :path => '../node_modules/react-native/React'
   pod 'React-DevSupport', :path => '../node_modules/react-native/React'
@@ -29,7 +29,7 @@ target 'EconoCoin' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-  target 'EconoCoinTests' do
+  target 'KazuTests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -37,10 +37,10 @@ target 'EconoCoin' do
   use_native_modules!
 end
 
-target 'EconoCoin-tvOS' do
-  # Pods for EconoCoin-tvOS
+target 'Kazu-tvOS' do
+  # Pods for Kazu-tvOS
 
-  target 'EconoCoin-tvOSTests' do
+  target 'Kazu-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

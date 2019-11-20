@@ -1,4 +1,4 @@
-package com.econocoin;
+package com.kazu;
 
 import android.app.Application;
 import android.util.Log;
