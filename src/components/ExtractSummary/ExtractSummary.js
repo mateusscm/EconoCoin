@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ImageBackground, View } from "react-native";
 import { Content, Card, CardItem, Text, ListItem } from "native-base";
 import ContentExtract from "./ContentExtract";
+import Reactotron from "reactotron-react-native";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -30,6 +31,12 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     fontWeight: "700",
     color: "#000"
+  },
+  insideImage: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center"
   }
 });
 
@@ -38,8 +45,8 @@ class ExtractSummary extends Component {
     super(props);
     this.state = {};
   }
-
   render() {
+    Reactotron.log(this.props.infos.length, "INFOS");
     return (
       <Content style={styles.content}>
         {this.props.view === "Home" ? (
@@ -47,25 +54,28 @@ class ExtractSummary extends Component {
         ) : (
           <Text style={styles.mainTitle}>EXTRATO COMPLETO</Text>
         )}
-        <Card style={{ zIndex: 0 }}>
-          {this.props.infos.map((info, i) => {
-            return <ContentExtract info={info} key={i} />;
-          })}
-          <CardItem style={{ justifyContent: "flex-end" }}>
-            <Text>Total: R${this.props.total}</Text>
-          </CardItem>
-          {/* {this.props.view === "Home" ? (
-            <CardItem
-              style={[styles.align, styles.border]}
-              footer
-              bordered
-              button
-              onPress={() => this.props.navigation.navigate("Extract")}
-            >
-              <Text>Conferir Extrato Total</Text>
+        {this.props && this.props.infos.length > 0 ? (
+          <Card style={{ zIndex: 0 }}>
+            {this.props.infos.map((info, i) => {
+              return <ContentExtract info={info} key={i} />;
+            })}
+            <CardItem style={{ justifyContent: "flex-end" }}>
+              <Text>Total: R${this.props.total}</Text>
             </CardItem>
-          ) : null} */}
-        </Card>
+          </Card>
+        ) : (
+          <Card style={{ zIndex: 0, paddingVertical: 10 }}>
+            <ImageBackground
+              imageStyle={{ opacity: 0.5 }}
+              style={{ width: "100%", height: 300, marginTop: 10 }}
+              source={require("./../../assets/img/empty_extract.png")}
+            >
+              <View style={styles.insideImage}>
+                <Text>Você não possui extrato no momento</Text>
+              </View>
+            </ImageBackground>
+          </Card>
+        )}
       </Content>
     );
   }

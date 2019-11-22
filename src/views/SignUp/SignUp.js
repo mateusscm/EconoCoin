@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Picker
 } from "react-native";
-import { DatePicker, Item, Label } from "native-base";
+import { DatePicker, Spinner, Label } from "native-base";
 import bgImage from "./../../assets/img/bg.jpg";
 import Icon from "react-native-vector-icons/Ionicons";
 import { theme } from "../../config/_theme";
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: theme.palette.secondary,
     justifyContent: "center",
-    marginTop: 80
+    marginTop: 50
   },
   signup: {
     color: "rgba(255, 255, 255, 0.7)",
@@ -117,17 +117,20 @@ class SignUp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
+      first: "",
+      last: "",
       email: "",
       password: "",
       sexo: "feminino",
       data: new Date().toISOString().split("T")[0],
-      errorMessage: null
+      errorMessage: null,
+      loading: false
     };
   }
 
   handleSignUp = async () => {
     try {
+      this.setState({ loading: true });
       let userCredentials = await FA.createUserWithEmailAndPassword(
         this.state.email,
         this.state.password
@@ -136,21 +139,39 @@ class SignUp extends Component {
         .doc(userCredentials.user.uid)
         .set({
           email: this.state.email,
-          name: this.state.name,
-          first: this.state.name,
+          first: this.state.first,
+          last: this.state.last,
           sexo: this.state.sexo,
           data: this.state.data,
           id: userCredentials.user.uid
         });
+      let con = await FFS.collection("user_conta")
+        .doc(userCredentials.user.uid)
+        .collection("contas")
+        .doc();
+      let cat = await FFS.collection("user_categoria")
+        .doc(userCredentials.user.uid)
+        .collection("categorias")
+        .doc();
+      await cat.set({
+        id: cat.id,
+        value: "Padrão"
+      });
+      await con.set({
+        nome: "Carteira",
+        sigla: "Ca",
+        balance: "0",
+        id: con.id
+      });
+      this.setState({ loading: false });
       return (
         userCredentials.user.updateProfile({
-          displayName: this.state.name
+          displayName: this.state.first
         }) && alert("acho que deu")
       );
     } catch (error) {
       console.log(error);
-
-      this.setState({ errorMessage: error.message });
+      this.setState({ loading: false });
     }
   };
 
@@ -189,11 +210,27 @@ class SignUp extends Component {
                 /> */}
                 <TextInput
                   style={styles.input}
-                  placeholder={"Nome Completo"}
+                  placeholder={"Nome"}
                   placeholderTextColor={"rgba(0, 0, 0, 0.7)"}
                   underlineColorAndroid="transparent"
-                  onChangeText={name => this.setState({ name })}
-                  value={this.state.name}
+                  onChangeText={first => this.setState({ first })}
+                  value={this.state.first}
+                />
+              </View>
+              <View style={styles.inputContainer}>
+                {/* <Icon
+                  name={"ios-person"}
+                  size={28}
+                  color="#000000"
+                  style={styles.inputIcon}
+                /> */}
+                <TextInput
+                  style={styles.input}
+                  placeholder={"Sobrenome"}
+                  placeholderTextColor={"rgba(0, 0, 0, 0.7)"}
+                  underlineColorAndroid="transparent"
+                  onChangeText={last => this.setState({ last })}
+                  value={this.state.last}
                 />
               </View>
               <View style={styles.inputContainer}>
@@ -206,6 +243,9 @@ class SignUp extends Component {
                 <TextInput
                   style={styles.input}
                   placeholder={"E-mail"}
+                  autoCompleteType="email"
+                  autoCapitalize="none"
+                  keyboardType="email-address"
                   placeholderTextColor={"rgba(0, 0, 0, 0.7)"}
                   underlineColorAndroid="transparent"
                   onChangeText={email => this.setState({ email })}
@@ -286,7 +326,12 @@ class SignUp extends Component {
                 style={styles.btnSignup}
                 onPress={this.handleSignUp}
               >
-                <Text style={styles.signup}>Cadastrar</Text>
+                {/* <Text style={styles.signup}>Cadastrar</Text> */}
+                {this.state.loading ? (
+                  <Spinner style={styles.spinner} color="green" />
+                ) : (
+                  <Text style={styles.signup}>Login</Text>
+                )}
               </TouchableOpacity>
             </View>
           </ScrollView>

@@ -120,7 +120,7 @@ class FloatingButton extends Component {
                       ? {
                           display: "flex",
                           position: "absolute",
-                          left: -130,
+                          left: -140,
                           // left: -140,
                           backgroundColor: "rgba(0,0,0,0.5)",
                           color: theme.palette.fontColorIcon,
@@ -130,7 +130,7 @@ class FloatingButton extends Component {
                       : { display: "none" }
                   }
                 >
-                  Nova Tranferência
+                  Nova Transferência
                 </Text>
                 <Icon type="MaterialCommunityIcons" name="swap-vertical" />
               </Button>
