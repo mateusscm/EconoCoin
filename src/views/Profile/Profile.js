@@ -6,10 +6,11 @@ import {
   Image,
   ImageBackground,
   TextInput,
-  Alert
+  Alert,
+  Picker
 } from "react-native";
-import { Form, Item, Label, Input, Button, Spinner } from "native-base";
-
+import { Form, Item, Label, DatePicker, Button, Spinner } from "native-base";
+import Reactotron from "reactotron-react-native";
 import MenuButton from "./../../components/MenuButton/MenuButton";
 import { theme } from "../../config/_theme";
 import { FA, FFS } from "../../Firebase";
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     color: theme.palette.txtPrimary
   },
   header: {
-    height: 250,
+    height: 200,
     backgroundColor: theme.palette.secondary,
     justifyContent: "center",
     alignItems: "center",
@@ -78,6 +79,16 @@ const styles = StyleSheet.create({
     paddingRight: 0,
     marginRight: 0
   },
+  description2: {
+    width: "45%",
+    marginLeft: 0,
+    paddingLeft: 0,
+    paddingRight: 0,
+    marginRight: 0,
+    paddingBottom: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: "#000"
+  },
   save: {
     flex: 1
   },
@@ -90,12 +101,26 @@ const styles = StyleSheet.create({
   txtBtn: {
     textTransform: "uppercase",
     color: "white"
+  },
+  column: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  sexo: {
+    color: "black",
+    width: "100%"
   }
 });
 
 const Profile = props => {
   const [first, setFirst] = React.useState("");
+  const [last, setLast] = React.useState("");
+  const [data, setData] = React.useState(
+    new Date().toISOString().split("T")[0]
+  );
   const [email, setEmail] = React.useState("");
+  const [sexo, setSexo] = React.useState("");
   const [id, setUsrId] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
@@ -109,6 +134,9 @@ const Profile = props => {
         const u = ref.data();
         setEmail(u.email);
         setFirst(u.first);
+        setLast(u.last);
+        setSexo(u.sexo);
+        setData(u.data);
         setUsrId(u.id);
       }
     };
@@ -119,11 +147,12 @@ const Profile = props => {
     setLoading(true);
     await FFS.collection("users")
       .doc(id)
-      .update({ email, first });
+      .update({ email, first, last, data, sexo });
     setLoading(false);
     Alert.alert("Sucesso!", `Alterações feitas, ${first}`);
   };
 
+  Reactotron.log(sexo, "sexo");
   return (
     <View style={styles.allCont}>
       <MenuButton view="Perfil" navigation={props.navigation} />
@@ -140,10 +169,10 @@ const Profile = props => {
                 source={require("../../assets/img/logo.png")}
               />
             </View>
-            <View style={styles.profileText}>
+            {/* <View style={styles.profileText}>
               <Text style={styles.name}>{first}</Text>
-              {/* <Text style={styles.subname}>Ver Perfil</Text> */}
-            </View>
+              
+            </View> */}
           </View>
         </ImageBackground>
         <View style={styles.data}>
@@ -156,7 +185,7 @@ const Profile = props => {
                   color: "rgba(0, 0, 0, 0.5)"
                 }}
               >
-                Nome do usuário
+                Nome
               </Label>
               <TextInput
                 value={first}
@@ -170,6 +199,31 @@ const Profile = props => {
                 }}
                 onChangeText={first => {
                   setFirst(first);
+                }}
+              />
+            </Item>
+            <Item stackedLabel style={styles.description}>
+              <Label
+                style={{
+                  fontSize: 18,
+                  paddingLeft: 0,
+                  color: "rgba(0, 0, 0, 0.5)"
+                }}
+              >
+                Sobrenome
+              </Label>
+              <TextInput
+                value={last}
+                style={{
+                  fontSize: 18,
+                  // paddingLeft: 5,
+                  paddingVertical: 5,
+                  width: "100%",
+                  borderBottomWidth: 1,
+                  borderBottomColor: "#000"
+                }}
+                onChangeText={last => {
+                  setLast(last);
                 }}
               />
             </Item>
@@ -199,6 +253,56 @@ const Profile = props => {
                 }}
               />
             </Item>
+            <View style={styles.column}>
+              <Item stackedLabel style={styles.description2}>
+                <Label
+                  style={{
+                    fontSize: 18,
+                    paddingLeft: 0,
+                    color: "rgba(0, 0, 0, 0.5)"
+                  }}
+                >
+                  Sexo
+                </Label>
+                <Picker
+                  style={styles.sexo}
+                  selectedValue={sexo}
+                  onValueChange={sexo => setSexo(sexo)}
+                >
+                  <Picker.Item label="Masculino" value="masculino" />
+                  <Picker.Item label="Feminino" value="feminino" />
+                </Picker>
+              </Item>
+              <Item stackedLabel style={styles.description2}>
+                <Label
+                  style={{
+                    fontSize: 18,
+                    paddingLeft: 0,
+                    color: "rgba(0, 0, 0, 0.5)"
+                  }}
+                >
+                  Nascimento
+                </Label>
+                <DatePicker
+                  defaultDate={new Date(1997, 4, 4)}
+                  minimumDate={new Date(1900, 1, 1)}
+                  maximumDate={new Date(2001, 1, 1)}
+                  locale={"br"}
+                  timeZoneOffsetInMinutes={undefined}
+                  modalTransparent={false}
+                  animationType={"fade"}
+                  androidMode={"default"}
+                  placeHolderText={data}
+                  textStyle={{ color: "black" }}
+                  placeHolderTextStyle={{ color: "black" }}
+                  onDateChange={data =>
+                    setData(data.toISOString().split("T")[0])
+                  }
+                  disabled={false}
+                  style={styles.date}
+                />
+              </Item>
+            </View>
             {/* <Item stackedLabel style={styles.description}>
                 <Label
                   style={{
