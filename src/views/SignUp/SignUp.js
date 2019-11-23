@@ -122,6 +122,7 @@ class SignUp extends Component {
       email: "",
       password: "",
       sexo: "feminino",
+      visibility: true,
       data: new Date().toISOString().split("T")[0],
       errorMessage: null,
       loading: false
@@ -143,6 +144,7 @@ class SignUp extends Component {
           last: this.state.last,
           sexo: this.state.sexo,
           data: this.state.data,
+          visibility: this.state.visibility,
           id: userCredentials.user.uid
         });
       let con = await FFS.collection("user_conta")
