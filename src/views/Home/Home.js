@@ -113,10 +113,12 @@ function Home(props) {
 
   async function getD() {
     setLoading(true);
-    setInfo(info_r.info);
-    if (info_r && info_r.ref) {
-      setInfos(info_r.ref.infos);
-      setTotal(info_r.ref.newTotal);
+    if (info_r) {
+      setInfo(info_r.info);
+      if (info_r.ref) {
+        setInfos(info_r.ref.infos);
+        setTotal(info_r.ref.newTotal);
+      }
     }
     setLoading(false);
   }
