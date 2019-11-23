@@ -58,6 +58,12 @@ const styles = StyleSheet.create({
     right: 0,
     top: "30%",
     color: "rgba(0,0,0,0.2)"
+  },
+  hidden: {
+    height: 37,
+    backgroundColor: "#c9c9c9",
+    width: 100,
+    margin: 8
   }
 });
 
@@ -76,9 +82,13 @@ const PreviewBalance = props => {
       <Card style={{ zIndex: 0 }}>
         <CardItem header>
           <Body style={styles.align}>
-            <Text style={!info.qtd >= 0 ? styles.title : styles.titleNeg}>
-              {info.qtd}
-            </Text>
+            {!props.visibility ? (
+              <View style={styles.hidden} />
+            ) : (
+              <Text style={!info.qtd >= 0 ? styles.title : styles.titleNeg}>
+                {info.qtd}
+              </Text>
+            )}
             {/* <Text style={styles.subtext}>Atualização: 06/09/2019</Text> */}
           </Body>
           {props.view === "Home" ? (

@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import { StyleSheet, ScrollView, RefreshControl } from 'react-native';
-import { Container, View, Spinner, Text } from 'native-base';
-import FloatingButton from './../../components/FloatingButton/FloatingButton';
+import React, { Component } from "react";
+import { StyleSheet, ScrollView, RefreshControl } from "react-native";
+import { Container, View, Spinner, Text } from "native-base";
+import FloatingButton from "./../../components/FloatingButton/FloatingButton";
 
-import MenuButton from './../../components/MenuButton/MenuButton';
-import { theme } from '../../config/_theme';
-import PreviewBalance from '../../components/PreviewBalance/PreviewBalance';
-import ExtractSummary from '../../components/ExtractSummary/ExtractSummary';
-import { FA, FFS } from '../../Firebase';
-import { connect, useDispatch, useSelector } from 'react-redux';
-import Reactotron from 'reactotron-react-native';
-import { get_info } from '../../Store/Action/info';
+import MenuButton from "./../../components/MenuButton/MenuButton";
+import { theme } from "../../config/_theme";
+import PreviewBalance from "../../components/PreviewBalance/PreviewBalance";
+import ExtractSummary from "../../components/ExtractSummary/ExtractSummary";
+import { FA, FFS } from "../../Firebase";
+import { connect, useDispatch, useSelector } from "react-redux";
+import Reactotron from "reactotron-react-native";
+import { get_info } from "../../Store/Action/info";
 // import Charts from "../../components/Charts/Charts";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity } from "react-native-gesture-handler";
 // import { infos } from "./../../data";
 
 // const { width: WIDTH } = Dimensions.get("window");
@@ -23,46 +23,46 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // alignItems: "center",
     paddingHorizontal: 10,
-    backgroundColor: theme.palette.backgroundMain,
+    backgroundColor: theme.palette.backgroundMain
   },
   opacity: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    zIndex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    backgroundColor: "rgba(0,0,0,0.5)",
+    zIndex: 1
   },
   text: {
     fontSize: 30,
-    color: theme.palette.txtPrimary,
+    color: theme.palette.txtPrimary
   },
   line: {
     borderWidth: 1,
     borderColor: theme.palette.secondary,
     marginRight: 200,
-    marginLeft: 20,
+    marginLeft: 20
   },
   spinner: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: theme.palette.backgroundMain,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: theme.palette.backgroundMain
   },
   buttonConta: {
     marginVertical: 10,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     flex: 1,
-    alignItems: 'flex-end',
+    alignItems: "flex-end"
   },
   txtBtn: {
     color: theme.palette.button,
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
+    fontWeight: "bold",
+    textDecorationLine: "underline"
   },
   margin: {
-    marginBottom: 70,
-  },
+    marginBottom: 70
+  }
 });
 
 function Home(props) {
@@ -70,27 +70,46 @@ function Home(props) {
   const info_r = useSelector(state => state.info.information);
   let [_ref, setRef] = React.useState({ empty: true });
   let [refreshing, setRefreshing] = React.useState(false);
+  // let [showMoney, setShowMoney] = React.useState(true);
+  let [id, setUsrId] = React.useState("");
+  let [visibility, setVisibility] = React.useState(true);
   let [infos, setInfos] = React.useState([]);
   let [total, setTotal] = React.useState(0);
   let [loading, setLoading] = React.useState(false);
   let [info, setInfo] = React.useState([
     {
-      title: 'Saldo',
-      qtd: '',
+      title: "Saldo",
+      qtd: ""
     },
     {
-      title: 'Receitas do mês',
-      qtd: '',
+      title: "Receitas do mês",
+      qtd: ""
     },
     {
-      title: 'Despesas do mês',
-      qtd: '',
+      title: "Despesas do mês",
+      qtd: ""
     },
     {
-      title: 'Balanço do mês',
-      qtd: '',
-    },
+      title: "Balanço do mês",
+      qtd: ""
+    }
   ]);
+
+  React.useEffect(() => {
+    const getUser = async () => {
+      const usr = await FA.currentUser;
+      const ref = await FFS.collection("users")
+        .doc(usr.uid)
+        .get();
+      if (ref.exists) {
+        const u = ref.data();
+        setVisibility(u.visibility);
+        setUsrId(u.id);
+        Reactotron.log(u.visibility, "aaaa");
+      }
+    };
+    getUser();
+  }, []);
 
   async function getD() {
     setLoading(true);
@@ -111,7 +130,7 @@ function Home(props) {
   React.useEffect(() => {
     getD();
     //eslint-disable-next-line
-  }, [ info_r]);
+  }, [info_r]);
 
   function _onRefresh() {
     setRefreshing(true);
@@ -123,9 +142,21 @@ function Home(props) {
     });
   }
 
+  const onPressIconMoney = async () => {
+    setVisibility(!visibility);
+    await FFS.collection("users")
+      .doc(id)
+      .update({ visibility });
+  };
+
   return (
     <Container>
-      <MenuButton view="Visão Geral" navigation={props.navigation} />
+      <MenuButton
+        view="Visão Geral"
+        navigation={props.navigation}
+        onPressIconMoney={onPressIconMoney}
+        visibility={visibility}
+      />
       {!loading ? (
         <>
           <ScrollView
@@ -145,27 +176,31 @@ function Home(props) {
                   view="Home"
                   navigation={props.navigation}
                   info={info[0]}
+                  visibility={visibility}
                 />
                 <PreviewBalance
                   view="Home"
                   navigation={props.navigation}
                   info={info[1]}
+                  visibility={visibility}
                 />
                 <PreviewBalance
                   view="Home"
                   navigation={props.navigation}
                   info={info[2]}
+                  visibility={visibility}
                 />
                 <PreviewBalance
                   view="Home"
                   navigation={props.navigation}
                   info={info[3]}
+                  visibility={visibility}
                 />
               </ScrollView>
             </View>
             <TouchableOpacity
               onPress={() =>
-                props.navigation.navigate('AccountBalance', { info: info[0] })
+                props.navigation.navigate("AccountBalance", { info: info[0] })
               }
               style={styles.buttonConta}
             >
@@ -179,7 +214,7 @@ function Home(props) {
               total={total}
             />
             <TouchableOpacity
-              onPress={() => props.navigation.navigate('Extract')}
+              onPress={() => props.navigation.navigate("Extract")}
               style={styles.buttonConta}
             >
               <Text style={[styles.txtBtn, styles.margin]}>
@@ -200,7 +235,7 @@ function Home(props) {
 }
 
 const mapStateToProps = store => ({
-  info: store.info.info,
+  info: store.info.info
 });
 
 export default connect(mapStateToProps)(Home);

@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     backgroundColor: theme.palette.secondary,
     justifyContent: "center",
-    marginTop: 50
+    marginTop: 30
   },
   signup: {
     color: "rgba(255, 255, 255, 0.7)",
