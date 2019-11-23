@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TextInput } from "react-native";
 import { connect, useDispatch } from "react-redux";
-import { get_info } from '../../Store/Action/info';
+import { get_info } from "../../Store/Action/info";
 
 import { FA, FFS } from "../../Firebase";
 import Reactotron from "reactotron-react-native";
@@ -63,8 +63,8 @@ function HomeNewTransf(props) {
   const [selected2, setSelected2] = React.useState(null);
   const [contas, setContas] = React.useState([]);
   const [categorias, setCategorias] = React.useState([]);
-  const [desc, setDesc] = React.useState('');
-  const [money, setMoney] = React.useState('');
+  const [desc, setDesc] = React.useState("");
+  const [money, setMoney] = React.useState("");
   const [date, setDate] = React.useState(new Date());
 
   const dispatch = useDispatch();
@@ -218,6 +218,7 @@ function HomeNewTransf(props) {
                 paddingLeft: 5,
                 width: "100%"
               }}
+              maxLength={16}
               value={desc}
               onChangeText={desc => {
                 setDesc(desc);

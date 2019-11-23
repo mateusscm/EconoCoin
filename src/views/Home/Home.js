@@ -72,7 +72,7 @@ function Home(props) {
   let [refreshing, setRefreshing] = React.useState(false);
   // let [showMoney, setShowMoney] = React.useState(true);
   let [id, setUsrId] = React.useState("");
-  let [visibility, setVisibility] = React.useState(true);
+  let [visibility, setVisibility] = React.useState(null);
   let [infos, setInfos] = React.useState([]);
   let [total, setTotal] = React.useState(0);
   let [loading, setLoading] = React.useState(false);

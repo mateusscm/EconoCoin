@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, TextInput } from "react-native";
+import { StyleSheet, TextInput, Alert } from "react-native";
 import { FA, FFS } from "../../Firebase";
 import { connect, useDispatch } from "react-redux";
 import { get_info } from "../../Store/Action/info";
@@ -101,7 +101,7 @@ function HomeNewExpense(props) {
     }
   };
 
-  const simpleMov = async () => {
+  const simpleMov = async props => {
     const user = await FA.currentUser;
 
     let con = JSON.parse(selected2);
@@ -118,28 +118,33 @@ function HomeNewExpense(props) {
       .collection("movimentacoes")
       .doc();
 
-    await ref.set({
-      id: ref.id,
-      descricao: desc,
-      balance: -Math.abs(money),
-      conta: con.nome,
-      categoria: selected,
-      data: date.toISOString().split("T")[0],
-      tipo: "despesa" //MUDAR "despesa"
-    });
+    if (desc.trim().length === 0 || money.trim().length === 0) {
+      Alert.alert("Aviso", "Algum campo está vazio");
+    } else {
+      await ref.set({
+        id: ref.id,
+        descricao: desc,
+        balance: -Math.abs(money),
+        conta: con.nome,
+        categoria: selected,
+        data: date.toISOString().split("T")[0],
+        tipo: "despesa" //MUDAR "despesa"
+      });
 
-    if (c.exists) {
-      var newBal = parseFloat(c.data().balance);
+      if (c.exists) {
+        var newBal = parseFloat(c.data().balance);
 
-      newBal -= parseFloat(money); //mudar para -=
-      await FFS.collection("user_conta")
-        .doc(user.uid)
-        .collection("contas")
-        .doc(con.id)
-        .update({ balance: newBal });
+        newBal -= parseFloat(money); //mudar para -=
+        await FFS.collection("user_conta")
+          .doc(user.uid)
+          .collection("contas")
+          .doc(con.id)
+          .update({ balance: newBal });
+      }
+      await dispatch(get_info());
+      Alert.alert("Sucesso!", "Despesa criada com sucesso!");
+      props.navigation.navigate("Extract");
     }
-    await dispatch(get_info());
-    props.navigation.navigate("Extract");
   };
 
   function setDate_(newDate) {
@@ -202,6 +207,7 @@ function HomeNewExpense(props) {
                 width: "100%"
               }}
               value={desc}
+              maxLength={16}
               onChangeText={desc => {
                 setDesc(desc);
               }}
