@@ -80,9 +80,8 @@ class DialogAccount extends Component {
         sigla: this.state.sigla,
       });
       this.props.navigation.goBack();
-      this.props._update();
     } catch (err) {
-      alert(err);
+      // alert(err);
     }
   }
 
