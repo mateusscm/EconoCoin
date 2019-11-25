@@ -58,7 +58,7 @@ class Categories extends Component {
       .doc(user.uid)
       .collection("categorias")
       .get();
-    Reactotron.log("FFS GET PORRA cATEGORIA");
+    // Reactotron.log("FFS GET PORRA cATEGORIA");
 
     if (!resp.empty) {
       let temp = [];

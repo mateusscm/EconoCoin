@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, StatusBar } from "react-native";
+import { StyleSheet, StatusBar, SafeAreaView } from "react-native";
 import {
   Header,
   Left,
@@ -50,7 +50,7 @@ class MenuButtonBack extends Component {
   }
   render() {
     return (
-      <React.Fragment>
+      <SafeAreaView>
         <Header
           style={
             this.props.view === "Transferência"
@@ -79,7 +79,7 @@ class MenuButtonBack extends Component {
           {/* <Text style={{ color: "white", marginRight: 10 }}>SALVAR</Text>
           </Right> */}
         </Header>
-      </React.Fragment>
+      </SafeAreaView>
       // <View style={styles.menu}>
       //   <Icon
       //     name="md-menu"

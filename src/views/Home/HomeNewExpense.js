@@ -16,7 +16,8 @@ import {
   Picker,
   Text,
   Button,
-  DatePicker
+  DatePicker,
+  Spinner
 } from "native-base";
 import Reactotron from "reactotron-react-native";
 import { theme } from "../../config/_theme";
@@ -66,6 +67,7 @@ function HomeNewExpense(props) {
   const [desc, setDesc] = React.useState("");
   const [money, setMoney] = React.useState("");
   const [date, setDate] = React.useState(new Date());
+  const [loading, setLoading] = React.useState(false);
 
   const dispatch = useDispatch();
 
@@ -80,7 +82,7 @@ function HomeNewExpense(props) {
       .doc(user.uid)
       .collection("contas")
       .get();
-    Reactotron.log("FFS GET PORRA");
+    // Reactotron.log("FFS GET PORRA");
     if (!resp.empty) {
       resp.forEach(r => {
         temp.push(r.data());
@@ -92,7 +94,7 @@ function HomeNewExpense(props) {
       .doc(user.uid)
       .collection("categorias")
       .get();
-    Reactotron.log("FFS GET PORRA");
+    // Reactotron.log("FFS GET PORRA");
     if (!resp.empty) {
       resp.forEach(r => {
         temp.push(r.data());
@@ -101,7 +103,8 @@ function HomeNewExpense(props) {
     }
   };
 
-  const simpleMov = async props => {
+  const simpleMov = async () => {
+    setLoading(true);
     const user = await FA.currentUser;
 
     let con = JSON.parse(selected2);
@@ -111,7 +114,7 @@ function HomeNewExpense(props) {
       .collection("contas")
       .doc(con.id)
       .get();
-    Reactotron.log("FFS GET PORRA");
+    // Reactotron.log("FFS GET PORRA");
 
     let ref = await FFS.collection("user_movimentacao")
       .doc(user.uid)
@@ -120,6 +123,7 @@ function HomeNewExpense(props) {
 
     if (desc.trim().length === 0 || money.trim().length === 0) {
       Alert.alert("Aviso", "Algum campo está vazio");
+      setLoading(false);
     } else {
       await ref.set({
         id: ref.id,
@@ -142,8 +146,9 @@ function HomeNewExpense(props) {
           .update({ balance: newBal });
       }
       await dispatch(get_info());
+      setLoading(false);
+      await props.navigation.navigate("Extract");
       Alert.alert("Sucesso!", "Despesa criada com sucesso!");
-      props.navigation.navigate("Extract");
     }
   };
 
@@ -309,7 +314,11 @@ function HomeNewExpense(props) {
         style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}
         onPress={simpleMov}
       >
-        <Text>SALVAR</Text>
+        {loading ? (
+          <Spinner style={styles.spinner} color="green" />
+        ) : (
+          <Text>SALVAR</Text>
+        )}
       </Button>
     </Container>
   );

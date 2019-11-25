@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TextInput } from "react-native";
+import { StyleSheet, TextInput, Alert } from "react-native";
 import { connect, useDispatch } from "react-redux";
 import { get_info } from "../../Store/Action/info";
 
@@ -18,7 +18,8 @@ import {
   Picker,
   Button,
   Text,
-  DatePicker
+  DatePicker,
+  Spinner
 } from "native-base";
 import { theme } from "../../config/_theme";
 
@@ -66,6 +67,7 @@ function HomeNewTransf(props) {
   const [desc, setDesc] = React.useState("");
   const [money, setMoney] = React.useState("");
   const [date, setDate] = React.useState(new Date());
+  const [loading, setLoading] = React.useState(false);
 
   const dispatch = useDispatch();
 
@@ -84,7 +86,7 @@ function HomeNewTransf(props) {
       .doc(user.uid)
       .collection("contas")
       .get();
-    Reactotron.log("FFS GET PORRA");
+    // Reactotron.log("FFS GET PORRA");
     if (!resp.empty) {
       resp.forEach(r => {
         temp.push(r.data());
@@ -95,6 +97,7 @@ function HomeNewTransf(props) {
 
   const simpleMov = async () => {
     try {
+      setLoading(true);
       const user = await FA.currentUser;
 
       let con = JSON.parse(selected2);
@@ -140,14 +143,14 @@ function HomeNewTransf(props) {
         tipo: "despesa"
       });
 
-      Reactotron.log("FAQUICARAI");
+      // Reactotron.log("FAQUICARAI");
 
       return FFS.runTransaction(async transaction => {
         try {
           // This code may get re-run multiple times if there are conflicts.
           const sfDoc = await transaction.get(c);
           if (!sfDoc.exists) {
-            Reactotron.log("DEU RUIM");
+            // Reactotron.log("DEU RUIM");
 
             throw new Error("Document does not exist!");
           }
@@ -156,7 +159,7 @@ function HomeNewTransf(props) {
 
           const sfDoc1 = await transaction.get(cr);
           if (!sfDoc1.exists) {
-            Reactotron.log("DEU RUIM");
+            // Reactotron.log("DEU RUIM");
             throw new Error("Document does not exist!");
           }
           var newBal1 = parseFloat(sfDoc1.data().balance);
@@ -165,13 +168,16 @@ function HomeNewTransf(props) {
           await transaction.update(c, { balance: newBal });
           await transaction.update(cr, { balance: newBal1 });
         } catch (err) {
-          Reactotron.log("DEU RUIM");
+          // Reactotron.log("DEU RUIM");
           console.log("Transaction failed");
         }
         await dispatch(get_info());
-        props.navigation.navigate("Extract");
+        setLoading(false);
+        await props.navigation.navigate("Extract");
+        Alert.alert("Sucesso!", "Transferência feita com sucesso!");
       });
     } catch (err) {
+      setLoading(false);
       Reactotron.log(err);
     }
   };
@@ -321,7 +327,11 @@ function HomeNewTransf(props) {
         style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}
         onPress={simpleMov}
       >
-        <Text>SALVAR</Text>
+        {loading ? (
+          <Spinner style={styles.spinner} color="green" />
+        ) : (
+          <Text>SALVAR</Text>
+        )}
       </Button>
     </Container>
   );

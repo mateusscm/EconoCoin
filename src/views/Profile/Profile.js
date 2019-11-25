@@ -152,7 +152,7 @@ const Profile = props => {
     Alert.alert("Sucesso!", `Alterações feitas, ${first}`);
   };
 
-  Reactotron.log(sexo, "sexo");
+  // Reactotron.log(sexo, "sexo");
   return (
     <View style={styles.allCont}>
       <MenuButton view="Perfil" navigation={props.navigation} />

@@ -65,7 +65,7 @@ class Extract extends Component {
       .collection("movimentacoes")
       .orderBy("data", "desc")
       .get();
-    Reactotron.log("FFS GET PORRA");
+    // Reactotron.log("FFS GET PORRA");
 
     if (!resp.empty) {
       resp.forEach(r => {

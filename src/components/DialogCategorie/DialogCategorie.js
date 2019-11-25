@@ -12,7 +12,8 @@ import {
   Input,
   Content,
   Text,
-  Button
+  Button,
+  Spinner
 } from "native-base";
 import { theme } from "../../config/_theme";
 import { FA, FFS } from "../../Firebase";
@@ -59,7 +60,8 @@ class DialogCategorie extends Component {
     super(props);
     this.state = {
       categorie: "",
-      id: ""
+      id: "",
+      loading: false
     };
     this.handleclick = this.handleclick.bind(this);
   }
@@ -76,6 +78,7 @@ class DialogCategorie extends Component {
   }
 
   async handleclick() {
+    this.setState({ loading: true });
     try {
       let user = await FA.currentUser;
       if (this.props.navigation.getParam("type", "edit") === "edit") {
@@ -84,6 +87,7 @@ class DialogCategorie extends Component {
           .collection("categorias")
           .doc(this.state.id)
           .set({ id: this.state.id, value: this.state.categorie });
+        this.setState({ loading: false });
         this.props.navigation.goBack();
       } else {
         let ref = await FFS.collection("user_categoria")
@@ -91,10 +95,12 @@ class DialogCategorie extends Component {
           .collection("categorias")
           .doc();
         ref.set({ id: ref.id, value: this.state.categorie });
+        this.setState({ loading: false });
         this.props.navigation.goBack();
       }
     } catch (err) {
       alert(err);
+      this.setState({ loading: false });
     }
   }
 
@@ -117,6 +123,7 @@ class DialogCategorie extends Component {
                 {type !== "edit" ? "Nova" : "Editar"} Categoria
               </Label>
               <TextInput
+                maxLength={16}
                 style={{
                   fontSize: 24,
                   paddingLeft: 5,
@@ -136,7 +143,11 @@ class DialogCategorie extends Component {
           light
           style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}
         >
-          <Text>SALVAR</Text>
+          {this.state.loading ? (
+            <Spinner style={styles.spinner} color="green" />
+          ) : (
+            <Text>SALVAR</Text>
+          )}
         </Button>
       </Container>
     );

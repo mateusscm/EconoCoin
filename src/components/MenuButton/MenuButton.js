@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, StatusBar, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  StatusBar,
+  TouchableOpacity,
+  SafeAreaView
+} from "react-native";
 import { Icon, Header, Left, Body, Right, Button, Title } from "native-base";
 import { theme } from "../../config/_theme";
 import IconI from "react-native-vector-icons/Ionicons";
@@ -26,9 +31,9 @@ const styles = StyleSheet.create({
 });
 
 function MenuButton(props) {
-  Reactotron.log(props.onPressIconMoney);
+  // Reactotron.log(props.onPressIconMoney);
   return (
-    <React.Fragment>
+    <SafeAreaView>
       <Header style={styles.menu}>
         <StatusBar backgroundColor="black" barStyle="light-content" />
         <Left>
@@ -60,7 +65,7 @@ function MenuButton(props) {
           <Right />
         )}
       </Header>
-    </React.Fragment>
+    </SafeAreaView>
   );
 }
 

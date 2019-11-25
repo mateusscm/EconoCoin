@@ -256,7 +256,7 @@ const Indicators = props => {
                 );
               }
             });
-            Reactotron.log(temp);
+            // Reactotron.log(temp);
             line.datasets[0].data = temp;
           }
         });
@@ -280,7 +280,7 @@ const Indicators = props => {
         });
       }
       setDataLine(line);
-      Reactotron.log(JSON.stringify(line));
+      // Reactotron.log(JSON.stringify(line));
       // setDataLine({
       //   labels: ["2019-11-10", "2019-11-11", "2019-11-12", "2019-11-13"],
       //   datasets: [{ data: [36, -25, 190, 0] }]

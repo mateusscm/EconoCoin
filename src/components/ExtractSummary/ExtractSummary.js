@@ -46,7 +46,7 @@ class ExtractSummary extends Component {
     this.state = {};
   }
   render() {
-    Reactotron.log(this.props.infos.length, "INFOS");
+    // Reactotron.log(this.props.infos.length, "INFOS");
     return (
       <Content style={styles.content}>
         {this.props.view === "Home" ? (

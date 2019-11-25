@@ -72,7 +72,7 @@ class Accounts extends Component {
       .doc(user.uid)
       .collection("contas")
       .get();
-    Reactotron.log("FFS GET PORRA Conta");
+    // Reactotron.log("FFS GET PORRA Conta");
     if (!resp.empty) {
       let temp = [];
       resp.forEach(r => {

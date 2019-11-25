@@ -105,7 +105,7 @@ function Home(props) {
         const u = ref.data();
         setVisibility(u.visibility);
         setUsrId(u.id);
-        Reactotron.log(u.visibility, "aaaa");
+        // Reactotron.log(u.visibility, "aaaa");
       }
     };
     getUser();

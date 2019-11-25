@@ -19,7 +19,8 @@ import {
   Picker,
   Button,
   Text,
-  DatePicker
+  DatePicker,
+  Spinner
 } from "native-base";
 import { theme } from "../../config/_theme";
 
@@ -68,6 +69,7 @@ function HomeNewIncome(props) {
   const [desc, setDesc] = React.useState("");
   const [money, setMoney] = React.useState("");
   const [date, setDate] = React.useState(new Date());
+  const [loading, setLoading] = React.useState(false);
 
   const dispatch = useDispatch();
 
@@ -82,7 +84,7 @@ function HomeNewIncome(props) {
       .doc(user.uid)
       .collection("contas")
       .get();
-    Reactotron.log("FFS GET PORRA");
+    // Reactotron.log("FFS GET PORRA");
     if (!resp.empty) {
       resp.forEach(r => {
         temp.push(r.data());
@@ -94,7 +96,7 @@ function HomeNewIncome(props) {
       .doc(user.uid)
       .collection("categorias")
       .get();
-    Reactotron.log("FFS GET PORRA");
+    // Reactotron.log("FFS GET PORRA");
     if (!resp.empty) {
       resp.forEach(r => {
         temp.push(r.data());
@@ -104,6 +106,7 @@ function HomeNewIncome(props) {
   };
 
   const simpleMov = async () => {
+    setLoading(true);
     const user = await FA.currentUser;
 
     let con = JSON.parse(selected2);
@@ -121,6 +124,7 @@ function HomeNewIncome(props) {
 
     if (desc.trim().length === 0 || money.trim().length === 0) {
       Alert.alert("Aviso", "Algum campo está vazio");
+      setLoading(false);
     } else {
       await ref.set({
         id: ref.id,
@@ -142,8 +146,9 @@ function HomeNewIncome(props) {
           .update({ balance: newBal });
       }
       await dispatch(get_info());
+      setLoading(false);
+      await props.navigation.navigate("Extract");
       Alert.alert("Sucesso!", "Receita criada com sucesso!");
-      props.navigation.navigate("Extract");
     }
   };
 
@@ -204,7 +209,7 @@ function HomeNewIncome(props) {
               value={desc}
               onChangeText={desc => {
                 setDesc(desc);
-                Reactotron.log(desc);
+                // Reactotron.log(desc);
               }}
             />
           </Item>
@@ -304,7 +309,11 @@ function HomeNewIncome(props) {
         style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}
         onPress={simpleMov}
       >
-        <Text>SALVAR</Text>
+        {loading ? (
+          <Spinner style={styles.spinner} color="green" />
+        ) : (
+          <Text>SALVAR</Text>
+        )}
       </Button>
     </Container>
   );
