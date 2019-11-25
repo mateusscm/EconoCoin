@@ -37,6 +37,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center"
+  },
+  price: {
+    fontWeight: "bold",
+    fontSize: 25,
+    color: "green"
+  },
+  priceNeg: {
+    fontWeight: "bold",
+    fontSize: 25,
+    color: "red"
+  },
+  total: {
+    // fontWeight: "bold",
+    fontSize: 25
   }
 });
 
@@ -55,12 +69,17 @@ class ExtractSummary extends Component {
           <Text style={styles.mainTitle}>EXTRATO COMPLETO</Text>
         )}
         {this.props && this.props.infos.length > 0 ? (
-          <Card style={{ zIndex: 0 }}>
+          <Card style={{ zIndex: 0, paddingLeft: 0 }}>
             {this.props.infos.map((info, i) => {
               return <ContentExtract info={info} key={i} />;
             })}
             <CardItem style={{ justifyContent: "flex-end" }}>
-              <Text>Total: R${this.props.total}</Text>
+              <Text style={styles.total}>Total: </Text>
+              <Text
+                style={this.props.total >= 0 ? styles.price : styles.priceNeg}
+              >
+                R${this.props.total}
+              </Text>
             </CardItem>
           </Card>
         ) : (

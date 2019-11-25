@@ -15,6 +15,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
     color: "red"
+  },
+  priceBg: {
+    backgroundColor: "#e1ebe2",
+    marginLeft: 0,
+    paddingLeft: 10
+  },
+  priceNegBg: {
+    backgroundColor: "#f0e9e9",
+    marginLeft: 0,
+    paddingLeft: 10
   }
 });
 
@@ -38,7 +48,12 @@ class ContentExtract extends Component {
         >
           -{this.props.info.data}-
         </Text>
-        <ListItem avatar>
+        <ListItem
+          avatar
+          style={
+            this.props.info.balance >= 0 ? styles.priceBg : styles.priceNegBg
+          }
+        >
           <Left>
             <Thumbnail source={logo} />
           </Left>
