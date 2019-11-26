@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { get_cc } from "../../Store/Action/c&c";
+import { connect } from "react-redux";
 import { StyleSheet, TextInput } from "react-native";
 
 // import { contas } from "./../../data";
@@ -98,6 +100,7 @@ class DialogCategorie extends Component {
         this.setState({ loading: false });
         this.props.navigation.goBack();
       }
+      this.props.get_cc();
     } catch (err) {
       alert(err);
       this.setState({ loading: false });
@@ -154,4 +157,11 @@ class DialogCategorie extends Component {
   }
 }
 
-export default DialogCategorie;
+const mapDispatchToProps = dispatch => {
+  return {
+    // dispatching actions returned by action creators
+    get_cc: () => dispatch(get_cc())
+  };
+};
+
+export default connect(null, mapDispatchToProps)(DialogCategorie);

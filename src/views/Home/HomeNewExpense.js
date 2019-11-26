@@ -131,7 +131,7 @@ function HomeNewExpense(props) {
         balance: -Math.abs(money),
         conta: con.nome,
         categoria: selected,
-        data: date.toISOString().split("T")[0],
+        data: date.getTime(),
         tipo: "despesa" //MUDAR "despesa"
       });
 

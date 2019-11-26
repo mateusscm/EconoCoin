@@ -6,6 +6,7 @@ import FloatingButton from "../FloatingButton/FloatingButton";
 import ListCategories from "./ListCategories";
 import { FA, FFS } from "../../Firebase";
 import Reactotron from "reactotron-react-native";
+import { connect } from "react-redux";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -34,40 +35,35 @@ class Categories extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categories: [],
       loading: false,
       refreshing: false
     };
   }
 
-  componentDidMount() {
-    this.getCat();
-  }
-
   _onRefresh() {
     this.setState({ refreshing: true });
-    this.getCat().then(() => {
+    this.props.update().then(() => {
       this.setState({ refreshing: false });
     });
   }
 
-  getCat = async () => {
-    this.setState({ loading: true });
-    let user = await FA.currentUser;
-    let resp = await FFS.collection("user_categoria")
-      .doc(user.uid)
-      .collection("categorias")
-      .get();
-    // Reactotron.log("FFS GET PORRA cATEGORIA");
+  // getCat = async () => {
+  //   this.setState({ loading: true });
+  //   let user = await FA.currentUser;
+  //   let resp = await FFS.collection("user_categoria")
+  //     .doc(user.uid)
+  //     .collection("categorias")
+  //     .get();
+  //   // Reactotron.log("FFS GET PORRA cATEGORIA");
 
-    if (!resp.empty) {
-      let temp = [];
-      resp.forEach(r => {
-        temp.push(r.data());
-      });
-      this.setState({ categories: temp, loading: false });
-    }
-  };
+  //   if (!resp.empty) {
+  //     let temp = [];
+  //     resp.forEach(r => {
+  //       temp.push(r.data());
+  //     });
+  //     this.setState({ categories: temp, loading: false });
+  //   }
+  // };
 
   onDelete = info => {
     Alert.alert(
@@ -121,18 +117,22 @@ class Categories extends Component {
           <Text style={styles.mainTitle}>CATEGORIAS EXISTENTES</Text>
           {/* <InsideCardAccount />; */}
           {!this.state.loading ? null : <Spinner color="green" />}
-          {this.state.categories.map((info, i) => {
-            return (
-              <ListCategories
-                navigation={this.props.navigation}
-                info={info}
-                key={i}
-                onDelete={e => {
-                  this.onDelete(e);
-                }}
-              />
-            );
-          })}
+          {this.props &&
+          this.props.categorias &&
+          this.props.categorias.length > 0
+            ? this.props.categorias.map((info, i) => {
+                return (
+                  <ListCategories
+                    navigation={this.props.navigation}
+                    info={info}
+                    key={i}
+                    onDelete={e => {
+                      this.onDelete(e);
+                    }}
+                  />
+                );
+              })
+            : null}
           {/* {this.props.infos.map((info, i) => {
               return <InsideCardAccount info={info} key={i} />;
             })} */}
@@ -142,4 +142,8 @@ class Categories extends Component {
   }
 }
 
-export default Categories;
+const mapStateToProps = store => ({
+  categorias: store.cc.cc.categorias
+});
+
+export default connect(mapStateToProps)(Categories);

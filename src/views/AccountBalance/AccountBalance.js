@@ -8,9 +8,12 @@ import Accounts from "../../components/Accounts/Accounts";
 import Categories from "../../components/Categories/Categories";
 import { ScrollView } from "react-native-gesture-handler";
 import FloatingButton from "../../components/FloatingButton/FloatingButton";
+import { connect } from "react-redux";
 
-import { contas, infos } from "./../../data";
+// import { contas, infos } from "./../../data";
 import AddAccount from "../../components/FloatingButton/AddAccount";
+
+import { get_cc } from "../../Store/Action/c&c";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -55,7 +58,9 @@ class AccountBalance extends Component {
       this.child.current.update();
     }
   }
-
+  componentDidMount() {
+    this.props.get_cc();
+  }
   render() {
     return (
       <React.Fragment>
@@ -92,7 +97,7 @@ class AccountBalance extends Component {
                 info={this.props.navigation.getParam("info")}
                 navigation={this.props.navigation}
               /> */}
-            <Accounts contas={contas} />
+            <Accounts update={this.props.get_cc} />
             {/* </View> */}
 
             <AddAccount view="Conta" navigation={this.props.navigation} />
@@ -102,7 +107,10 @@ class AccountBalance extends Component {
             activeTabStyle={{ backgroundColor: theme.palette.secondary }}
             heading="Categorias"
           >
-            <Categories ref={this.child} navigation={this.props.navigation} />
+            <Categories
+              navigation={this.props.navigation}
+              update={this.props.get_cc}
+            />
             <FloatingButton
               view="Categoria"
               navigation={this.props.navigation}
@@ -116,5 +124,15 @@ class AccountBalance extends Component {
     );
   }
 }
+const mapStateToProps = store => ({
+  cc: store.cc.cc
+});
 
-export default AccountBalance;
+const mapDispatchToProps = dispatch => {
+  return {
+    // dispatching actions returned by action creators
+    get_cc: () => dispatch(get_cc())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AccountBalance);

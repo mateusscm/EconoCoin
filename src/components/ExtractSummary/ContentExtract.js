@@ -46,7 +46,13 @@ class ContentExtract extends Component {
             fontWeight: "bold"
           }}
         >
-          -{this.props.info.data}-
+          -
+          {new Date(this.props.info.data).toLocaleDateString("pt-br", {
+            year: "numeric",
+            month: "numeric",
+            day: "numeric"
+          })}
+          -
         </Text>
         <ListItem
           avatar

@@ -98,31 +98,35 @@ const Indicators = props => {
         let graphs = ["Categoria", "Conta", "Tipo"];
         // eslint-disable-next-line
         graphs.forEach(g => {
-          if (kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]]) {
+          if (
+            kpinfo[g.toLowerCase() + "_" + new Date(obj.data).getFullYear()]
+          ) {
             if (
-              kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
+              kpinfo[g.toLowerCase() + "_" + new Date(obj.data).getFullYear()][
                 obj[g.toLowerCase()]
               ]
             ) {
-              kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
+              kpinfo[g.toLowerCase() + "_" + new Date(obj.data).getFullYear()][
                 obj[g.toLowerCase()]
               ].forEach((item, index) => {
                 if (index === 0 || index < year(obj.data)) {
-                  kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
-                    obj[g.toLowerCase()]
-                  ][index] += parseFloat(obj.balance);
+                  kpinfo[
+                    g.toLowerCase() + "_" + new Date(obj.data).getFullYear()
+                  ][obj[g.toLowerCase()]][index] += parseFloat(obj.balance);
                 }
               });
             } else {
-              kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
+              kpinfo[g.toLowerCase() + "_" + new Date(obj.data).getFullYear()][
                 obj[g.toLowerCase()]
               ] = Array(366)
                 .fill(0, 0, year(obj.data))
                 .fill(parseFloat(obj.balance), year(obj.data));
             }
           } else {
-            kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]] = {};
-            kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
+            kpinfo[
+              g.toLowerCase() + "_" + new Date(obj.data).getFullYear()
+            ] = {};
+            kpinfo[g.toLowerCase() + "_" + new Date(obj.data).getFullYear()][
               obj[g.toLowerCase()]
             ] = Array(366)
               .fill(0, 0, year(obj.data))
@@ -130,7 +134,7 @@ const Indicators = props => {
           }
         });
       } catch (err) {
-        console.log("Err");
+        alert(err);
       }
     }
     const docRef = await FFS.collection("user_kpi")
@@ -208,8 +212,8 @@ const Indicators = props => {
         Object.keys(kpinfo).forEach(kpi => {
           if (
             kpi.split("_")[0] === "categoria" &&
-            (kpi.split("_")[1] === data_inicial.split("-")[0] ||
-              kpi.split("_")[1] === data_final.split("-")[0])
+            (kpi.split("_")[1] === new Date(data_inicial).getFullYear() ||
+              kpi.split("_")[1] === new Date(data_final).getFullYear())
           ) {
             Object.keys(kpinfo[kpi]).forEach(k => {
               count_categoria = {

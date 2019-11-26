@@ -132,7 +132,7 @@ function HomeNewIncome(props) {
         balance: money,
         conta: con.nome,
         categoria: selected,
-        data: date.toISOString().split("T")[0],
+        data: date.getTime(),
         tipo: "receita" //MUDAR "despesa"
       });
       if (c.exists) {

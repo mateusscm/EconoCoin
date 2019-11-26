@@ -5,6 +5,7 @@ import InsideCardAccount from "./InsideCardAccount";
 import { FA, FFS } from "../../Firebase";
 import Reactotron from "reactotron-react-native";
 import { theme } from "../../config/_theme";
+import { connect } from "react-redux";
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -54,33 +55,12 @@ class Accounts extends Component {
     };
   }
 
-  componentDidMount() {
-    this.getContas();
-  }
-
   _onRefresh() {
     this.setState({ refreshing: true });
-    this.getContas().then(() => {
+    this.props.update().then(() => {
       this.setState({ refreshing: false });
     });
   }
-
-  getContas = async () => {
-    this.setState({ loading: true });
-    let user = await FA.currentUser;
-    let resp = await FFS.collection("user_conta")
-      .doc(user.uid)
-      .collection("contas")
-      .get();
-    // Reactotron.log("FFS GET PORRA Conta");
-    if (!resp.empty) {
-      let temp = [];
-      resp.forEach(r => {
-        temp.push(r.data());
-      });
-      this.setState({ contas: temp, loading: false });
-    }
-  };
 
   onDelete = info => {
     Alert.alert("Confirmando", "Tem certeza que deseja excluir esta Conta?", [
@@ -129,17 +109,19 @@ class Accounts extends Component {
         <Content style={styles.content}>
           <Text style={styles.mainTitle}>CONTAS EXISTENTES</Text>
           {!this.state.loading ? null : <Spinner color="green" />}
-          {this.state.contas.map((conta, i) => {
-            return (
-              <InsideCardAccount
-                conta={conta}
-                key={i}
-                onDelete={e => {
-                  this.onDelete(e);
-                }}
-              />
-            );
-          })}
+          {this.props && this.props.contas && this.props.contas.length > 0
+            ? this.props.contas.map((conta, i) => {
+                return (
+                  <InsideCardAccount
+                    conta={conta}
+                    key={i}
+                    onDelete={e => {
+                      this.onDelete(e);
+                    }}
+                  />
+                );
+              })
+            : null}
           {/* {this.props.infos.map((info, i) => {
             return <InsideCardAccount info={info} key={i} />;
           })} */}
@@ -149,4 +131,8 @@ class Accounts extends Component {
   }
 }
 
-export default Accounts;
+const mapStateToProps = store => ({
+  contas: store.cc.cc.contas
+});
+
+export default connect(mapStateToProps)(Accounts);

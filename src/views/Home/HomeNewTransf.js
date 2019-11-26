@@ -139,7 +139,7 @@ function HomeNewTransf(props) {
         balance: -Math.abs(money),
         conta: conR.nome,
         categoria: "Transferencia",
-        data: date.toISOString().split("T")[0],
+        data: date.getTime(),
         tipo: "despesa"
       });
 

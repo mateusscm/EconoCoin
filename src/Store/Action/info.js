@@ -9,8 +9,8 @@ export const get_info = () => {
       let ref = await FFS.collection("user_movimentacao")
         .doc(user.uid)
         .collection("movimentacoes")
-        .where("data", ">", ini.toISOString().split("T")[0])
-        .where("data", "<", fin.toISOString().split("T")[0])
+        .where("data", ">", ini.getTime())
+        .where("data", "<", fin.getTime())
         .orderBy("data", "desc")
         .get();
 
@@ -35,9 +35,9 @@ export const get_info = () => {
         ref.docs.forEach(doc => {
           let data = doc.data();
           if (data.categoria !== "Transferencia") {
-            if (data.tipo === 'receita') {
+            if (data.tipo === "receita") {
               rec += parseFloat(data.balance);
-            } else if (data.tipo === 'despesa') {
+            } else if (data.tipo === "despesa") {
               desp += parseFloat(data.balance);
             }
           }
@@ -89,14 +89,10 @@ export const del_info = (redirect, target) => {
 
 const _getDates = () => {
   let fin = new Date(
-    new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
-      .toISOString()
-      .split("T")[0]
+    new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getTime()
   );
   let ini = new Date(
-    new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-      .toISOString()
-      .split("T")[0]
+    new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime()
   );
 
   ini.setDate(ini.getDate() - 1);

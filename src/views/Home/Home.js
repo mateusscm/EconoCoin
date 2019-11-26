@@ -145,10 +145,11 @@ function Home(props) {
   }
 
   const onPressIconMoney = async () => {
-    setVisibility(!visibility);
+    let tmp = !visibility;
+    setVisibility(tmp);
     await FFS.collection("users")
       .doc(id)
-      .update({ visibility });
+      .update({ visibility: tmp });
   };
 
   return (

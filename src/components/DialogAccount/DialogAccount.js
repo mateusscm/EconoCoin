@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { StyleSheet, TextInput } from "react-native";
+import { get_cc } from "../../Store/Action/c&c";
 
 // import { contas } from "./../../data";
 
@@ -83,6 +85,7 @@ class DialogAccount extends Component {
         sigla: this.state.sigla
       });
       this.setState({ loading: false });
+      this.props.get_cc();
       this.props.navigation.goBack();
     } catch (err) {
       this.setState({ loading: false });
@@ -181,5 +184,11 @@ class DialogAccount extends Component {
     );
   }
 }
+const mapDispatchToProps = dispatch => {
+  return {
+    // dispatching actions returned by action creators
+    get_cc: () => dispatch(get_cc())
+  };
+};
 
-export default DialogAccount;
+export default connect(null, mapDispatchToProps)(DialogAccount);
