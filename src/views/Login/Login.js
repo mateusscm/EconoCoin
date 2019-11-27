@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   containerActions: {
     width: WIDTH - 55,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     marginTop: 10
   },
   errorMessage: {
@@ -242,11 +242,11 @@ class Login extends Component {
           </TouchableOpacity>
 
           <View style={styles.containerActions}>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => this.props.navigation.navigate("Forget")}
             >
               <Text style={styles.text2}>Esqueceu a senha?</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate("SignUp")}
             >

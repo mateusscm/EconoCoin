@@ -97,6 +97,7 @@ function Home(props) {
 
   React.useEffect(() => {
     const getUser = async () => {
+      setLoading(true);
       const usr = await FA.currentUser;
       const ref = await FFS.collection("users")
         .doc(usr.uid)
@@ -106,6 +107,7 @@ function Home(props) {
         setVisibility(u.visibility);
         setUsrId(u.id);
         // Reactotron.log(u.visibility, "aaaa");
+        setLoading(false);
       }
     };
     getUser();

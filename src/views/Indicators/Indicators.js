@@ -358,7 +358,7 @@ const Indicators = props => {
       {!loading ? (
         <>
           <ScrollView style={styles.allCont}>
-            <ChartHeader />
+            {/* <ChartHeader /> */}
             <Text style={styles.mainTitle}>DESPESA E RECEITA TOTAIS</Text>
             {dataPie2.length > 0 ? (
               <View
