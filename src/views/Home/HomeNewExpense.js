@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { StyleSheet, TextInput, Alert } from "react-native";
-import { FA, FFS } from "../../Firebase";
-import { connect, useDispatch } from "react-redux";
-import { get_info } from "../../Store/Action/info";
+import React, { Component } from 'react';
+import { StyleSheet, TextInput, Alert } from 'react-native';
+import { FA, FFS } from '../../Firebase';
+import { connect, useDispatch } from 'react-redux';
+import { get_info } from '../../Store/Action/info';
 // import { contas } from "./../../data";
 
-import MenuButtonBack from "./../../components/MenuButtonBack/MenuButtonBack";
+import MenuButtonBack from './../../components/MenuButtonBack/MenuButtonBack';
 import {
   Container,
   Form,
@@ -17,46 +17,46 @@ import {
   Text,
   Button,
   DatePicker,
-  Spinner
-} from "native-base";
-import Reactotron from "reactotron-react-native";
-import { theme } from "../../config/_theme";
+  Spinner,
+} from 'native-base';
+import Reactotron from 'reactotron-react-native';
+import { theme } from '../../config/_theme';
 
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   allCont: {
-    backgroundColor: theme.palette.backgroundMain
+    backgroundColor: theme.palette.backgroundMain,
   },
   text: {
     fontSize: 30,
-    color: theme.palette.txtPrimary
+    color: theme.palette.txtPrimary,
   },
   header: {
     height: 100,
-    width: "100%",
-    backgroundColor: "#ba4145",
-    justifyContent: "center",
-    alignItems: "flex-start",
+    width: '100%',
+    backgroundColor: '#ba4145',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
     zIndex: 0,
     paddingLeft: 10,
     marginTop: 0,
     marginLeft: 0,
     paddingTop: 2,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(0, 0, 0, 0.5)"
+    borderBottomColor: 'rgba(0, 0, 0, 0.5)',
   },
   description: {
-    justifyContent: "center",
-    alignItems: "flex-start",
+    justifyContent: 'center',
+    alignItems: 'flex-start',
     zIndex: 0,
     marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
     paddingTop: 2,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(0, 0, 0, 0.5)"
-  }
+    borderBottomColor: 'rgba(0, 0, 0, 0.5)',
+  },
 });
 
 function HomeNewExpense(props) {
@@ -64,8 +64,8 @@ function HomeNewExpense(props) {
   const [selected2, setSelected2] = React.useState(null);
   const [contas, setContas] = React.useState([]);
   const [categorias, setCategorias] = React.useState([]);
-  const [desc, setDesc] = React.useState("");
-  const [money, setMoney] = React.useState("");
+  const [desc, setDesc] = React.useState('');
+  const [money, setMoney] = React.useState('');
   const [date, setDate] = React.useState(new Date());
   const [loading, setLoading] = React.useState(false);
 
@@ -78,9 +78,9 @@ function HomeNewExpense(props) {
   const getInfo = async () => {
     const user = await FA.currentUser;
     let temp = [];
-    let resp = await FFS.collection("user_conta")
+    let resp = await FFS.collection('user_conta')
       .doc(user.uid)
-      .collection("contas")
+      .collection('contas')
       .get();
     // Reactotron.log("FFS GET PORRA");
     if (!resp.empty) {
@@ -90,9 +90,9 @@ function HomeNewExpense(props) {
       setContas(temp);
     }
     temp = [];
-    resp = await FFS.collection("user_categoria")
+    resp = await FFS.collection('user_categoria')
       .doc(user.uid)
-      .collection("categorias")
+      .collection('categorias')
       .get();
     // Reactotron.log("FFS GET PORRA");
     if (!resp.empty) {
@@ -109,20 +109,20 @@ function HomeNewExpense(props) {
 
     let con = JSON.parse(selected2);
 
-    let c = await FFS.collection("user_conta")
+    let c = await FFS.collection('user_conta')
       .doc(user.uid)
-      .collection("contas")
+      .collection('contas')
       .doc(con.id)
       .get();
     // Reactotron.log("FFS GET PORRA");
 
-    let ref = await FFS.collection("user_movimentacao")
+    let ref = await FFS.collection('user_movimentacao')
       .doc(user.uid)
-      .collection("movimentacoes")
+      .collection('movimentacoes')
       .doc();
 
     if (desc.trim().length === 0 || money.trim().length === 0) {
-      Alert.alert("Aviso", "Algum campo está vazio");
+      Alert.alert('Aviso', 'Algum campo está vazio');
       setLoading(false);
     } else {
       await ref.set({
@@ -131,24 +131,24 @@ function HomeNewExpense(props) {
         balance: -Math.abs(money),
         conta: con.nome,
         categoria: selected,
-        data: date.getTime(),
-        tipo: "despesa" //MUDAR "despesa"
+        data: date.toISOString().split('T')[0],
+        tipo: 'despesa', //MUDAR "despesa"
       });
 
       if (c.exists) {
         var newBal = parseFloat(c.data().balance);
 
         newBal -= parseFloat(money); //mudar para -=
-        await FFS.collection("user_conta")
+        await FFS.collection('user_conta')
           .doc(user.uid)
-          .collection("contas")
+          .collection('contas')
           .doc(con.id)
           .update({ balance: newBal });
       }
       await dispatch(get_info());
       setLoading(false);
-      await props.navigation.navigate("Extract");
-      Alert.alert("Sucesso!", "Despesa criada com sucesso!");
+      await props.navigation.navigate('Extract');
+      Alert.alert('Sucesso!', 'Despesa criada com sucesso!');
     }
   };
 
@@ -178,15 +178,15 @@ function HomeNewExpense(props) {
           </View> */}
         <Form>
           <Item stackedLabel underline style={styles.header}>
-            <Label style={{ color: "#fff", fontSize: 16 }}>Valor</Label>
+            <Label style={{ color: '#fff', fontSize: 16 }}>Valor</Label>
             <TextInput
               placeholder="R$"
-              keyboardType={"numeric"}
+              keyboardType={'numeric'}
               placeholderTextColor="rgba(255, 255, 255, 0.7)"
               style={{
-                color: "#fff",
+                color: '#fff',
                 fontSize: 44,
-                width: "100%"
+                width: '100%',
               }}
               label="R$"
               value={money}
@@ -200,7 +200,7 @@ function HomeNewExpense(props) {
               style={{
                 fontSize: 18,
                 paddingLeft: 0,
-                color: "rgba(0, 0, 0, 0.5)"
+                color: 'rgba(0, 0, 0, 0.5)',
               }}
             >
               Breve descrição
@@ -209,7 +209,7 @@ function HomeNewExpense(props) {
               style={{
                 fontSize: 24,
                 paddingLeft: 5,
-                width: "100%"
+                width: '100%',
               }}
               value={desc}
               maxLength={16}
@@ -223,16 +223,16 @@ function HomeNewExpense(props) {
               style={{
                 fontSize: 18,
                 paddingLeft: 0,
-                color: "rgba(0, 0, 0, 0.5)"
+                color: 'rgba(0, 0, 0, 0.5)',
               }}
             >
               Categoria
             </Label>
             <Picker
               mode="dropdown"
-              style={{ width: "100%", paddingLeft: 0 }}
+              style={{ width: '100%', paddingLeft: 0 }}
               placeholder="Select your SIM"
-              placeholderStyle={{ color: "#bfc6ea" }}
+              placeholderStyle={{ color: '#bfc6ea' }}
               placeholderIconColor="#007aff"
               selectedValue={selected}
               onValueChange={ev => {
@@ -254,16 +254,16 @@ function HomeNewExpense(props) {
               style={{
                 fontSize: 18,
                 paddingLeft: 0,
-                color: "rgba(0, 0, 0, 0.5)"
+                color: 'rgba(0, 0, 0, 0.5)',
               }}
             >
               Conta
             </Label>
             <Picker
               mode="dropdown"
-              style={{ width: "100%", paddingLeft: 0 }}
+              style={{ width: '100%', paddingLeft: 0 }}
               placeholder="Select your SIM"
-              placeholderStyle={{ color: "#bfc6ea" }}
+              placeholderStyle={{ color: '#bfc6ea' }}
               placeholderIconColor="#007aff"
               selectedValue={selected2}
               onValueChange={ev => {
@@ -285,7 +285,7 @@ function HomeNewExpense(props) {
               style={{
                 fontSize: 18,
                 paddingLeft: 0,
-                color: "rgba(0, 0, 0, 0.5)"
+                color: 'rgba(0, 0, 0, 0.5)',
               }}
             >
               Data
@@ -294,14 +294,14 @@ function HomeNewExpense(props) {
               // defaultDate={new Date(2018, 4, 4)}
               // minimumDate={new Date(2018, 1, 1)}
               // maximumDate={new Date(2018, 12, 31)}
-              locale={"pt"}
+              locale={'pt'}
               timeZoneOffsetInMinutes={undefined}
               modalTransparent={false}
-              animationType={"fade"}
-              androidMode={"default"}
+              animationType={'fade'}
+              androidMode={'default'}
               placeHolderText={`Data: ${date.toString().substr(4, 12)}`}
-              textStyle={{ color: "black" }}
-              placeHolderTextStyle={{ color: "#000" }}
+              textStyle={{ color: 'black' }}
+              placeHolderTextStyle={{ color: '#000' }}
               onDateChange={setDate_}
               disabled={false}
             />
@@ -311,7 +311,7 @@ function HomeNewExpense(props) {
       <Button
         transparent
         light
-        style={{ position: "absolute", zIndex: 10, right: 5, top: 7 }}
+        style={{ position: 'absolute', zIndex: 10, right: 5, top: 7 }}
         onPress={simpleMov}
       >
         {loading ? (

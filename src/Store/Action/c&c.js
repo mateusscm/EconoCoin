@@ -33,7 +33,6 @@ export const get_cc = () => {
       }
 
       const cc = { contas, categorias };
-
       return dispatch({ type: "GET_C&C", payload: cc });
     } catch (error) {
       console.log("Login with redux -> Failed");

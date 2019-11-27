@@ -9,7 +9,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Dimensions } from "react-native";
 import { PieChart, BarChart } from "react-native-chart-kit";
-import { StackedBarChart } from "react-native-svg-charts";
+import PureChart from "react-native-pure-chart";
 import { FFS, FA } from "../../Firebase";
 import Reactotron from "reactotron-react-native";
 import palette from "google-palette";
@@ -43,12 +43,20 @@ const styles = StyleSheet.create({
   }
 });
 const Indicators = props => {
-  const [data_final, setData_final] = useState("");
-  const [data_, setData_] = useState("");
-  const [data_inicial, setData_inicial] = useState("");
+  const [data_final, setData_final] = useState(
+    new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
+      .toISOString()
+      .split("T")[0]
+  );
+  const [data_, setData_] = useState(new Date().toISOString().split("T")[0]);
+  const [data_inicial, setData_inicial] = useState(
+    new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+      .toISOString()
+      .split("T")[0]
+  );
   const [dataPie, setDataPie] = useState([]);
   const [dataPie2, setDataPie2] = useState([]);
-  const [dataLine, setDataLine] = useState(null);
+  const [dataLine, setDataLine] = useState([]);
   const [trigger, setTrigger] = useState(false);
   const [trigger1, setTrigger1] = useState(false);
   const [loading, setLoading] = React.useState(false);
@@ -57,17 +65,7 @@ const Indicators = props => {
   // const [loading, setLoading] = useState(false);
 
   React.useEffect(() => {
-    setData_(new Date().toISOString().split("T")[0]);
-    setData_final(
-      new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
-        .toISOString()
-        .split("T")[0]
-    );
-    setData_inicial(
-      new Date(new Date().getFullYear(), new Date().getMonth(), 1)
-        .toISOString()
-        .split("T")[0]
-    );
+    setTrigger(true);
   }, []);
 
   const getC = async () => {
@@ -82,9 +80,9 @@ const Indicators = props => {
     const user = FA.currentUser;
     let kpinfo = {};
     let movimentacoes = [];
-    const ref = await FFS.collection("user_movimentacao")
+    const ref = await FFS.collection('user_movimentacao')
       .doc(user.uid)
-      .collection("movimentacoes")
+      .collection('movimentacoes')
       .get();
     if (!ref.empty) {
       ref.forEach(doc => {
@@ -95,38 +93,35 @@ const Indicators = props => {
     for (let i = 0; i < movimentacoes.length; i++) {
       try {
         const obj = movimentacoes[i];
-        let graphs = ["Categoria", "Conta", "Tipo"];
+        let graphs = ['Categoria', 'Conta', 'Tipo'];
         // eslint-disable-next-line
         graphs.forEach(g => {
-          if (
-            kpinfo[g.toLowerCase() + "_" + new Date(obj.data).getFullYear()]
-          ) {
+          if (kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]]) {
             if (
-              kpinfo[g.toLowerCase() + "_" + new Date(obj.data).getFullYear()][
+              kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
                 obj[g.toLowerCase()]
               ]
             ) {
-              kpinfo[g.toLowerCase() + "_" + new Date(obj.data).getFullYear()][
+              kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
                 obj[g.toLowerCase()]
               ].forEach((item, index) => {
                 if (index === 0 || index < year(obj.data)) {
-                  kpinfo[
-                    g.toLowerCase() + "_" + new Date(obj.data).getFullYear()
-                  ][obj[g.toLowerCase()]][index] += parseFloat(obj.balance);
+                  return;
                 }
+                kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
+                  obj[g.toLowerCase()]
+                ][index] += parseFloat(obj.balance);
               });
             } else {
-              kpinfo[g.toLowerCase() + "_" + new Date(obj.data).getFullYear()][
+              kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
                 obj[g.toLowerCase()]
               ] = Array(366)
                 .fill(0, 0, year(obj.data))
                 .fill(parseFloat(obj.balance), year(obj.data));
             }
           } else {
-            kpinfo[
-              g.toLowerCase() + "_" + new Date(obj.data).getFullYear()
-            ] = {};
-            kpinfo[g.toLowerCase() + "_" + new Date(obj.data).getFullYear()][
+            kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]] = {};
+            kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
               obj[g.toLowerCase()]
             ] = Array(366)
               .fill(0, 0, year(obj.data))
@@ -134,16 +129,16 @@ const Indicators = props => {
           }
         });
       } catch (err) {
-        alert(err);
+        console.log('Err');
       }
     }
-    const docRef = await FFS.collection("user_kpi")
+    const docRef = await FFS.collection('user_kpi')
       .doc(user.uid)
-      .collection("kpis");
+      .collection('kpis');
     Object.keys(kpinfo).forEach(async kpi => {
       await docRef.doc(kpi).set(kpinfo[kpi]);
     });
-    console.log("Graficos gerados");
+    console.log('Graficos gerados');
     setTrigger(!trigger);
   };
 
@@ -154,6 +149,7 @@ const Indicators = props => {
         pie: [],
         pie2: []
       };
+      let testeLine = [];
       let line = {
         labels: [],
         datasets: [
@@ -177,6 +173,16 @@ const Indicators = props => {
       // let count_conta = {};
       // let count_classe = {};
 
+      const getPercento = info => {
+        let tmp = info.map(i => i.population);
+        let tot = tmp.reduce((t, i) => {
+          return t + i;
+        });
+        Reactotron.log(tot);
+        return info.map(i => {
+          return (i.population * 100) / tot;
+        });
+      };
       const getNumber = info => {
         const idx_ini =
           Math.ceil(new Date(data_inicial).getTime() / 86400000) -
@@ -188,6 +194,11 @@ const Indicators = props => {
           Math.floor(
             new Date().setFullYear(new Date().getFullYear(), 0, 1) / 86400000
           );
+        Reactotron.log(JSON.stringify(info[idx_final]));
+        Reactotron.log(
+          JSON.stringify(info[idx_ini - 1 === -1 ? 0 : idx_ini - 1])
+        );
+
         return info[idx_final] - info[idx_ini - 1 === -1 ? 0 : idx_ini - 1];
       };
 
@@ -212,8 +223,8 @@ const Indicators = props => {
         Object.keys(kpinfo).forEach(kpi => {
           if (
             kpi.split("_")[0] === "categoria" &&
-            (kpi.split("_")[1] === new Date(data_inicial).getFullYear() ||
-              kpi.split("_")[1] === new Date(data_final).getFullYear())
+            (kpi.split("_")[1] === data_inicial.split("-")[0] ||
+              kpi.split("_")[1] === data_final.split("-")[0])
           ) {
             Object.keys(kpinfo[kpi]).forEach(k => {
               count_categoria = {
@@ -243,52 +254,59 @@ const Indicators = props => {
               Math.floor(
                 new Date().setFullYear(new Date().getFullYear(), 0, 1) /
                   86400000
-              );
+              ) +
+              1;
 
             for (let i = idx - 3; i <= idx; i++) {
               line.labels.push(idxToDate(i));
             }
 
+            function ret(_kpinfo, _kpi, a, i) {
+              if (_kpinfo && _kpi && _kpinfo[_kpi] && _kpinfo[_kpi][a] && i) {
+                return _kpinfo[_kpi][a][i] - _kpinfo[_kpi][a][i - 1];
+              }
+              return 0;
+            }
+
             let temp = [];
             kpinfo[kpi].receita.forEach((info, i) => {
               if (i >= idx - 3 && i <= idx) {
+                testeLine.push({
+                  x: idxToDate(i),
+                  y:
+                    ret(kpinfo, kpi, "receita", i) +
+                    ret(kpinfo, kpi, 'despesa', i),
+                });
                 temp.push(
-                  kpinfo[kpi].receita[i] -
-                    kpinfo[kpi].receita[i - 1] +
-                    kpinfo[kpi].despesa[i] -
-                    kpinfo[kpi].despesa[i - 1]
+                  ret(kpinfo, kpi, "receita", i) +
+                    ret(kpinfo, kpi, "despesa", i)
                 );
               }
             });
-            // Reactotron.log(temp);
             line.datasets[0].data = temp;
           }
         });
         Object.keys(count_categoria).forEach((a, i) => {
           graph.pie.push({
-            name: a,
-            population: count_categoria[a],
+            label: a,
+            value: count_categoria[a],
             color: "#" + palette("tol-dv", 15)[i],
-            legendFontColor: "#7F7F7F",
-            legendFontSize: 15
+            // legendFontColor: "#7F7F7F",
+            // legendFontSize: 15
           });
         });
         Object.keys(count_tipo).forEach((a, i) => {
           graph.pie2.push({
-            name: a,
-            population: count_tipo[a],
+            label: a,
+            value: count_tipo[a],
             color: "#" + palette("tol-dv", 15)[i],
-            legendFontColor: "#7F7F7F",
-            legendFontSize: 15
+            // legendFontColor: "#7F7F7F",
+            // legendFontSize: 15
           });
         });
       }
-      setDataLine(line);
-      // Reactotron.log(JSON.stringify(line));
-      // setDataLine({
-      //   labels: ["2019-11-10", "2019-11-11", "2019-11-12", "2019-11-13"],
-      //   datasets: [{ data: [36, -25, 190, 0] }]
-      // });
+
+      setDataLine(testeLine);
       setDataPie2(graph.pie2);
       setDataPie(graph.pie);
       setLoading(false);
@@ -342,7 +360,21 @@ const Indicators = props => {
           <ScrollView style={styles.allCont}>
             <ChartHeader />
             <Text style={styles.mainTitle}>DESPESA E RECEITA TOTAIS</Text>
-            <PieChart
+            {dataPie2.length > 0 ? (
+              <PureChart data={dataPie2} type="pie" />
+            ) : null}
+            <Text style={styles.mainTitle}>GASTOS POR CATEGORIA</Text>
+            {dataPie.length > 0 ? (
+              <PureChart data={dataPie} type="pie" />
+            ) : null}
+            <Text style={styles.mainTitle}>
+              MOVIMENTAÇÕES DOS ÚLTIMOS 4 DIAS
+            </Text>
+            {dataLine.length > 0 ? (
+              <PureChart data={dataLine} type="line" />
+            ) : null}
+
+            {/* <PieChart
               data={dataPie2}
               width={screenWidth}
               height={220}
@@ -363,7 +395,6 @@ const Indicators = props => {
                 borderRadius: 16
               }}
             />
-            <Text style={styles.mainTitle}>GASTOS POR CATEGORIA</Text>
             <PieChart
               data={dataPie}
               width={screenWidth}
@@ -384,11 +415,8 @@ const Indicators = props => {
                 marginVertical: 4,
                 borderRadius: 16
               }}
-            />
-            <Text style={styles.mainTitle}>
-              MOVIMENTAÇÕES DOS ÚLTIMOS 4 DIAS
-            </Text>
-            {dataLine < 2 ? null : (
+            /> */}
+            {/* {dataLine < 2 ? null : (
               <BarChart
                 data={dataLine}
                 width={screenWidth}
@@ -414,15 +442,7 @@ const Indicators = props => {
                   borderRadius: 16
                 }}
               />
-            )}
-            <StackedBarChart
-              style={{ height: 200 }}
-              keys={keys}
-              colors={colors}
-              data={dataStack}
-              showGrid={true}
-              contentInset={{ top: 30, bottom: 30 }}
-            />
+            )} */}
           </ScrollView>
         </>
       ) : (

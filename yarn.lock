@@ -3966,7 +3966,7 @@ lodash.unescape@4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/lodash.unescape/-/lodash.unescape-4.0.1.tgz#bf2249886ce514cda112fae9218cdc065211fc9c"
 
-lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.6.1:
+lodash@^4.0.0, lodash@^4.17.10, lodash@^4.17.11, lodash@^4.17.12, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.6.1:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
 
@@ -5192,11 +5192,12 @@ react-native-animatable@^1.2.4:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-chart-kit@^3.11.0:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/react-native-chart-kit/-/react-native-chart-kit-3.11.0.tgz#ff62e168f224a0f282b762eb796e20ea61fd68a9"
+react-native-chart-kit@4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-chart-kit/-/react-native-chart-kit-4.0.0.tgz#53eb9510cf2b865c4c7115f75f75dd7cbf095a3d"
+  integrity sha512-XEFm13PT0IpoTyhxqR8P3wsCctIZx0qb6zQ1xDc8VTGAU/ywTZn6ay9DMYMGde+ZdRgzTb9MPxAn2do0s0tKqA==
   dependencies:
-    lodash "^4.17.11"
+    lodash "^4.17.13"
     paths-js "^0.4.10"
     point-in-polygon "^1.0.1"
 
@@ -5256,6 +5257,14 @@ react-native-modal@^9.0.0:
   dependencies:
     prop-types "^15.6.2"
     react-native-animatable "^1.2.4"
+
+react-native-pure-chart@^0.0.24:
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/react-native-pure-chart/-/react-native-pure-chart-0.0.24.tgz#6a06d803d6bce0d6cdb94ee426e32cfce95f19a1"
+  integrity sha512-YczRMLyR1PY5u5qpYc4ScrYdbPVAD9GxIdnR8m7zbttwytlHVjn90+buYBnHW3Lm/JXHVzCMjTQkXQ5cskvB+Q==
+  dependencies:
+    lodash "^4.17.4"
+    prop-types "^15.6.0"
 
 react-native-reanimated@^1.2.0:
   version "1.2.0"

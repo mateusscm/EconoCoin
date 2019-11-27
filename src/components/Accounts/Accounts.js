@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { StyleSheet, Alert, RefreshControl, ScrollView } from "react-native";
-import { Content, Text, Spinner } from "native-base";
-import InsideCardAccount from "./InsideCardAccount";
-import { FA, FFS } from "../../Firebase";
-import Reactotron from "reactotron-react-native";
-import { theme } from "../../config/_theme";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { StyleSheet, Alert, RefreshControl, ScrollView } from 'react-native';
+import { Content, Text, Spinner } from 'native-base';
+import InsideCardAccount from './InsideCardAccount';
+import { FA, FFS } from '../../Firebase';
+import Reactotron from 'reactotron-react-native';
+import { theme } from '../../config/_theme';
+import { connect } from 'react-redux';
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -15,34 +15,34 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // alignItems: "center",
     paddingHorizontal: 10,
-    backgroundColor: theme.palette.backgroundMain
+    backgroundColor: theme.palette.backgroundMain,
   },
   content: {
-    width: "100%",
-    paddingBottom: 50
+    width: '100%',
+    paddingBottom: 50,
   },
   align: {
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 40,
-    fontWeight: "bold"
+    fontWeight: 'bold',
   },
   subtext: {
-    color: "grey"
+    color: 'grey',
   },
   border: {
-    borderTopColor: "#cdcdcd",
-    borderTopWidth: 0.5
+    borderTopColor: '#cdcdcd',
+    borderTopWidth: 0.5,
   },
   mainTitle: {
     paddingTop: 10,
     paddingHorizontal: 18,
     paddingBottom: 5,
-    fontWeight: "700",
-    color: "#6e6e6e"
-  }
+    fontWeight: '700',
+    color: '#6e6e6e',
+  },
 });
 
 class Accounts extends Component {
@@ -51,7 +51,7 @@ class Accounts extends Component {
     this.state = {
       contas: [],
       loading: false,
-      refreshing: false
+      refreshing: false,
     };
   }
 
@@ -63,20 +63,20 @@ class Accounts extends Component {
   }
 
   onDelete = info => {
-    Alert.alert("Confirmando", "Tem certeza que deseja excluir esta Conta?", [
+    Alert.alert('Confirmando', 'Tem certeza que deseja excluir esta Conta?', [
       {
-        text: "NÃO",
+        text: 'NÃO',
         // onPress: () => console.warn("NO Pressed"),
-        style: "cancel"
+        style: 'cancel',
       },
       {
-        text: "SIM",
+        text: 'SIM',
         onPress: async () => {
           try {
             let user = await FA.currentUser;
-            await FFS.collection("user_conta")
+            await FFS.collection('user_conta')
               .doc(user.uid)
-              .collection("contas")
+              .collection('contas')
               .doc(info.id)
               .delete();
             let temp = this.state.contas;
@@ -88,10 +88,12 @@ class Accounts extends Component {
             );
             this.setState({ contas: temp });
           } catch (err) {
-            if (err) alert("Algo deu errado! Tente novamente mais tarde.");
+            if (err) {
+              alert('Algo deu errado! Tente novamente mais tarde.');
+            }
           }
-        }
-      }
+        },
+      },
     ]);
   };
 

@@ -1,31 +1,31 @@
-import React, { Component } from "react";
-import { StyleSheet } from "react-native";
-import { ListItem, Body, Text, Right, Thumbnail, Left } from "native-base";
-import logo from "./../../assets/img/logo.png";
+import React, { Component } from 'react';
+import { StyleSheet } from 'react-native';
+import { ListItem, Body, Text, Right, Thumbnail, Left } from 'native-base';
+import logo from './../../assets/img/logo.png';
 
 // const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   price: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 25,
-    color: "green"
+    color: 'green',
   },
   priceNeg: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 25,
-    color: "red"
+    color: 'red',
   },
   priceBg: {
-    backgroundColor: "#e1ebe2",
+    backgroundColor: '#e1ebe2',
     marginLeft: 0,
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   priceNegBg: {
-    backgroundColor: "#f0e9e9",
+    backgroundColor: '#f0e9e9',
     marginLeft: 0,
-    paddingLeft: 10
-  }
+    paddingLeft: 10,
+  },
 });
 
 class ContentExtract extends Component {
@@ -39,20 +39,14 @@ class ContentExtract extends Component {
       <>
         <Text
           style={{
-            textAlign: "center",
-            color: "#919191",
+            textAlign: 'center',
+            color: '#919191',
             fontSize: 12,
             paddingTop: 5,
-            fontWeight: "bold"
+            fontWeight: 'bold',
           }}
         >
-          -
-          {new Date(this.props.info.data).toLocaleDateString("pt-br", {
-            year: "numeric",
-            month: "numeric",
-            day: "numeric"
-          })}
-          -
+          -{this.props.info.data}-
         </Text>
         <ListItem
           avatar
@@ -64,7 +58,7 @@ class ContentExtract extends Component {
             <Thumbnail source={logo} />
           </Left>
           <Body>
-            <Text style={{ fontWeight: "bold" }}>
+            <Text style={{ fontWeight: 'bold' }}>
               {this.props.info.descricao}
             </Text>
             <Text note>{this.props.info.categoria}</Text>
