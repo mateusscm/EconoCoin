@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import MenuButton from "./../../components/MenuButton/MenuButton";
 import { Container, Button, Text, Spinner } from "native-base";
@@ -80,9 +80,9 @@ const Indicators = props => {
     const user = FA.currentUser;
     let kpinfo = {};
     let movimentacoes = [];
-    const ref = await FFS.collection('user_movimentacao')
+    const ref = await FFS.collection("user_movimentacao")
       .doc(user.uid)
-      .collection('movimentacoes')
+      .collection("movimentacoes")
       .get();
     if (!ref.empty) {
       ref.forEach(doc => {
@@ -93,35 +93,35 @@ const Indicators = props => {
     for (let i = 0; i < movimentacoes.length; i++) {
       try {
         const obj = movimentacoes[i];
-        let graphs = ['Categoria', 'Conta', 'Tipo'];
+        let graphs = ["Categoria", "Conta", "Tipo"];
         // eslint-disable-next-line
         graphs.forEach(g => {
-          if (kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]]) {
+          if (kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]]) {
             if (
-              kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
+              kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
                 obj[g.toLowerCase()]
               ]
             ) {
-              kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
+              kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
                 obj[g.toLowerCase()]
               ].forEach((item, index) => {
                 if (index === 0 || index < year(obj.data)) {
                   return;
                 }
-                kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
+                kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
                   obj[g.toLowerCase()]
                 ][index] += parseFloat(obj.balance);
               });
             } else {
-              kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
+              kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
                 obj[g.toLowerCase()]
               ] = Array(366)
                 .fill(0, 0, year(obj.data))
                 .fill(parseFloat(obj.balance), year(obj.data));
             }
           } else {
-            kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]] = {};
-            kpinfo[g.toLowerCase() + '_' + obj.data.split('-')[0]][
+            kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]] = {};
+            kpinfo[g.toLowerCase() + "_" + obj.data.split("-")[0]][
               obj[g.toLowerCase()]
             ] = Array(366)
               .fill(0, 0, year(obj.data))
@@ -129,16 +129,16 @@ const Indicators = props => {
           }
         });
       } catch (err) {
-        console.log('Err');
+        console.log("Err");
       }
     }
-    const docRef = await FFS.collection('user_kpi')
+    const docRef = await FFS.collection("user_kpi")
       .doc(user.uid)
-      .collection('kpis');
+      .collection("kpis");
     Object.keys(kpinfo).forEach(async kpi => {
       await docRef.doc(kpi).set(kpinfo[kpi]);
     });
-    console.log('Graficos gerados');
+    console.log("Graficos gerados");
     setTrigger(!trigger);
   };
 
@@ -275,7 +275,7 @@ const Indicators = props => {
                   x: idxToDate(i),
                   y:
                     ret(kpinfo, kpi, "receita", i) +
-                    ret(kpinfo, kpi, 'despesa', i),
+                    ret(kpinfo, kpi, "despesa", i)
                 });
                 temp.push(
                   ret(kpinfo, kpi, "receita", i) +
@@ -290,7 +290,7 @@ const Indicators = props => {
           graph.pie.push({
             label: a,
             value: count_categoria[a],
-            color: "#" + palette("tol-dv", 15)[i],
+            color: "#" + palette("tol-dv", 15)[i]
             // legendFontColor: "#7F7F7F",
             // legendFontSize: 15
           });
@@ -299,7 +299,7 @@ const Indicators = props => {
           graph.pie2.push({
             label: a,
             value: count_tipo[a],
-            color: "#" + palette("tol-dv", 15)[i],
+            color: "#" + palette("tol-dv", 15)[i]
             // legendFontColor: "#7F7F7F",
             // legendFontSize: 15
           });
@@ -361,17 +361,68 @@ const Indicators = props => {
             <ChartHeader />
             <Text style={styles.mainTitle}>DESPESA E RECEITA TOTAIS</Text>
             {dataPie2.length > 0 ? (
-              <PureChart data={dataPie2} type="pie" />
+              <View
+                style={{
+                  width: screenWidth,
+                  backgroundColor: "white",
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingVertical: 10,
+                  borderRadius: 15
+                }}
+              >
+                <PureChart
+                  width={"100%"}
+                  height={220}
+                  data={dataPie2}
+                  type="pie"
+                />
+              </View>
             ) : null}
             <Text style={styles.mainTitle}>GASTOS POR CATEGORIA</Text>
             {dataPie.length > 0 ? (
-              <PureChart data={dataPie} type="pie" />
+              <View
+                style={{
+                  width: screenWidth,
+                  backgroundColor: "white",
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingVertical: 10,
+                  borderRadius: 15
+                }}
+              >
+                <PureChart
+                  width={"100%"}
+                  height={220}
+                  data={dataPie}
+                  type="pie"
+                />
+              </View>
             ) : null}
             <Text style={styles.mainTitle}>
               MOVIMENTAÇÕES DOS ÚLTIMOS 4 DIAS
             </Text>
             {dataLine.length > 0 ? (
-              <PureChart data={dataLine} type="line" />
+              <View
+                style={{
+                  width: screenWidth,
+                  backgroundColor: "white",
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  paddingVertical: 10,
+                  borderRadius: 15
+                }}
+              >
+                <PureChart
+                  width={"100%"}
+                  height={220}
+                  data={dataLine}
+                  type="line"
+                />
+              </View>
             ) : null}
 
             {/* <PieChart

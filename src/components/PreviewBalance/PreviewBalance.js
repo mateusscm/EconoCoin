@@ -16,7 +16,8 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 const styles = StyleSheet.create({
   contentHome: {
     // width: 390,
-    width: 230,
+    // width: 230,
+    alignSelf: "center",
     marginRight: 10
   },
   contentAccount: {
