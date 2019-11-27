@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { StyleSheet, Alert, ScrollView, RefreshControl } from "react-native";
-import { Content, Text, Spinner, Toast } from "native-base";
-import { theme } from "../../config/_theme";
-import FloatingButton from "../FloatingButton/FloatingButton";
-import ListCategories from "./ListCategories";
-import { FA, FFS } from "../../Firebase";
-import Reactotron from "reactotron-react-native";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { StyleSheet, Alert, ScrollView, RefreshControl } from 'react-native';
+import { Content, Text, Spinner, Toast } from 'native-base';
+import { theme } from '../../config/_theme';
+import FloatingButton from '../FloatingButton/FloatingButton';
+import ListCategories from './ListCategories';
+import { FA, FFS } from '../../Firebase';
+import Reactotron from 'reactotron-react-native';
+import { connect } from 'react-redux';
 
 // const { width: WIDTH } = Dimensions.get("window");
 
@@ -16,19 +16,19 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     // alignItems: "center",
     paddingHorizontal: 10,
-    backgroundColor: theme.palette.backgroundMain
+    backgroundColor: theme.palette.backgroundMain,
   },
   content: {
     flex: 2,
-    paddingBottom: 50
+    paddingBottom: 50,
   },
   mainTitle: {
     paddingTop: 10,
     paddingHorizontal: 18,
     paddingBottom: 5,
-    fontWeight: "700",
-    color: "#6e6e6e"
-  }
+    fontWeight: '700',
+    color: '#6e6e6e',
+  },
 });
 
 class Categories extends Component {
@@ -36,7 +36,7 @@ class Categories extends Component {
     super(props);
     this.state = {
       loading: false,
-      refreshing: false
+      refreshing: false,
     };
   }
 
@@ -67,37 +67,30 @@ class Categories extends Component {
 
   onDelete = info => {
     Alert.alert(
-      "Confirmando",
-      "Tem certeza que deseja excluir esta Categoria?",
+      'Confirmando',
+      'Tem certeza que deseja excluir esta Categoria?',
       [
         {
-          text: "NÃO",
+          text: 'NÃO',
           // onPress: () => console.warn("NO Pressed"),
-          style: "cancel"
+          style: 'cancel',
         },
         {
-          text: "SIM",
+          text: 'SIM',
           onPress: async () => {
             try {
               let user = await FA.currentUser;
-              await FFS.collection("user_categoria")
+              await FFS.collection('user_categoria')
                 .doc(user.uid)
-                .collection("categorias")
+                .collection('categorias')
                 .doc(info.id)
                 .delete();
-              let temp = this.state.categories;
-              temp.splice(
-                this.state.categories.findIndex(c => {
-                  return c.id === info.id;
-                }),
-                1
-              );
-              this.setState({ categories: temp });
+              this.props.update();
             } catch (err) {
-              if (err) alert("Algo deu errado! Tente novamente mais tarde.");
+              if (err) {alert("Algo deu errado! Tente novamente mais tarde.");}
             }
-          }
-        }
+          },
+        },
       ]
     );
   };
@@ -143,7 +136,7 @@ class Categories extends Component {
 }
 
 const mapStateToProps = store => ({
-  categorias: store.cc.cc.categorias
+  categorias: store.cc.cc.categorias,
 });
 
 export default connect(mapStateToProps)(Categories);
