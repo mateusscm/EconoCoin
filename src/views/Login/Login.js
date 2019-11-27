@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 import { Spinner } from "native-base";
 
 import bgImage from "./../../assets/img/bg.jpg";
-import logo from "./../../assets/img/logo.png";
+import logo from "./../../assets/img/kazu.png";
 
 import Icon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-community/async-storage";
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   logo: {
-    width: 120,
+    width: WIDTH - 55,
     height: 120
   },
   logoContainer: {
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     width: WIDTH - 55,
     height: 45,
     borderRadius: 25,
-    backgroundColor: theme.palette.secondary,
+    backgroundColor: theme.palette.button,
     justifyContent: "center",
     marginTop: 20
   },
@@ -169,7 +169,7 @@ class Login extends Component {
       <ImageBackground
         source={bgImage}
         style={styles.backgroundContainer}
-        imageStyle={{ opacity: 0.7 }}
+        imageStyle={{ opacity: 0.5 }}
       >
         <View style={styles.allCont}>
           <View style={styles.logoContainer}>

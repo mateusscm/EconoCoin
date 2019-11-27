@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     // alignItems: "center"
   },
   text: {
-    color: "#59BF3F",
+    color: theme.palette.button,
     fontSize: 25,
     fontWeight: "bold"
   },
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 45,
     borderRadius: 25,
-    backgroundColor: theme.palette.secondary,
+    backgroundColor: theme.palette.button,
     justifyContent: "center",
     marginTop: 80
   },

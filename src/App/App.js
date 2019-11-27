@@ -23,6 +23,7 @@ import DrawerNavigator from "./../navigation/DrawerNavigator";
 // firebase.initializeApp(firebaseConfig);
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
+YellowBox.ignoreWarnings(["ComponentWillReceiveProps"]);
 const _console = _.clone(console);
 console.warn = message => {
   if (message.indexOf("Setting a timer") <= -1) {

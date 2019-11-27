@@ -7,7 +7,8 @@ import {
   ImageBackground,
   TextInput,
   Alert,
-  Picker
+  Picker,
+  Dimensions
 } from "react-native";
 import { Form, Item, Label, DatePicker, Button, Spinner } from "native-base";
 import Reactotron from "reactotron-react-native";
@@ -16,6 +17,8 @@ import { theme } from "../../config/_theme";
 import { FA, FFS } from "../../Firebase";
 import { ScrollView } from "react-native-gesture-handler";
 import bg from "./../../assets/img/bg.jpg";
+
+const { width: WIDTH } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   allCont: {
@@ -30,7 +33,7 @@ const styles = StyleSheet.create({
     color: theme.palette.txtPrimary
   },
   header: {
-    height: 200,
+    height: 170,
     backgroundColor: theme.palette.secondary,
     justifyContent: "center",
     alignItems: "center",
@@ -47,9 +50,8 @@ const styles = StyleSheet.create({
     paddingRight: 20
   },
   img: {
-    height: 150,
-    width: 150,
-    borderRadius: 50
+    height: 120,
+    width: WIDTH - 55
   },
   profileText: {
     justifyContent: "center",
@@ -166,7 +168,7 @@ const Profile = props => {
             <View style={styles.imgView}>
               <Image
                 style={styles.img}
-                source={require("../../assets/img/logo.png")}
+                source={require("../../assets/img/kazu.png")}
               />
             </View>
             {/* <View style={styles.profileText}>

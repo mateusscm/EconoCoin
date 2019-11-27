@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.7)"
   },
   text: {
-    color: "#59BF3F",
+    color: theme.palette.button,
     fontSize: 25,
     fontWeight: "bold"
   },
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 45,
     borderRadius: 25,
-    backgroundColor: theme.palette.secondary,
+    backgroundColor: theme.palette.button,
     justifyContent: "center",
     marginTop: 30
   },
@@ -332,7 +332,7 @@ class SignUp extends Component {
                 {this.state.loading ? (
                   <Spinner style={styles.spinner} color="green" />
                 ) : (
-                  <Text style={styles.signup}>Login</Text>
+                  <Text style={styles.signup}>Criar</Text>
                 )}
               </TouchableOpacity>
             </View>
